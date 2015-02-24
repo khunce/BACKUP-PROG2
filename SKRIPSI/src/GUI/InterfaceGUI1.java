@@ -14,10 +14,23 @@ import SimulasiAntrianPasien.StatisticsGenerator;
 import SimulasiAntrianPasien.StatisticsSimulationAwal;
 import SimulasiAntrianPasien.StatisticsSimulationPoli;
 import java.awt.*;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.JFXPanel;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.chart.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+import javax.swing.*;
 import javax.swing.*;
 import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
@@ -25,6 +38,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+ 
+
 /**
  *
  * @author robby
@@ -33,6 +48,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
     int banyakServer;
     int banyakCustomer;
+    JFXPanel fxPanel;
+    JFXPanel fxPanel2;
+    JFXPanel fxPanel3;
     StatisticsSimulationAwal sim;
     StatisticsSimulationPoli sim2;
     StatisticsGenerator gen;
@@ -84,8 +102,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jFrame1.setVisible(true);
         queuereport=new LinkedList();
         queuereport2=new LinkedList();
-
-        
+        fxPanel=new JFXPanel();
+        fxPanel2=new JFXPanel();
+        fxPanel3=new JFXPanel();
         //slider.setValue(700);
        // sim=new StatisticsSimulationAwal();
     }
@@ -110,7 +129,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jLabel45 = new javax.swing.JLabel();
         jLabel46 = new javax.swing.JLabel();
         jLabel47 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        panel_grafik_poli = new javax.swing.JPanel();
         jLabel48 = new javax.swing.JLabel();
         jLabel49 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
@@ -146,9 +165,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel_arrival_rate = new javax.swing.JPanel();
         panel_interarrival = new javax.swing.JPanel();
         panel_waiting_time = new javax.swing.JPanel();
-        panel_delay_time = new javax.swing.JPanel();
         panel_pasien = new javax.swing.JPanel();
         panel_service_rate = new javax.swing.JPanel();
+        panel_delay_time = new javax.swing.JPanel();
         frame_report4 = new javax.swing.JFrame();
         tab1 = new javax.swing.JTabbedPane();
         panel_petugas = new javax.swing.JPanel();
@@ -163,8 +182,6 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel7 = new javax.swing.JPanel();
         panel8 = new javax.swing.JPanel();
         panel_perawat = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        output_perawat = new javax.swing.JTextArea();
         panel9 = new javax.swing.JPanel();
         panel10 = new javax.swing.JPanel();
         panel11 = new javax.swing.JPanel();
@@ -173,6 +190,8 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel14 = new javax.swing.JPanel();
         panel15 = new javax.swing.JPanel();
         panel16 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        output_perawat = new javax.swing.JTextArea();
         panel_dokter = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         output_dokter = new javax.swing.JTextArea();
@@ -200,7 +219,6 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        panelanimasi = new javax.swing.JPanel();
         ratio = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -248,7 +266,6 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         jSeparator5 = new javax.swing.JSeparator();
-        jSeparator6 = new javax.swing.JSeparator();
         jSeparator7 = new javax.swing.JSeparator();
         jSeparator8 = new javax.swing.JSeparator();
         jSeparator9 = new javax.swing.JSeparator();
@@ -258,6 +275,10 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jSeparator13 = new javax.swing.JSeparator();
         report = new javax.swing.JButton();
         back = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        panelanimasi = new javax.swing.JPanel();
+        panelanimasi2 = new javax.swing.JPanel();
+        panelanimasi3 = new javax.swing.JPanel();
 
         jFrame1.setTitle("Simulasi Antrian Poliklinik");
         jFrame1.setBounds(new java.awt.Rectangle(0, 200, 500, 400));
@@ -269,61 +290,61 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jLabel39.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel39.setText("jLabel39");
         jFrame1.getContentPane().add(jLabel39);
-        jLabel39.setBounds(590, 160, 400, 13);
+        jLabel39.setBounds(670, 160, 400, 13);
 
         jLabel40.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel40.setText("jLabel40");
         jFrame1.getContentPane().add(jLabel40);
-        jLabel40.setBounds(590, 190, 400, 13);
+        jLabel40.setBounds(670, 190, 400, 13);
 
         jLabel41.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel41.setText("jLabel41");
         jFrame1.getContentPane().add(jLabel41);
-        jLabel41.setBounds(590, 220, 400, 13);
+        jLabel41.setBounds(670, 220, 400, 13);
 
         jLabel42.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel42.setText("jLabel42");
         jFrame1.getContentPane().add(jLabel42);
-        jLabel42.setBounds(590, 250, 400, 13);
+        jLabel42.setBounds(670, 250, 400, 13);
 
         jLabel43.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel43.setText("jLabel43");
         jFrame1.getContentPane().add(jLabel43);
-        jLabel43.setBounds(590, 280, 400, 13);
+        jLabel43.setBounds(670, 280, 400, 13);
 
         jLabel44.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel44.setText("jLabel44");
         jFrame1.getContentPane().add(jLabel44);
-        jLabel44.setBounds(590, 310, 400, 13);
+        jLabel44.setBounds(670, 310, 400, 13);
 
         jLabel45.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel45.setText("jLabel45");
         jFrame1.getContentPane().add(jLabel45);
-        jLabel45.setBounds(590, 340, 400, 13);
+        jLabel45.setBounds(670, 340, 400, 13);
 
         jLabel46.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel46.setText("jLabel46");
         jFrame1.getContentPane().add(jLabel46);
-        jLabel46.setBounds(590, 370, 410, 13);
+        jLabel46.setBounds(670, 370, 410, 13);
 
         jLabel47.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel47.setText("jLabel47");
         jFrame1.getContentPane().add(jLabel47);
-        jLabel47.setBounds(590, 400, 410, 13);
+        jLabel47.setBounds(670, 400, 410, 13);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+        javax.swing.GroupLayout panel_grafik_poliLayout = new javax.swing.GroupLayout(panel_grafik_poli);
+        panel_grafik_poli.setLayout(panel_grafik_poliLayout);
+        panel_grafik_poliLayout.setHorizontalGroup(
+            panel_grafik_poliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 650, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+        panel_grafik_poliLayout.setVerticalGroup(
+            panel_grafik_poliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
-        jFrame1.getContentPane().add(jPanel1);
-        jPanel1.setBounds(10, 47, 570, 350);
+        jFrame1.getContentPane().add(panel_grafik_poli);
+        panel_grafik_poli.setBounds(10, 47, 650, 400);
 
         jLabel48.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel48.setText("Pemodelan dan Simulasi Antrian Pasien di Poliklinik");
@@ -332,22 +353,22 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
         jLabel49.setText("Output Pelayanan Poliklinik : ");
         jFrame1.getContentPane().add(jLabel49);
-        jLabel49.setBounds(650, 40, 149, 17);
+        jLabel49.setBounds(670, 60, 149, 17);
 
         jLabel50.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel50.setText("jLabel50");
         jFrame1.getContentPane().add(jLabel50);
-        jLabel50.setBounds(10, 403, 120, 13);
+        jLabel50.setBounds(10, 460, 120, 13);
 
         jLabel51.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel51.setText("jLabel51");
         jFrame1.getContentPane().add(jLabel51);
-        jLabel51.setBounds(155, 403, 100, 13);
+        jLabel51.setBounds(150, 460, 100, 13);
 
         jLabel52.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel52.setText("jLabel52");
         jFrame1.getContentPane().add(jLabel52);
-        jLabel52.setBounds(294, 403, 150, 13);
+        jLabel52.setBounds(290, 460, 150, 13);
 
         output_poli.setEditable(false);
         output_poli.setColumns(20);
@@ -355,7 +376,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jScrollPane1.setViewportView(output_poli);
 
         jFrame1.getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(586, 65, 270, 70);
+        jScrollPane1.setBounds(670, 80, 270, 70);
         jFrame1.getContentPane().add(jSeparator14);
         jSeparator14.setBounds(0, 35, 1000, 2);
 
@@ -449,7 +470,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         frame_report3.getContentPane().add(jLabel53);
         jLabel53.setBounds(300, 0, 500, 30);
         frame_report3.getContentPane().add(jSeparator15);
-        jSeparator15.setBounds(0, 40, 1030, 10);
+        jSeparator15.setBounds(0, 40, 1040, 10);
 
         panel_tabel_utility.setInheritsPopupMenu(true);
         panel_tabel_utility.setMinimumSize(new java.awt.Dimension(750, 400));
@@ -459,7 +480,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel_tabel_utility.setLayout(panel_tabel_utilityLayout);
         panel_tabel_utilityLayout.setHorizontalGroup(
             panel_tabel_utilityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         panel_tabel_utilityLayout.setVerticalGroup(
             panel_tabel_utilityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -467,7 +488,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
 
         frame_report3.getContentPane().add(panel_tabel_utility);
-        panel_tabel_utility.setBounds(0, 140, 730, 60);
+        panel_tabel_utility.setBounds(0, 140, 730, 80);
 
         hasil.setEditable(false);
         hasil.setColumns(20);
@@ -475,7 +496,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jScrollPane3.setViewportView(hasil);
 
         frame_report3.getContentPane().add(jScrollPane3);
-        jScrollPane3.setBounds(740, 60, 290, 600);
+        jScrollPane3.setBounds(740, 60, 300, 600);
 
         javax.swing.GroupLayout panel_averageLayout = new javax.swing.GroupLayout(panel_average);
         panel_average.setLayout(panel_averageLayout);
@@ -485,11 +506,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel_averageLayout.setVerticalGroup(
             panel_averageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         frame_report3.getContentPane().add(panel_average);
-        panel_average.setBounds(0, 210, 730, 60);
+        panel_average.setBounds(0, 220, 730, 80);
 
         javax.swing.GroupLayout panel_arrival_rateLayout = new javax.swing.GroupLayout(panel_arrival_rate);
         panel_arrival_rate.setLayout(panel_arrival_rateLayout);
@@ -499,11 +520,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel_arrival_rateLayout.setVerticalGroup(
             panel_arrival_rateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         frame_report3.getContentPane().add(panel_arrival_rate);
-        panel_arrival_rate.setBounds(0, 290, 730, 60);
+        panel_arrival_rate.setBounds(0, 300, 730, 80);
 
         javax.swing.GroupLayout panel_interarrivalLayout = new javax.swing.GroupLayout(panel_interarrival);
         panel_interarrival.setLayout(panel_interarrivalLayout);
@@ -513,11 +534,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel_interarrivalLayout.setVerticalGroup(
             panel_interarrivalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         frame_report3.getContentPane().add(panel_interarrival);
-        panel_interarrival.setBounds(0, 360, 730, 60);
+        panel_interarrival.setBounds(0, 380, 730, 80);
 
         javax.swing.GroupLayout panel_waiting_timeLayout = new javax.swing.GroupLayout(panel_waiting_time);
         panel_waiting_time.setLayout(panel_waiting_timeLayout);
@@ -527,25 +548,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel_waiting_timeLayout.setVerticalGroup(
             panel_waiting_timeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         frame_report3.getContentPane().add(panel_waiting_time);
-        panel_waiting_time.setBounds(0, 430, 730, 60);
-
-        javax.swing.GroupLayout panel_delay_timeLayout = new javax.swing.GroupLayout(panel_delay_time);
-        panel_delay_time.setLayout(panel_delay_timeLayout);
-        panel_delay_timeLayout.setHorizontalGroup(
-            panel_delay_timeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
-        );
-        panel_delay_timeLayout.setVerticalGroup(
-            panel_delay_timeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
-        );
-
-        frame_report3.getContentPane().add(panel_delay_time);
-        panel_delay_time.setBounds(0, 500, 730, 70);
+        panel_waiting_time.setBounds(0, 640, 730, 80);
 
         javax.swing.GroupLayout panel_pasienLayout = new javax.swing.GroupLayout(panel_pasien);
         panel_pasien.setLayout(panel_pasienLayout);
@@ -555,25 +562,39 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel_pasienLayout.setVerticalGroup(
             panel_pasienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         frame_report3.getContentPane().add(panel_pasien);
-        panel_pasien.setBounds(0, 60, 730, 60);
+        panel_pasien.setBounds(0, 50, 730, 80);
 
         javax.swing.GroupLayout panel_service_rateLayout = new javax.swing.GroupLayout(panel_service_rate);
         panel_service_rate.setLayout(panel_service_rateLayout);
         panel_service_rateLayout.setHorizontalGroup(
             panel_service_rateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 720, Short.MAX_VALUE)
+            .addGap(0, 730, Short.MAX_VALUE)
         );
         panel_service_rateLayout.setVerticalGroup(
             panel_service_rateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         frame_report3.getContentPane().add(panel_service_rate);
-        panel_service_rate.setBounds(10, 590, 720, 70);
+        panel_service_rate.setBounds(0, 550, 730, 80);
+
+        javax.swing.GroupLayout panel_delay_timeLayout = new javax.swing.GroupLayout(panel_delay_time);
+        panel_delay_time.setLayout(panel_delay_timeLayout);
+        panel_delay_timeLayout.setHorizontalGroup(
+            panel_delay_timeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 730, Short.MAX_VALUE)
+        );
+        panel_delay_timeLayout.setVerticalGroup(
+            panel_delay_timeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 80, Short.MAX_VALUE)
+        );
+
+        frame_report3.getContentPane().add(panel_delay_time);
+        panel_delay_time.setBounds(0, 470, 730, 80);
 
         frame_report4.getContentPane().setLayout(null);
 
@@ -583,7 +604,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -591,123 +612,117 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
 
         panel_petugas.add(panel1);
-        panel1.setBounds(10, 22, 730, 60);
+        panel1.setBounds(0, 0, 750, 60);
 
+        output_petugas.setEditable(false);
         output_petugas.setColumns(20);
         output_petugas.setRows(5);
         jScrollPane4.setViewportView(output_petugas);
 
         panel_petugas.add(jScrollPane4);
-        jScrollPane4.setBounds(749, 1, 280, 610);
+        jScrollPane4.setBounds(749, 1, 300, 620);
 
         javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
         panel2.setLayout(panel2Layout);
         panel2Layout.setHorizontalGroup(
             panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         panel2Layout.setVerticalGroup(
             panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel2);
-        panel2.setBounds(10, 90, 730, 60);
+        panel2.setBounds(0, 60, 750, 80);
 
         javax.swing.GroupLayout panel3Layout = new javax.swing.GroupLayout(panel3);
         panel3.setLayout(panel3Layout);
         panel3Layout.setHorizontalGroup(
             panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         panel3Layout.setVerticalGroup(
             panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel3);
-        panel3.setBounds(10, 160, 730, 60);
+        panel3.setBounds(0, 140, 750, 80);
 
         javax.swing.GroupLayout panel4Layout = new javax.swing.GroupLayout(panel4);
         panel4.setLayout(panel4Layout);
         panel4Layout.setHorizontalGroup(
             panel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         panel4Layout.setVerticalGroup(
             panel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel4);
-        panel4.setBounds(10, 230, 730, 60);
+        panel4.setBounds(0, 220, 750, 80);
 
         javax.swing.GroupLayout panel5Layout = new javax.swing.GroupLayout(panel5);
         panel5.setLayout(panel5Layout);
         panel5Layout.setHorizontalGroup(
             panel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         panel5Layout.setVerticalGroup(
             panel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel5);
-        panel5.setBounds(10, 300, 730, 60);
+        panel5.setBounds(0, 300, 750, 80);
 
         javax.swing.GroupLayout panel6Layout = new javax.swing.GroupLayout(panel6);
         panel6.setLayout(panel6Layout);
         panel6Layout.setHorizontalGroup(
             panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         panel6Layout.setVerticalGroup(
             panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel6);
-        panel6.setBounds(10, 380, 730, 60);
+        panel6.setBounds(0, 380, 750, 80);
 
         javax.swing.GroupLayout panel7Layout = new javax.swing.GroupLayout(panel7);
         panel7.setLayout(panel7Layout);
         panel7Layout.setHorizontalGroup(
             panel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         panel7Layout.setVerticalGroup(
             panel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel7);
-        panel7.setBounds(10, 450, 730, 60);
+        panel7.setBounds(0, 460, 750, 80);
 
         javax.swing.GroupLayout panel8Layout = new javax.swing.GroupLayout(panel8);
         panel8.setLayout(panel8Layout);
         panel8Layout.setHorizontalGroup(
             panel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
         panel8Layout.setVerticalGroup(
             panel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel8);
-        panel8.setBounds(10, 520, 730, 60);
+        panel8.setBounds(0, 540, 750, 80);
 
         tab1.addTab("Petugas", panel_petugas);
 
         panel_perawat.setLayout(null);
-
-        output_perawat.setColumns(20);
-        output_perawat.setRows(5);
-        jScrollPane5.setViewportView(output_perawat);
-
-        panel_perawat.add(jScrollPane5);
-        jScrollPane5.setBounds(755, 0, 280, 610);
 
         javax.swing.GroupLayout panel9Layout = new javax.swing.GroupLayout(panel9);
         panel9.setLayout(panel9Layout);
@@ -717,11 +732,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel9Layout.setVerticalGroup(
             panel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_perawat.add(panel9);
-        panel9.setBounds(0, 10, 750, 60);
+        panel9.setBounds(0, 10, 750, 70);
 
         javax.swing.GroupLayout panel10Layout = new javax.swing.GroupLayout(panel10);
         panel10.setLayout(panel10Layout);
@@ -731,11 +746,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel10Layout.setVerticalGroup(
             panel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_perawat.add(panel10);
-        panel10.setBounds(0, 90, 750, 60);
+        panel10.setBounds(0, 90, 750, 70);
 
         javax.swing.GroupLayout panel11Layout = new javax.swing.GroupLayout(panel11);
         panel11.setLayout(panel11Layout);
@@ -745,11 +760,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel11Layout.setVerticalGroup(
             panel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_perawat.add(panel11);
-        panel11.setBounds(0, 170, 750, 60);
+        panel11.setBounds(0, 170, 750, 70);
 
         javax.swing.GroupLayout panel12Layout = new javax.swing.GroupLayout(panel12);
         panel12.setLayout(panel12Layout);
@@ -759,11 +774,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel12Layout.setVerticalGroup(
             panel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_perawat.add(panel12);
-        panel12.setBounds(0, 240, 750, 60);
+        panel12.setBounds(0, 240, 750, 70);
 
         javax.swing.GroupLayout panel13Layout = new javax.swing.GroupLayout(panel13);
         panel13.setLayout(panel13Layout);
@@ -773,11 +788,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel13Layout.setVerticalGroup(
             panel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_perawat.add(panel13);
-        panel13.setBounds(0, 310, 750, 60);
+        panel13.setBounds(0, 310, 750, 70);
 
         javax.swing.GroupLayout panel14Layout = new javax.swing.GroupLayout(panel14);
         panel14.setLayout(panel14Layout);
@@ -787,11 +802,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel14Layout.setVerticalGroup(
             panel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_perawat.add(panel14);
-        panel14.setBounds(0, 390, 750, 60);
+        panel14.setBounds(0, 390, 750, 70);
 
         javax.swing.GroupLayout panel15Layout = new javax.swing.GroupLayout(panel15);
         panel15.setLayout(panel15Layout);
@@ -801,11 +816,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel15Layout.setVerticalGroup(
             panel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_perawat.add(panel15);
-        panel15.setBounds(0, 460, 750, 60);
+        panel15.setBounds(0, 480, 750, 70);
 
         javax.swing.GroupLayout panel16Layout = new javax.swing.GroupLayout(panel16);
         panel16.setLayout(panel16Layout);
@@ -815,22 +830,31 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel16Layout.setVerticalGroup(
             panel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_perawat.add(panel16);
-        panel16.setBounds(0, 540, 750, 60);
+        panel16.setBounds(0, 550, 750, 70);
+
+        output_perawat.setEditable(false);
+        output_perawat.setColumns(20);
+        output_perawat.setRows(5);
+        jScrollPane5.setViewportView(output_perawat);
+
+        panel_perawat.add(jScrollPane5);
+        jScrollPane5.setBounds(760, 0, 290, 620);
 
         tab1.addTab("Perawat", panel_perawat);
 
         panel_dokter.setLayout(null);
 
+        output_dokter.setEditable(false);
         output_dokter.setColumns(20);
         output_dokter.setRows(5);
         jScrollPane6.setViewportView(output_dokter);
 
         panel_dokter.add(jScrollPane6);
-        jScrollPane6.setBounds(735, 0, 300, 610);
+        jScrollPane6.setBounds(740, 0, 300, 600);
 
         javax.swing.GroupLayout panel17Layout = new javax.swing.GroupLayout(panel17);
         panel17.setLayout(panel17Layout);
@@ -840,11 +864,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel17Layout.setVerticalGroup(
             panel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_dokter.add(panel17);
-        panel17.setBounds(0, 0, 730, 60);
+        panel17.setBounds(0, 10, 730, 70);
 
         javax.swing.GroupLayout panel18Layout = new javax.swing.GroupLayout(panel18);
         panel18.setLayout(panel18Layout);
@@ -854,11 +878,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel18Layout.setVerticalGroup(
             panel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_dokter.add(panel18);
-        panel18.setBounds(0, 70, 730, 60);
+        panel18.setBounds(0, 80, 730, 70);
 
         javax.swing.GroupLayout panel19Layout = new javax.swing.GroupLayout(panel19);
         panel19.setLayout(panel19Layout);
@@ -868,11 +892,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel19Layout.setVerticalGroup(
             panel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_dokter.add(panel19);
-        panel19.setBounds(0, 140, 730, 60);
+        panel19.setBounds(0, 150, 730, 70);
 
         javax.swing.GroupLayout panel20Layout = new javax.swing.GroupLayout(panel20);
         panel20.setLayout(panel20Layout);
@@ -882,11 +906,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel20Layout.setVerticalGroup(
             panel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_dokter.add(panel20);
-        panel20.setBounds(0, 210, 730, 60);
+        panel20.setBounds(0, 220, 730, 70);
 
         javax.swing.GroupLayout panel21Layout = new javax.swing.GroupLayout(panel21);
         panel21.setLayout(panel21Layout);
@@ -896,11 +920,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel21Layout.setVerticalGroup(
             panel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_dokter.add(panel21);
-        panel21.setBounds(0, 280, 730, 60);
+        panel21.setBounds(0, 290, 730, 70);
 
         javax.swing.GroupLayout panel22Layout = new javax.swing.GroupLayout(panel22);
         panel22.setLayout(panel22Layout);
@@ -914,7 +938,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
 
         panel_dokter.add(panel22);
-        panel22.setBounds(0, 350, 730, 70);
+        panel22.setBounds(0, 360, 730, 70);
 
         javax.swing.GroupLayout panel23Layout = new javax.swing.GroupLayout(panel23);
         panel23.setLayout(panel23Layout);
@@ -928,7 +952,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
 
         panel_dokter.add(panel23);
-        panel23.setBounds(0, 430, 730, 70);
+        panel23.setBounds(0, 440, 730, 70);
 
         javax.swing.GroupLayout panel24Layout = new javax.swing.GroupLayout(panel24);
         panel24.setLayout(panel24Layout);
@@ -938,16 +962,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel24Layout.setVerticalGroup(
             panel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 80, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_dokter.add(panel24);
-        panel24.setBounds(0, 520, 730, 80);
+        panel24.setBounds(0, 530, 730, 70);
 
         tab1.addTab("Dokter", panel_dokter);
 
         frame_report4.getContentPane().add(tab1);
-        tab1.setBounds(2, 50, 1040, 640);
+        tab1.setBounds(2, 50, 1060, 660);
 
         jLabel54.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel54.setText("HASIL ANALISIS PEMODELAN DAN SIMULASI ANTRIAN PASIEN DI POLIKLINIK");
@@ -1048,10 +1072,6 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jLabel10.setText("Faster");
         getContentPane().add(jLabel10);
         jLabel10.setBounds(370, 650, 40, 17);
-
-        panelanimasi.setLayout(null);
-        getContentPane().add(panelanimasi);
-        panelanimasi.setBounds(6, 176, 670, 430);
 
         ratio.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         ratio.addActionListener(new java.awt.event.ActionListener() {
@@ -1305,10 +1325,8 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jSeparator4.setBounds(280, 30, 20, 140);
         getContentPane().add(jSeparator5);
         jSeparator5.setBounds(0, 140, 0, 2);
-        getContentPane().add(jSeparator6);
-        jSeparator6.setBounds(0, 170, 280, 20);
         getContentPane().add(jSeparator7);
-        jSeparator7.setBounds(270, 170, 400, 10);
+        jSeparator7.setBounds(0, 170, 670, 10);
 
         jSeparator8.setOrientation(javax.swing.SwingConstants.VERTICAL);
         getContentPane().add(jSeparator8);
@@ -1350,6 +1368,55 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         });
         getContentPane().add(back);
         back.setBounds(790, 633, 160, 30);
+
+        panelanimasi.setAutoscrolls(true);
+        panelanimasi.setPreferredSize(new java.awt.Dimension(0, 0));
+
+        javax.swing.GroupLayout panelanimasiLayout = new javax.swing.GroupLayout(panelanimasi);
+        panelanimasi.setLayout(panelanimasiLayout);
+        panelanimasiLayout.setHorizontalGroup(
+            panelanimasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 675, Short.MAX_VALUE)
+        );
+        panelanimasiLayout.setVerticalGroup(
+            panelanimasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 379, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Grafik 1", panelanimasi);
+
+        panelanimasi2.setAutoscrolls(true);
+
+        javax.swing.GroupLayout panelanimasi2Layout = new javax.swing.GroupLayout(panelanimasi2);
+        panelanimasi2.setLayout(panelanimasi2Layout);
+        panelanimasi2Layout.setHorizontalGroup(
+            panelanimasi2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 675, Short.MAX_VALUE)
+        );
+        panelanimasi2Layout.setVerticalGroup(
+            panelanimasi2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 379, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Grafik 2", panelanimasi2);
+
+        panelanimasi3.setAutoscrolls(true);
+
+        javax.swing.GroupLayout panelanimasi3Layout = new javax.swing.GroupLayout(panelanimasi3);
+        panelanimasi3.setLayout(panelanimasi3Layout);
+        panelanimasi3Layout.setHorizontalGroup(
+            panelanimasi3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 675, Short.MAX_VALUE)
+        );
+        panelanimasi3Layout.setVerticalGroup(
+            panelanimasi3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 379, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Grafik 3", panelanimasi3);
+
+        getContentPane().add(jTabbedPane1);
+        jTabbedPane1.setBounds(0, 190, 680, 410);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1419,6 +1486,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             for(int i=0;i<jlabel4.length;i++){
                 jlabel4[i].setText("");
             }
+            panelanimasi.setVisible(false);
+            panelanimasi2.setVisible(false);
+            panel_grafik_poli.setVisible(false);
             if(customer.getText().isEmpty()||arr_rate.getText().isEmpty()||ser_rate.getText().isEmpty()||ratio.getText().isEmpty()||servicerate_poli.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"Masih ada field yang kosong!","Alert",JOptionPane.ERROR_MESSAGE);
             }
@@ -2765,7 +2835,172 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         customer.setEnabled(true);
         queue_capacity.setEnabled(true);
     }
+     
+    public void initFxComponents(final int bpjsb,final int bpjsl,final int emr,final LinkedList<int[]> listcounterpasien ){
 
+        Platform.runLater(new Runnable() {
+          @Override
+          public void run() {
+              GridPane grid = new GridPane();
+              Scene scene = new Scene(grid,500, 300);
+                ObservableList<PieChart.Data> pieChartData =
+                FXCollections.observableArrayList(
+                new PieChart.Data("Pasien BPJS Lama ("+bpjsl+")", bpjsl),
+                new PieChart.Data("Pasien BPJS Baru ("+bpjsb+")",bpjsb),
+                new PieChart.Data("Pasien Emergency ("+emr+")", emr));
+                final PieChart chart = new PieChart(pieChartData);
+                chart.setTitle("Proporsi Jumlah Pasien");
+                grid.add(chart,0,0);
+
+                final CategoryAxis xAxis = new CategoryAxis();
+                final NumberAxis yAxis = new NumberAxis();
+                final BarChart<String,Number> bc =
+                new BarChart<String,Number>(xAxis,yAxis);
+                bc.setTitle("Grafik Jumlah Pasien per Loket");
+                xAxis.setLabel("Loket");
+                yAxis.setLabel("Jumlah Pasien");
+                XYChart.Series series1 = new XYChart.Series();
+                series1.setName("BPJS Lama");
+                int size=listcounterpasien.size();
+                for(int i=0;i<listcounterpasien.size();i++){
+                    int[] temp=listcounterpasien.get(i);
+                    series1.getData().add(new XYChart.Data("Loket-"+(i+1), temp[0]));
+                    System.out.println(temp[0]+"lama");
+                }
+                XYChart.Series series2 = new XYChart.Series();
+                series2.setName("BPJS Baru");
+                for(int i=0;i<listcounterpasien.size();i++){
+                    int[] temp=listcounterpasien.get(i);
+                    series2.getData().add(new XYChart.Data("Loket-"+(i+1), temp[1]));
+                    System.out.println(temp[1]+"baru");
+                }
+                bc.getData().addAll(series1, series2);
+                grid.setVgap(20);
+                grid.setHgap(20);
+                grid.add(bc, 2, 0);
+                fxPanel.setScene(scene);
+            }
+          });
+
+  }
+     
+     
+    public void initFxComponents2(final int bpjsb,final int bpjsl,final int emr){
+
+        Platform.runLater(new Runnable() {
+          @Override
+          public void run() {
+              GridPane grid = new GridPane();
+              Scene scene = new Scene(grid,650, 400);
+                ObservableList<PieChart.Data> pieChartData =
+                FXCollections.observableArrayList(
+                new PieChart.Data("Pasien BPJS Lama ("+bpjsl+")", bpjsl),
+                new PieChart.Data("Pasien BPJS Baru ("+bpjsb+")",bpjsb),
+                new PieChart.Data("Pasien Emergency ("+emr+")", emr));
+                final PieChart chart = new PieChart(pieChartData);
+                chart.setTitle("Proporsi Jumlah Pasien");
+                grid.add(chart,0,0);
+                fxPanel2.setScene(scene);
+            }
+          });
+
+  }
+    
+     public void initFxComponents3(final Object[][] utility,final int length,final LinkedList<int[]> delaytime){
+
+      Platform.runLater(new Runnable() {
+          @Override
+         public void run() {
+            GridPane grid = new GridPane();
+            Scene scene = new Scene(grid,600, 400);
+            final CategoryAxis xAxis = new CategoryAxis();
+                final NumberAxis yAxis = new NumberAxis();
+                final BarChart<String,Number> bc =
+                new BarChart<String,Number>(xAxis,yAxis);
+                bc.setTitle("Grafik Utilitas Server (Loket)");
+                xAxis.setLabel("Loket");
+                yAxis.setLabel("Utility");
+                XYChart.Series series1 = new XYChart.Series();
+                series1.setName("Utilitas Loket (%)");
+                int size=length;
+                for(int i=0;i<size;i++){
+                    double temp=(double)utility[0][i];
+                    series1.getData().add(new XYChart.Data("Loket-"+(i+1), temp));
+                    System.out.println(temp+"utility");
+                }
+                bc.getData().addAll(series1);
+                grid.add(bc, 0, 0);
+                
+                final CategoryAxis xAxis2 = new CategoryAxis();
+                final NumberAxis yAxis2 = new NumberAxis();
+                final BarChart<String,Number> bc2 =
+                new BarChart<String,Number>(xAxis2,yAxis2);
+                bc2.setTitle("Grafik Total Delay Time per Loket");
+                xAxis2.setLabel("Loket");
+                yAxis2.setLabel("DelayTime (menit)");
+                XYChart.Series series2 = new XYChart.Series();
+                series2.setName("BPJS Lama");
+                int size2=delaytime.size();
+                for(int i=0;i<size2;i++){
+                    int[] temp=delaytime.get(i);
+                    series2.getData().add(new XYChart.Data("Loket-"+(i+1),temp[0]));
+                    System.out.println(temp[0]+"lama delay");
+                }
+                XYChart.Series series3 = new XYChart.Series();
+                series3.setName("BPJS Baru");
+                for(int i=0;i<size2;i++){
+                    int[] temp=delaytime.get(i);
+                    series3.getData().add(new XYChart.Data("Loket-"+(i+1), temp[1]));
+                    System.out.println(temp[1]+"baru delay");
+                }
+                bc2.getData().addAll(series2, series3);
+                grid.add(bc2, 2, 0);
+                fxPanel3.setScene(scene);
+                
+            }
+          });
+
+  }
+
+
+  public XYChart.Data getData(double x, double y){
+    XYChart.Data data = new XYChart.Data<>();
+    data.setXValue(x);
+    data.setYValue(y);
+    return data;
+  }
+
+  public XYChart.Data getData(double x, String y){
+    XYChart.Data data = new XYChart.Data<>();
+    data.setYValue(x);
+    data.setXValue(y);
+    return data;
+  }
+  
+  public void setChart(int bpjsb,int bpjsl,int emr, LinkedList<int[]> listcounterpasien,Object[][] utility,int length,LinkedList<int[]> delaytime){
+        panelanimasi.setVisible(true);
+        panelanimasi.setLayout( new BorderLayout() );
+        panelanimasi.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
+        panelanimasi2.setVisible(true);
+        panelanimasi2.setLayout( new BorderLayout() );
+        panelanimasi2.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
+        getContentPane().add(fxPanel);
+        getContentPane().add(fxPanel3);
+        initFxComponents(bpjsb,bpjsl,emr,listcounterpasien);
+        initFxComponents3(utility,length,delaytime);
+        panelanimasi.add(fxPanel,BorderLayout.CENTER);
+        panelanimasi2.add(fxPanel3,BorderLayout.CENTER);
+  }
+
+  public void setChartPoli(int bpjsb,int bpjsl,int emr){
+        panel_grafik_poli.setVisible(true);
+        panel_grafik_poli.setLayout( new BorderLayout() );
+        panel_grafik_poli.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Poliklinik",TitledBorder.CENTER,TitledBorder.TOP));
+        getContentPane().add(  panel_grafik_poli );
+        initFxComponents2(bpjsb,bpjsl,emr);
+        panel_grafik_poli.add(fxPanel2,BorderLayout.CENTER);
+        jFrame1.add(panel_grafik_poli);
+  }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField arr_rate;
     private javax.swing.JButton back;
@@ -2834,7 +3069,6 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2855,11 +3089,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JSlider jSlider1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea output2;
     private javax.swing.JTextArea output_dokter;
     private javax.swing.JTextArea output_perawat;
@@ -2893,6 +3127,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private javax.swing.JPanel panel_average;
     private javax.swing.JPanel panel_delay_time;
     private javax.swing.JPanel panel_dokter;
+    private javax.swing.JPanel panel_grafik_poli;
     private javax.swing.JPanel panel_interarrival;
     private javax.swing.JPanel panel_pasien;
     private javax.swing.JPanel panel_perawat;
@@ -2903,6 +3138,8 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private javax.swing.JPanel panel_tabel_utility;
     private javax.swing.JPanel panel_waiting_time;
     private javax.swing.JPanel panelanimasi;
+    private javax.swing.JPanel panelanimasi2;
+    private javax.swing.JPanel panelanimasi3;
     private javax.swing.JLabel pasien_baru;
     private javax.swing.JLabel pasien_emergency;
     private javax.swing.JLabel pasien_lama;

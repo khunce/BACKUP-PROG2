@@ -45,7 +45,9 @@ public class StatisticsSimulationAwal  extends Thread {
      private double counterPasienBPJSLama;
      private double counterPasienBPJSBaru;
      private double counterPasienEmergency2;
-     
+     private double counterPasienBPJSLama2;
+     private double counterPasienBPJSBaru2;
+     private double counterPasienEmergency3;
  public StatisticsSimulationAwal(int numOfCustomer,ServerAwal[] server,StatisticsGenerator gen,double ratio2,InterfaceGUI1 MainGUI,int kapasitasantrian){
         super();
         this.MainGUI=MainGUI;
@@ -76,6 +78,9 @@ public class StatisticsSimulationAwal  extends Thread {
         this.counterPasienBPJSBaru=this.counterPasienBaru;
         this.counterPasienBPJSLama=this.counterPasienLama;
         this.counterPasienEmergency2=this.counterPasienEmergency;
+        this.counterPasienBPJSBaru2=0;
+        this.counterPasienBPJSLama2=0;
+        this.counterPasienEmergency3=0;
         this.animator=new Thread(this);
     }
  
@@ -89,6 +94,7 @@ public class StatisticsSimulationAwal  extends Thread {
        c.setPriority(1);
        c.setNumber(this.getNumber());
        this.setCounterPasienBaru(this.getCounterPasienBaru() - 1);
+        this.counterPasienBPJSBaru2++;
        return c;
     }
     
@@ -98,6 +104,7 @@ public class StatisticsSimulationAwal  extends Thread {
        c.setPriority(1);
        c.setNumber(this.getNumber());
        this.setCounterPasienLama(this.getCounterPasienLama() - 1);
+        this.counterPasienBPJSLama2++;
        return c;
     }
     
@@ -107,6 +114,7 @@ public class StatisticsSimulationAwal  extends Thread {
        c.setPriority(2);
        c.setNumber(this.getNumber());
        this.setCounterPasienEmergency(this.getCounterPasienEmergency() - 1);
+       this.counterPasienEmergency3++;
        return c;
     }
     
@@ -261,6 +269,7 @@ public class StatisticsSimulationAwal  extends Thread {
         String realtime=gen.convertSeconds(clock);
         MainGUI.setOutputValue(temp.getNumber()+" "+temp.getJenis()+" "+realtime);
         MainGUI.setOutputCounter((int)this.getCounterPasienBaru(),(int)this.getCounterPasienLama(),(int)this.getCounterPasienEmergency());
+//        MainGUI.setChart((int)this.counterPasienBPJSBaru2,(int)this.counterPasienBPJSLama2,(int)this.counterPasienEmergency3);
         try {
                        Thread.sleep(this.slidervalue);
                     } catch (Exception ex) {
@@ -371,6 +380,7 @@ public class StatisticsSimulationAwal  extends Thread {
     public void runSimulation(){
         int i=0;
         int batascounterserver=0;
+        int counterpasien=getNumOfCustomer();
         while(i<getNumOfCustomer()){
                 System.out.println("lll");
                 Customer temp=new Customer();
@@ -387,18 +397,30 @@ public class StatisticsSimulationAwal  extends Thread {
                              if(random==1){
                                  this.addToPoliQueue(temp);
                              }
-                             temp=this.processArrival2();
-                             this.server[server].addCustomertoQueue(temp);
-                             l+=2;
+                             l++;
+                             System.out.println("i bro : "+i);
+//                             counterpasien--;
+//                             temp=this.processArrival2();
+//                             this.server[server].addCustomertoQueue(temp);
+//                             l++;
                         }
                         else{
                             this.server[server].addCustomertoQueue(temp);
                             l++;
+//                            counterpasien--;
+                            System.out.println("i bro : "+i);
                         }
+//                        if(counterpasien==0){
+//                             l=this.kapasitasantrian;
+////                             i=0;
+//                             System.out.println("i bro : "+i);
+//                            
+//                        }
                         
                     }
                     this.server[server].setStatus(false);
                     i+=l;
+                    System.out.println("i bro : "+i);
                 }
                 else{
                     int sisa=getNumOfCustomer()%this.kapasitasantrian;
@@ -415,9 +437,13 @@ public class StatisticsSimulationAwal  extends Thread {
                                      if(random==1){
                                          this.addToPoliQueue(temp);
                                      }
-                                     temp=this.processArrival2();
-                                     this.server[server].addCustomertoQueue(temp);
-                                     l+=2;
+//                                     temp=this.processArrival2();
+//                                     this.server[server].addCustomertoQueue(temp);
+//                                     l+=2;
+                                     l++;
+//                                     if(l==(sisa-1)){
+//                                         l=sisa;
+//                                     }
                                 }
                                 else{
                                     this.server[server].addCustomertoQueue(temp);
@@ -438,9 +464,10 @@ public class StatisticsSimulationAwal  extends Thread {
                                  if(random==1){
                                      this.addToPoliQueue(temp);
                                  }
-                                    temp=this.processArrival2();
-                                    this.server[server].addCustomertoQueue(temp);
-                                    l+=2;
+//                                    temp=this.processArrival2();
+//                                    this.server[server].addCustomertoQueue(temp);
+//                                    l+=2;
+                                 l++;
                             }
                             else{
                                 this.server[server].addCustomertoQueue(temp);
@@ -453,10 +480,19 @@ public class StatisticsSimulationAwal  extends Thread {
                     }
                     
                 }
-                if(i==getNumOfCustomer()-1||i==getNumOfCustomer()){
+                if(i==getNumOfCustomer()){
                     MainGUI.enableResetButton();
+                   
+                }
+                if(i==getNumOfCustomer()){
+                    LinkedList<int[]> listcounter=this.gen.getPasienCounter(this.server);
+                    LinkedList<int[]> listdelay=this.gen.getPasienDelayTime(server);
+                    Object[][] utility=this.gen.generateUtilityServerforChart(server);
+                     MainGUI.setChart((int)this.counterPasienBPJSBaru,(int)this.counterPasienBPJSLama,(int)this.counterPasienEmergency2,listcounter,utility,this.server.length,listdelay);
+                    
                 }
         }
+         MainGUI.setChartPoli(this.poli.getCounterpasien1(),this.poli.getCounterpasien2(),this.poli.getCounterpasien3());
         
         
     }

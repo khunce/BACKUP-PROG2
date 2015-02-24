@@ -74,7 +74,12 @@ public class Tester {
 //       }
 //       System.out.println(ex.getQueueOfCustomer().size()+" "+ex.getTotalbaru()+" "+ex.getTotallama()+" "+ex.getEmergency()+" "+ex.getTotalpasienpoli());
 //   
+       double r=0;
+       bd = new BigDecimal(r); 
+            bd = bd.setScale(2,BigDecimal.ROUND_UP);
+            System.out.println(bd.doubleValue());
     }
+    
     
     public static double exponential(Random rng, double mean) {
         return -mean * Math.log(rng.nextDouble());

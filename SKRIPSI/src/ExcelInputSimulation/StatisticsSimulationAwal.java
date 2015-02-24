@@ -65,6 +65,9 @@ public class StatisticsSimulationAwal  extends Thread {
         this.counterPasienBPJSLama=this.excel.getTotallama();
         this.counterPasienEmergency=this.excel.getEmergency();
         this.numOfCustomer=this.excel.getQueueOfCustomer().size();
+        this.counterPasienBaru=this.excel.getTotalbaru();
+        this.counterPasienLama=this.excel.getTotallama();
+        this.counterPasienEmergency2=this.excel.getEmergency();
         this.kapasitasantrian=kapasitasantrian;
         this.animator=new Thread(this);
         this.slidervalue=700;
@@ -254,12 +257,12 @@ public class StatisticsSimulationAwal  extends Thread {
                     }
                     
                 }
-                if(i==getNumOfCustomer()-1||i==getNumOfCustomer()){
+                if(i==getNumOfCustomer()){
                     MainGUI.enableResetButton();
+                    MainGUI.setChart((int)this.counterPasienBaru,(int)this.counterPasienLama,(int)this.counterPasienEmergency2);
                 }
         }
-        
-        
+         MainGUI.setChartPoli(this.poli.getCounterpasien1(),this.poli.getCounterpasien2(),this.poli.getCounterpasien3()); 
     }
     
      public void setPoli(StatisticsSimulationPoli poli) {
@@ -270,12 +273,7 @@ public class StatisticsSimulationAwal  extends Thread {
         this.getPoli().addCustomer(temp);
         notifyAll();
     }
-    //@Override
-    public void paint(Graphics g){
-        
-    }
 
-    //@Override
     @Override
     public void run() {
                  this.runSimulation();
