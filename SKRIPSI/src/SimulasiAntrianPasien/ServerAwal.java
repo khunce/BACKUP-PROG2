@@ -40,7 +40,10 @@ public class ServerAwal extends Thread implements Server{
     private Queue<Customer> queuereport;
     private LinkedList<Customer> queuereport2;
     private int counter;
-   
+    private double totalWaitingTimeBPJSLama;
+    private double totalWaitingTimeBPJSBaru;
+    private double totalServiceTimeBPJSLama;
+    private double totalServiceTimeBPJSBaru;
     public ServerAwal(int servernumber, StatisticsGenerator stat,InterfaceGUI1 gui ){
         super();
         this.stat=stat;
@@ -59,6 +62,10 @@ public class ServerAwal extends Thread implements Server{
         this.queuereport2=new LinkedList<Customer>();
         this.counterCustomer=0;
         this.counter=0;
+        this.totalServiceTimeBPJSBaru=0;
+        this.totalServiceTimeBPJSLama=0;
+        this.totalWaitingTimeBPJSBaru=0;
+        this.totalWaitingTimeBPJSLama=0;
     }
     
     ServerAwal(){
@@ -126,6 +133,8 @@ public class ServerAwal extends Thread implements Server{
                             totalservicetime+=servicetime;
                             totalWaitingTime+=waitingtime;
                             totalDelayTime+=delaytime;
+                            totalServiceTimeBPJSLama+=servicetime;
+                            totalWaitingTimeBPJSLama+=waitingtime;
                             temp.setArrivaltimepoli(getServerclock());
                             temp.setTimeServiceEnd(getServerclock());
                             double cek=getSim().getCounterPasien();
@@ -157,6 +166,8 @@ public class ServerAwal extends Thread implements Server{
                             totalservicetime+=servicetime;
                             totalWaitingTime+=waitingtime;
                             totalDelayTime+=delaytime;
+                            totalServiceTimeBPJSLama+=servicetime;
+                            totalWaitingTimeBPJSLama+=waitingtime;
                             temp.setArrivaltimepoli(getServerclock());
                             temp.setTimeServiceEnd(getServerclock());
                             this.setTimeServiceEnd(getServerclock());
@@ -192,6 +203,8 @@ public class ServerAwal extends Thread implements Server{
                                 totalservicetime+=servicetime;
                                 totalWaitingTime+=waitingtime;
                                 totalDelayTime+=delaytime;
+                                totalServiceTimeBPJSBaru+=servicetime;
+                                totalWaitingTimeBPJSBaru+=waitingtime;
                                 temp.setArrivaltimepoli(getServerclock());
                                 temp.setTimeServiceEnd(getServerclock());
                                 double cek=getSim().getCounterPasien();
@@ -223,6 +236,8 @@ public class ServerAwal extends Thread implements Server{
                                 totalservicetime+=servicetime;
                                 totalWaitingTime+=waitingtime;
                                 totalDelayTime+=delaytime;
+                                totalServiceTimeBPJSBaru+=servicetime;
+                                totalWaitingTimeBPJSBaru+=waitingtime;
                                 temp.setArrivaltimepoli(getServerclock());
                                 temp.setTimeServiceEnd(getServerclock());
                                 double cek=getSim().getCounterPasien();
@@ -503,5 +518,33 @@ public class ServerAwal extends Thread implements Server{
      */
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    /**
+     * @return the totalWaitingTimeBPJSLama
+     */
+    public double getTotalWaitingTimeBPJSLama() {
+        return totalWaitingTimeBPJSLama;
+    }
+
+    /**
+     * @return the totalWaitingTimeBPJSBaru
+     */
+    public double getTotalWaitingTimeBPJSBaru() {
+        return totalWaitingTimeBPJSBaru;
+    }
+
+    /**
+     * @return the totalServiceTimeBPJSLama
+     */
+    public double getTotalServiceTimeBPJSLama() {
+        return totalServiceTimeBPJSLama;
+    }
+
+    /**
+     * @return the totalServiceTimeBPJSBaru
+     */
+    public double getTotalServiceTimeBPJSBaru() {
+        return totalServiceTimeBPJSBaru;
     }
 }

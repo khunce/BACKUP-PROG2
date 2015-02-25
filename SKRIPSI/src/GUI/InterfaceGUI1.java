@@ -51,6 +51,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     JFXPanel fxPanel;
     JFXPanel fxPanel2;
     JFXPanel fxPanel3;
+    JFXPanel fxPanel4;
     StatisticsSimulationAwal sim;
     StatisticsSimulationPoli sim2;
     StatisticsGenerator gen;
@@ -105,6 +106,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         fxPanel=new JFXPanel();
         fxPanel2=new JFXPanel();
         fxPanel3=new JFXPanel();
+        fxPanel4=new JFXPanel();
         //slider.setValue(700);
        // sim=new StatisticsSimulationAwal();
     }
@@ -1488,6 +1490,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             }
             panelanimasi.setVisible(false);
             panelanimasi2.setVisible(false);
+            panelanimasi3.setVisible(false);
             panel_grafik_poli.setVisible(false);
             if(customer.getText().isEmpty()||arr_rate.getText().isEmpty()||ser_rate.getText().isEmpty()||ratio.getText().isEmpty()||servicerate_poli.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"Masih ada field yang kosong!","Alert",JOptionPane.ERROR_MESSAGE);
@@ -2961,6 +2964,44 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
           });
 
   }
+     
+      public void initFxComponents4(final LinkedList<double[]> waitingtime){
+
+      Platform.runLater(new Runnable() {
+          @Override
+         public void run() {
+            GridPane grid = new GridPane();
+            Scene scene = new Scene(grid,600, 400);
+            final CategoryAxis xAxis2 = new CategoryAxis();
+                final NumberAxis yAxis2 = new NumberAxis();
+                final BarChart<String,Number> bc2 =
+                new BarChart<String,Number>(xAxis2,yAxis2);
+                bc2.setTitle("Grafik Total Waiting Time per Loket");
+                xAxis2.setLabel("Loket");
+                yAxis2.setLabel("Waiting Time (menit)");
+                XYChart.Series series2 = new XYChart.Series();
+                series2.setName("BPJS Lama");
+                int size2=waitingtime.size();
+                for(int i=0;i<size2;i++){
+                    double[] temp=waitingtime.get(i);
+                    series2.getData().add(new XYChart.Data("Loket-"+(i+1),temp[0]));
+                    System.out.println(temp[0]+"lama waiting");
+                }
+                XYChart.Series series3 = new XYChart.Series();
+                series3.setName("BPJS Baru");
+                for(int i=0;i<size2;i++){
+                    double[] temp=waitingtime.get(i);
+                    series3.getData().add(new XYChart.Data("Loket-"+(i+1), temp[1]));
+                    System.out.println(temp[1]+"baru waiting");
+                }
+                bc2.getData().addAll(series2, series3);
+                grid.add(bc2, 0, 0);
+                fxPanel4.setScene(scene);
+                
+            }
+          });
+
+  }
 
 
   public XYChart.Data getData(double x, double y){
@@ -2977,19 +3018,25 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     return data;
   }
   
-  public void setChart(int bpjsb,int bpjsl,int emr, LinkedList<int[]> listcounterpasien,Object[][] utility,int length,LinkedList<int[]> delaytime){
+  public void setChart(int bpjsb,int bpjsl,int emr, LinkedList<int[]> listcounterpasien,Object[][] utility,int length,LinkedList<int[]> delaytime,LinkedList<double[]> waitingtime){
         panelanimasi.setVisible(true);
         panelanimasi.setLayout( new BorderLayout() );
         panelanimasi.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
         panelanimasi2.setVisible(true);
         panelanimasi2.setLayout( new BorderLayout() );
         panelanimasi2.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
+        panelanimasi3.setVisible(true);
+        panelanimasi3.setLayout( new BorderLayout() );
+        panelanimasi3.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
         getContentPane().add(fxPanel);
         getContentPane().add(fxPanel3);
+        getContentPane().add(fxPanel4);
         initFxComponents(bpjsb,bpjsl,emr,listcounterpasien);
         initFxComponents3(utility,length,delaytime);
+        initFxComponents4(waitingtime);
         panelanimasi.add(fxPanel,BorderLayout.CENTER);
         panelanimasi2.add(fxPanel3,BorderLayout.CENTER);
+        panelanimasi3.add(fxPanel4,BorderLayout.CENTER);
   }
 
   public void setChartPoli(int bpjsb,int bpjsl,int emr){

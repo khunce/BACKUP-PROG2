@@ -406,6 +406,68 @@ public class StatisticsGenerator  {
          }
          return pasien;
      }
+     
+     public int getMaxArrivalTimePoli(ServerAwal[] arrayServer){
+         double max=this.getMaxArrivalTimeCustomer(arrayServer[0].getQueueReport2());
+         for(int i=1;i<arrayServer.length;i++){
+             if(max<this.getMaxArrivalTimeCustomer(arrayServer[i].getQueueReport2())){
+                 max=this.getMaxArrivalTimeCustomer(arrayServer[i].getQueueReport2());
+             }
+         }
+         int max2=this.convertSecondsForChart(max);
+         return max2;
+     }
+     
+     public double getMaxArrivalTimeCustomer(LinkedList<Customer> cust){
+         double cari=cust.get(0).getArrivaltimepoli();
+         for(int i=1;i<cust.size();i++){
+             if(cari<cust.get(i).getArrivaltimepoli()){
+                 cari=cust.get(i).getArrivaltimepoli();
+             }
+         }
+         return cari;
+     }
+     
+     public LinkedList<double[]> getWaitingTimeServer(ServerAwal[] arrayServer){
+         LinkedList<double[]> customer=new LinkedList<double[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             double[] waiting=new double[2];
+             waiting[0]=this.convertSecondsForChart(arrayServer[i].getTotalWaitingTimeBPJSLama());
+             System.out.println("waiting time lama : "+arrayServer[i].getTotalWaitingTimeBPJSLama());
+             waiting[1]=this.convertSecondsForChart(arrayServer[i].getTotalWaitingTimeBPJSBaru());
+             System.out.println("waiting time baru : "+arrayServer[i].getTotalWaitingTimeBPJSBaru());
+             customer.add(waiting);
+         }
+         return customer;
+         
+     }
+     
+     public LinkedList<double[]> getServiceTimeServer(ServerAwal[] arrayServer){
+         LinkedList<double[]> customer=new LinkedList<double[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             double[] waiting=new double[2];
+             waiting[0]=this.convertSecondsForChart(arrayServer[i].getTotalWaitingTimeBPJSLama());
+             System.out.println("waiting time lama : "+arrayServer[i].getTotalWaitingTimeBPJSLama());
+             waiting[1]=this.convertSecondsForChart(arrayServer[i].getTotalWaitingTimeBPJSBaru());
+             System.out.println("waiting time baru : "+arrayServer[i].getTotalWaitingTimeBPJSBaru());
+             customer.add(waiting);
+         }
+         return customer;
+         
+     }
+     
+     public int countPasienBaru(ServerAwal[] arrayServer){
+         int count=0;
+         for(int i=0;i<arrayServer.length;i++){
+             LinkedList<Customer> temp=arrayServer[i].getQueueReport2();
+             for(int k=0;k<temp.size();k++){
+                 if(temp.get(k).getJenis().equals("BPJS Baru")){
+                     count++;
+                 }
+             }
+         }
+         return count;
+     }
       
      
      

@@ -485,10 +485,12 @@ public class StatisticsSimulationAwal  extends Thread {
                    
                 }
                 if(i==getNumOfCustomer()){
+                    LinkedList<double[]> listcounter2=this.gen.getWaitingTimeServer(server);
                     LinkedList<int[]> listcounter=this.gen.getPasienCounter(this.server);
                     LinkedList<int[]> listdelay=this.gen.getPasienDelayTime(server);
+                    //int max=this.gen.getMaxArrivalTimePoli(server);
                     Object[][] utility=this.gen.generateUtilityServerforChart(server);
-                     MainGUI.setChart((int)this.counterPasienBPJSBaru,(int)this.counterPasienBPJSLama,(int)this.counterPasienEmergency2,listcounter,utility,this.server.length,listdelay);
+                     MainGUI.setChart((int)this.counterPasienBPJSBaru,(int)this.counterPasienBPJSLama,(int)this.counterPasienEmergency2,listcounter,utility,this.server.length,listdelay,listcounter2);
                     
                 }
         }
