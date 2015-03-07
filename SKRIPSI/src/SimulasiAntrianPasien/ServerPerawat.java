@@ -37,6 +37,9 @@ public class ServerPerawat extends Thread implements Server {
     private Customer temp;
     private LinkedList<Customer> queuereport2;
     private int counter;
+    private int counterPasienLama;
+    private int counterPasienBaru;
+    private int counterPasienEmergency;
     public ServerPerawat(int servernumber, StatisticsGenerator stat,InterfaceGUI1 gui,ServerDokter[] serverdokter){
         this.servernumber=servernumber;
         this.stat=stat;
@@ -55,6 +58,9 @@ public class ServerPerawat extends Thread implements Server {
         this.totalWaitingTime=0;
         this.totalservicetime=0;
         this.queuereport2=new LinkedList<Customer>();
+        this.counterPasienBaru=0;
+        this.counterPasienLama=0;
+        this.counterPasienEmergency=0;
     }
     
     ServerPerawat(){
@@ -102,6 +108,12 @@ public class ServerPerawat extends Thread implements Server {
                 double waitingtime=0;
                 double delaytime=0;
                 double servicetime=0;
+                if(getTemp().equals("BPJS Lama")){
+                    this.counterPasienLama++;
+                }
+                else if(getTemp().equals("BPJS Baru")){
+                    this.counterPasienBaru++;
+                }
                 if(getServerclock()<getTemp().getArrivaltimepoli2()){
                        setServerclock(getTemp().getArrivaltimepoli2());
                        if(i==0){
@@ -149,7 +161,12 @@ public class ServerPerawat extends Thread implements Server {
                 this.setServerclock(bd.doubleValue());
                 String realtime=stat.convertSeconds(servicetime);
                 String realtime2=stat.convertSeconds(this.getServerclock());
-                gui.setOutputValue5("Pasien nomot urut "+getTemp().getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                //gui.setOutputValue5("Pasien nomot urut "+getTemp().getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                gui.setOutputValue11("Perawat ke - "+this.getServernumber(),this.servernumber+2);
+                gui.setOutputValue12(getTemp().getNumberinpoli()+"",this.servernumber+2);
+                gui.setOutputValue13(getTemp().getJenis()+"",this.servernumber+2);
+                gui.setOutputValue14(realtime2+"",this.servernumber+2);
+                gui.setOutputValue142(realtime+"",this.servernumber+2);
                 try {
                     Thread.sleep(this.slidervalue);
                 } catch (Exception ex) {
@@ -474,6 +491,20 @@ public class ServerPerawat extends Thread implements Server {
      */
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    /**
+     * @return the counterPasienLama
+     */
+    public int getCounterPasienLama() {
+        return counterPasienLama;
+    }
+
+    /**
+     * @return the counterPasienBaru
+     */
+    public int getCounterPasienBaru() {
+        return counterPasienBaru;
     }
     
 }

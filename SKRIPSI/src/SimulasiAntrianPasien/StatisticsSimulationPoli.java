@@ -82,7 +82,7 @@ public class StatisticsSimulationPoli extends Thread{
         clock=clock+arrivaltime;
         temp.setNumberinpoli(number);
         System.out.println("Jenis pasien "+temp.getJenis());
-        String realtime=gen.convertSeconds(temp.getArrivaltime());
+        String realtime=gen.convertSeconds(temp.getArrivaltimepoli());
         MainGUI.setOutputValue2(temp.getNumber()+" "+temp.getJenis()+" "+realtime);
         if(temp.getJenis().equals("BPJS Lama")){
             this.counterpasien2++;

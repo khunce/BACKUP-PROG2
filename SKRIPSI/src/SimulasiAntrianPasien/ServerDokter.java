@@ -36,6 +36,9 @@ public class ServerDokter extends Thread implements Server  {
     private LinkedList<Customer> queuereport2;
     private Customer temp;
     private int counter;
+    private int counterPasienLama;
+    private int counterPasienBaru;
+    private int counterPasienEmergency;
     public ServerDokter(int servernumber, StatisticsGenerator stat,InterfaceGUI1 gui){
         this.servernumber=servernumber;
         this.stat=stat;
@@ -49,6 +52,9 @@ public class ServerDokter extends Thread implements Server  {
         this.queuereport2=new LinkedList<Customer>();
         this.temp=new Customer();
         this.counter=0;
+        this.counterPasienBaru=0;
+        this.counterPasienLama=0;
+        this.counterPasienEmergency=0;
     }
     
     ServerDokter(){
@@ -77,12 +83,22 @@ public class ServerDokter extends Thread implements Server  {
             double waitingtime=0;
             double delaytime=0;
             double servicetime=0;
+            if(getTemp().equals("BPJS Lama")){
+                    this.counterPasienLama++;
+                }
+            else if(getTemp().equals("BPJS Baru")){
+                    this.counterPasienBaru++;
+            }
+            else if(getTemp().equals("Emergency")){
+                    this.counterPasienEmergency++;
+            }
             if(getServerclock()<temp.getArrivaltimepoli3()){
                    setServerclock(temp.getArrivaltimepoli3());
                    if(i==0){
                             this.setTimeServiceBegin(this.getServerclock());
                        }
                    temp.setTimeServiceBegin4(this.serverclock);
+                   getTemp().setTimeServiceBegin2(this.serverclock);
                    servicetime=stat.generateServiceTimePoli();
                    delaytime=(Math.abs(temp.getArrivaltimepoli3()-(getServerclock())));
                    temp.setDelaytimepoli3(delaytime);
@@ -100,6 +116,7 @@ public class ServerDokter extends Thread implements Server  {
                             this.setTimeServiceBegin(this.getServerclock());
                    }
                    temp.setTimeServiceBegin4(this.serverclock);
+                   getTemp().setTimeServiceBegin2(this.serverclock);
                    servicetime=stat.generateServiceTimePoli();
                    delaytime=(Math.abs(temp.getArrivaltimepoli3()-(getServerclock())));
                    temp.setDelaytimepoli3(delaytime);
@@ -124,7 +141,12 @@ public class ServerDokter extends Thread implements Server  {
                 this.setServerclock(bd.doubleValue());
                 String realtime=stat.convertSeconds(servicetime);
                 String realtime2=stat.convertSeconds(this.getServerclock());
-                gui.setOutputValue6("Pasien nomot urut "+temp.getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                //gui.setOutputValue6("Pasien nomot urut "+temp.getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                gui.setOutputValue11("Dokter ke - "+this.getServernumber(),this.servernumber+5);
+                gui.setOutputValue12(getTemp().getNumberinpoli()+"",this.servernumber+5);
+                gui.setOutputValue13(getTemp().getJenis()+"",this.servernumber+5);
+                gui.setOutputValue14(realtime2+"",this.servernumber+5);
+                gui.setOutputValue142(realtime+"",this.servernumber+5);
                 try {
                     Thread.sleep(this.slidervalue);
                 } catch (Exception ex) {
@@ -381,6 +403,27 @@ public class ServerDokter extends Thread implements Server  {
      */
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    /**
+     * @return the counterPasienLama
+     */
+    public int getCounterPasienLama() {
+        return counterPasienLama;
+    }
+
+    /**
+     * @return the counterPasienBaru
+     */
+    public int getCounterPasienBaru() {
+        return counterPasienBaru;
+    }
+
+    /**
+     * @return the counterPasienEmergency
+     */
+    public int getCounterPasienEmergency() {
+        return counterPasienEmergency;
     }
     
 }

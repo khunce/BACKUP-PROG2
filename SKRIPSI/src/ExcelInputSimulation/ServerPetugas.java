@@ -143,7 +143,12 @@ public class ServerPetugas extends Thread implements Server {
             this.setServerclock(bd.doubleValue());
             String realtime=stat.convertSeconds(servicetime);
             String realtime2=stat.convertSeconds(this.getServerclock());
-            gui.setOutputValue4("Pasien nomot urut "+getTemp().getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+            //gui.setOutputValue4("Pasien nomot urut "+getTemp().getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+            gui.setOutputValue11("Petugas ke - "+this.getServernumber(),this.servernumber-1);
+            gui.setOutputValue12(getTemp().getNumberinpoli()+"",this.servernumber-1);
+            gui.setOutputValue13(getTemp().getJenis()+"",this.servernumber-1);
+            gui.setOutputValue14(realtime2+"",this.servernumber-1);
+            gui.setOutputValue142(realtime+"",this.servernumber-1);
             try {
                 Thread.sleep(this.slidervalue);
             } catch (Exception ex) {

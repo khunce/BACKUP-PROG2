@@ -48,6 +48,9 @@ public class StatisticsSimulationAwal  extends Thread {
      private double counterPasienBPJSLama2;
      private double counterPasienBPJSBaru2;
      private double counterPasienEmergency3;
+     private ServerPetugas[] serverpetugas;
+     private ServerPerawat[] serverperawat;
+     private ServerDokter[] serverdokter;
  public StatisticsSimulationAwal(int numOfCustomer,ServerAwal[] server,StatisticsGenerator gen,double ratio2,InterfaceGUI1 MainGUI,int kapasitasantrian){
         super();
         this.MainGUI=MainGUI;
@@ -86,6 +89,18 @@ public class StatisticsSimulationAwal  extends Thread {
  
     public StatisticsSimulationAwal(){
         
+    }
+    
+    public void setPetugas(ServerPetugas[] serverpetugas){
+        this.serverpetugas=serverpetugas;
+    }
+    
+    public void setPerawat(ServerPerawat[] serverperawat){
+        this.serverperawat=serverperawat;
+    }
+    
+    public void setDokter(ServerDokter[] serverdokter){
+        this.serverdokter=serverdokter;
     }
  
     public Customer createPatientBPJSBaru(){
@@ -263,19 +278,23 @@ public class StatisticsSimulationAwal  extends Thread {
         double arrivaltime=gen.generateArrivalTime();
         clock=clock+arrivaltime;
         temp.setArrivaltime(clock);
+        if(temp.getJenis().equals("Emergency")){
+            temp.setArrivaltimepoli(temp.getArrivaltime());
+        }
         temp.setNumber(this.getNumber());
         customerqueue.add(temp);
         System.out.println(temp.getNumber()+" "+temp.getJenis()+" "+clock+" "+arrivaltime);
         String realtime=gen.convertSeconds(clock);
         MainGUI.setOutputValue(temp.getNumber()+" "+temp.getJenis()+" "+realtime);
         MainGUI.setOutputCounter((int)this.getCounterPasienBaru(),(int)this.getCounterPasienLama(),(int)this.getCounterPasienEmergency());
-//        MainGUI.setChart((int)this.counterPasienBPJSBaru2,(int)this.counterPasienBPJSLama2,(int)this.counterPasienEmergency3);
         try {
                        Thread.sleep(this.slidervalue);
                     } catch (Exception ex) {
                         System.out.println(ex.getMessage());;
                 }
-        this.setNumber(this.getNumber() + 1);
+        if(!temp.getJenis().equals("Emergency")){
+            this.setNumber(this.getNumber() + 1);
+        }
         return temp;
     }
     
@@ -350,7 +369,6 @@ public class StatisticsSimulationAwal  extends Thread {
                    System.out.println("Clock : "+this.clock+" Status :  "+this.server[i].isStatus()+" No :  "+i+" Server clock :  "+this.server[i].getServerclock()+" queue size : "+this.server[i].getQueueSize());
                     if(this.server[i].isStatus()==false&&this.server[i].getServerclock()<=this.clock&&this.server[i].getQueueSize()==0){
                         server=i;
-                        // System.out.println("Clock : "+this.clock+" Status :  "+this.server[i].isStatus()+" No :  "+i+" Server clock :  "+this.server[i].getServerclock()+" queue size : "+this.server[i].getQueueSize());
                         i=this.server.length;
                     }
                 }
@@ -391,35 +409,35 @@ public class StatisticsSimulationAwal  extends Thread {
                     this.server[server].setStatus(true);
                     int l=0;
                     while(l<this.kapasitasantrian){
-                        temp=this.processArrival();
-                        if(temp.getJenis().equals("Emergency")){
-                             int random=rand.nextInt(2)+1;
-                             if(random==1){
-                                 this.addToPoliQueue(temp);
-                             }
-                             l++;
-                             System.out.println("i bro : "+i);
-//                             counterpasien--;
-//                             temp=this.processArrival2();
-//                             this.server[server].addCustomertoQueue(temp);
-//                             l++;
+                        if(this.getCounterPasienLama()>0||this.getCounterPasienBaru()>0||this.getCounterPasienEmergency()>0){
+                            temp=this.processArrival();
+                            if(temp.getJenis().equals("Emergency")){
+                                 int random=rand.nextInt(2)+1;
+                                 if(random==1){
+                                     this.addToPoliQueue(temp);
+                                 }
+                                 System.out.println("i bro : "+i);
+                            }
+                            else{
+                                this.server[server].addCustomertoQueue(temp);
+                                l++;
+                                System.out.println("i bro : "+i);
+                            }
+                            if((i+l)>=numOfCustomer){
+                                l=kapasitasantrian;
+                            }
                         }
                         else{
-                            this.server[server].addCustomertoQueue(temp);
-                            l++;
-//                            counterpasien--;
-                            System.out.println("i bro : "+i);
+                            l=kapasitasantrian;
                         }
-//                        if(counterpasien==0){
-//                             l=this.kapasitasantrian;
-////                             i=0;
-//                             System.out.println("i bro : "+i);
-//                            
-//                        }
-                        
                     }
                     this.server[server].setStatus(false);
-                    i+=l;
+                    if((i+l)>=numOfCustomer){
+                                i=numOfCustomer;
+                    }
+                    else{
+                        i+=l;
+                    }
                     System.out.println("i bro : "+i);
                 }
                 else{
@@ -428,75 +446,127 @@ public class StatisticsSimulationAwal  extends Thread {
                     batascounterserver=server;
                     System.out.println("Server ke- "+server);
                     this.server[server].setStatus(true);
-                    if(i==(getNumOfCustomer()-sisa)){
+                    if(i==(getNumOfCustomer()-(sisa))){
                             int l=0;
                             while(l<sisa){
-                                temp=this.processArrival();
-                                if(temp.getJenis().equals("Emergency")){
-                                     int random=rand.nextInt(2)+1;
-                                     if(random==1){
-                                         this.addToPoliQueue(temp);
-                                     }
-//                                     temp=this.processArrival2();
-//                                     this.server[server].addCustomertoQueue(temp);
-//                                     l+=2;
-                                     l++;
-//                                     if(l==(sisa-1)){
-//                                         l=sisa;
-//                                     }
-                                }
-                                else{
-                                    this.server[server].addCustomertoQueue(temp);
-                                    l++;
-                                }
+                               if(this.getCounterPasienLama()>0||this.getCounterPasienBaru()>0||this.getCounterPasienEmergency()>0){
+                                    temp=this.processArrival();
+                                    if(temp.getJenis().equals("Emergency")){
+                                         int random=rand.nextInt(2)+1;
+                                         if(random==1){
+                                             this.addToPoliQueue(temp);
+                                         }
+                                    }
+                                    else{
+                                        this.server[server].addCustomertoQueue(temp);
+                                        l++;
+                                    }
+                                    if((i+l)>=numOfCustomer){
+                                        l=sisa;
+                                    }
+                               }
+                               else{
+                                   l=sisa;
+                               }
                             }
                         this.server[server].setStatus(false);
-                        i+=l;
+                        if((i+l)>=numOfCustomer){
+                                i=numOfCustomer;
+                        }
+                        else{
+                            i+=l;
+                        }
                     }
                     else{
                         System.out.println("Server ke- "+server);
                         this.server[server].setStatus(true);
                         int l=0;
                         while(l<this.kapasitasantrian){
-                            temp=this.processArrival();
-                            if(temp.getJenis().equals("Emergency")){
-                                 int random=rand.nextInt(2)+1;
-                                 if(random==1){
-                                     this.addToPoliQueue(temp);
-                                 }
-//                                    temp=this.processArrival2();
-//                                    this.server[server].addCustomertoQueue(temp);
-//                                    l+=2;
-                                 l++;
-                            }
-                            else{
-                                this.server[server].addCustomertoQueue(temp);
-                                l++;
-                            }
-
+                               if(this.getCounterPasienLama()>0||this.getCounterPasienBaru()>0||this.getCounterPasienEmergency()>0){  
+                                    temp=this.processArrival();
+                                    if(temp.getJenis().equals("Emergency")){
+                                         int random=rand.nextInt(2)+1;
+                                         if(random==1){
+                                             this.addToPoliQueue(temp);
+                                         }
+                                    }
+                                    else{
+                                        this.server[server].addCustomertoQueue(temp);
+                                        l++;
+                                    }
+                                    if((i+l)>=numOfCustomer){
+                                        l=kapasitasantrian;
+                                    }
+                               }
+                               else{
+                                   l=kapasitasantrian;
+                               }
                         }
                         this.server[server].setStatus(false);
-                        i+=l;
+                        if((i+l)>=numOfCustomer){
+                                i=numOfCustomer;
+                        }
+                        else{
+                            i+=l;
+                        }
                     }
                     
                 }
                 if(i==getNumOfCustomer()){
                     MainGUI.enableResetButton();
+                    displayChart1();
                    
                 }
-                if(i==getNumOfCustomer()){
+        }
+        if(serverpetugas[0].getQueueSize()==0&&serverperawat[0].getQueueSize()==0&&serverdokter[0].getQueueSize()==0){
+            displayChart2();
+        }
+    }
+    
+    public void displayChart1(){
                     LinkedList<double[]> listcounter2=this.gen.getWaitingTimeServer(server);
                     LinkedList<int[]> listcounter=this.gen.getPasienCounter(this.server);
                     LinkedList<int[]> listdelay=this.gen.getPasienDelayTime(server);
-                    //int max=this.gen.getMaxArrivalTimePoli(server);
-                    Object[][] utility=this.gen.generateUtilityServerforChart(server);
-                     MainGUI.setChart((int)this.counterPasienBPJSBaru,(int)this.counterPasienBPJSLama,(int)this.counterPasienEmergency2,listcounter,utility,this.server.length,listdelay,listcounter2);
+                    LinkedList<double[]> listcounter3=this.gen.getServiceTimeServer(server);
+                    LinkedList<int[]> listcounter4=this.gen.getCounterPasienperServer(this.server);
+                    double[][] utility=this.gen.generateUtilityServerforChart(server);
+                    int maxtime=this.gen.getMaxPasien(server);
+                    int maxpasien=this.gen.getMaxJumlahPasienperServer(listcounter4);
+                    MainGUI.setChart((int)this.counterPasienBPJSBaru2,(int)this.counterPasienBPJSLama2,(int)this.counterPasienEmergency3,listcounter,utility,this.server.length,listdelay,listcounter2,listcounter3,listcounter4,maxtime,maxpasien);
                     
-                }
-        }
-         MainGUI.setChartPoli(this.poli.getCounterpasien1(),this.poli.getCounterpasien2(),this.poli.getCounterpasien3());
-        
-        
+    }
+    
+    public void displayChart2(){
+        LinkedList<int[]> listdelay=this.gen.getPasienDelayTimePetugas(serverpetugas);
+        LinkedList<int[]> listdelay2=this.gen.getPasienDelayTimePerawat(serverperawat);
+        LinkedList<int[]> listdelay3=this.gen.getPasienDelayTimeDokter(serverdokter);
+        LinkedList<int[]> counterpetugas=this.gen.getCounterPasienPetugas(serverpetugas);
+        LinkedList<int[]> counterperawat=this.gen.getCounterPasienPerawat(serverperawat);
+        LinkedList<int[]> counterdokter=this.gen.getCounterPasienDokter(serverdokter);
+        LinkedList<int[]>waitingtime1=this.gen.getWaitingTimeServerPetugas(serverpetugas);
+        LinkedList<int[]>waitingtime2=this.gen.getWaitingTimeServerPerawat(serverperawat);
+        LinkedList<int[]>waitingtime3=this.gen.getWaitingTimeServerDokter(serverdokter);
+        LinkedList<int[]>service1=this.gen.getServiceTimeServerPetugas(serverpetugas);
+        LinkedList<int[]>service2=this.gen.getServiceTimeServerPerawat(serverperawat);
+        LinkedList<int[]>service3=this.gen.getServiceTimeServerDokter(serverdokter);
+        MainGUI.setChartPoli(this.poli.getCounterpasien1(),this.poli.getCounterpasien2(),this.poli.getCounterpasien3(),counterpetugas,counterperawat,counterdokter);
+        double[][] utility1=this.gen.generateUtilityServer2forChart(serverpetugas);
+        double[][] utility2=this.gen.generateUtilityServer3forChart(serverperawat);
+        double[][] utility3=this.gen.generateUtilityServer4forChart(serverdokter);
+        LinkedList<int[]> listcounter4=this.gen.getCounterPasienperServer2(serverpetugas);
+        LinkedList<int[]> listcounter5=this.gen.getCounterPasienperServer3(serverperawat);
+        LinkedList<int[]> listcounter6=this.gen.getCounterPasienperServer4(serverdokter);
+        int maxtime=this.gen.getMaxPasien2(serverpetugas);
+        int maxpasien=this.gen.getMaxJumlahPasienperServer(listcounter4);
+        int maxtime2=this.gen.getMaxPasien3(serverperawat);
+        int maxpasien2=this.gen.getMaxJumlahPasienperServer(listcounter5);
+        int maxtime3=this.gen.getMaxPasien4(serverdokter);
+        int maxpasien3=this.gen.getMaxJumlahPasienperServer(listcounter6);
+        MainGUI.setChartPoli2(utility1,utility2,utility3,this.serverpetugas.length,this.serverperawat.length,this.serverdokter.length,listdelay,listdelay2,listdelay3);
+        MainGUI.setChartPoli3(waitingtime1,waitingtime2,waitingtime3,service1,service2,service3);
+        MainGUI.setChartPoli4(listcounter4,maxtime,maxpasien);
+        MainGUI.setChartPoli5(listcounter5,maxtime2,maxpasien2);
+        MainGUI.setChartPoli6(listcounter6,maxtime3,maxpasien3);
     }
     
     private synchronized void addToPoliQueue(Customer temp){
@@ -653,5 +723,26 @@ public class StatisticsSimulationAwal  extends Thread {
      */
     public void setNumOfCustomer(int numOfCustomer) {
         this.numOfCustomer = numOfCustomer;
+    }
+
+    /**
+     * @return the counterPasienBPJSLama2
+     */
+    public double getCounterPasienBPJSLama2() {
+        return counterPasienBPJSLama2;
+    }
+
+    /**
+     * @return the counterPasienBPJSBaru2
+     */
+    public double getCounterPasienBPJSBaru2() {
+        return counterPasienBPJSBaru2;
+    }
+
+    /**
+     * @return the counterPasienEmergency3
+     */
+    public double getCounterPasienEmergency3() {
+        return counterPasienEmergency3;
     }
 }

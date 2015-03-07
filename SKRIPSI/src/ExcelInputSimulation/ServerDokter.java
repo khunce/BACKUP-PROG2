@@ -87,6 +87,7 @@ public class ServerDokter extends Thread implements Server  {
                             this.setTimeServiceBegin(this.getServerclock());
                        }
                    temp.setTimeServiceBegin4(this.serverclock);
+                   getTemp().setTimeServiceBegin2(this.serverclock);
                    servicetime=stat.generateServiceTimePoli();
                    delaytime=(Math.abs(temp.getArrivaltimepoli3()-(getServerclock())));
                    temp.setDelaytimepoli3(delaytime);
@@ -104,6 +105,7 @@ public class ServerDokter extends Thread implements Server  {
                             this.setTimeServiceBegin(this.getServerclock());
                    }
                    temp.setTimeServiceBegin4(this.serverclock);
+                   getTemp().setTimeServiceBegin2(this.serverclock);
                    servicetime=stat.generateServiceTimePoli();
                    delaytime=(Math.abs(temp.getArrivaltimepoli3()-(getServerclock())));
                    temp.setDelaytimepoli3(delaytime);
@@ -128,7 +130,12 @@ public class ServerDokter extends Thread implements Server  {
                 this.setServerclock(bd.doubleValue());
                 String realtime=stat.convertSeconds(servicetime);
                 String realtime2=stat.convertSeconds(this.getServerclock());
-                gui.setOutputValue6("Pasien nomot urut "+temp.getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                //gui.setOutputValue6("Pasien nomot urut "+temp.getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                gui.setOutputValue11("Dokter ke - "+this.getServernumber(),this.servernumber+5);
+                gui.setOutputValue12(getTemp().getNumberinpoli()+"",this.servernumber+5);
+                gui.setOutputValue13(getTemp().getJenis()+"",this.servernumber+5);
+                gui.setOutputValue14(realtime2+"",this.servernumber+5);
+                gui.setOutputValue142(realtime+"",this.servernumber+5);
                 try {
                     Thread.sleep(this.slidervalue);
                 } catch (Exception ex) {

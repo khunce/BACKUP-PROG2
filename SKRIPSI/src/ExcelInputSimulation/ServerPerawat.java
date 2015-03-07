@@ -153,7 +153,12 @@ public class ServerPerawat extends Thread implements Server {
                 this.setServerclock(bd.doubleValue());
                 String realtime=stat.convertSeconds(servicetime);
                 String realtime2=stat.convertSeconds(this.getServerclock());
-                gui.setOutputValue5("Pasien nomot urut "+getTemp().getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                //gui.setOutputValue5("Pasien nomot urut "+getTemp().getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                gui.setOutputValue11("Perawat ke - "+this.getServernumber(),this.servernumber+2);
+                gui.setOutputValue12(getTemp().getNumberinpoli()+"",this.servernumber+2);
+                gui.setOutputValue13(getTemp().getJenis()+"",this.servernumber+2);
+                gui.setOutputValue14(realtime2+"",this.servernumber+2);
+                gui.setOutputValue142(realtime+"",this.servernumber+2);
                 try {
                     Thread.sleep(this.slidervalue);
                 } catch (Exception ex) {

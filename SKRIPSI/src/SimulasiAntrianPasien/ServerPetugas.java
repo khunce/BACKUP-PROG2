@@ -37,6 +37,9 @@ public class ServerPetugas extends Thread implements Server {
     private int counterfindserver;
     private int batasserver;
     private Customer temp;
+    private int counterPasienLama;
+    private int counterPasienBaru;
+    private int counterPasienEmergency;
     public ServerPetugas(int servernumber, StatisticsGenerator stat,InterfaceGUI1 gui,ServerPerawat[] serverperawat){
         this.servernumber=servernumber;
         this.stat=stat;
@@ -52,6 +55,9 @@ public class ServerPetugas extends Thread implements Server {
         this.counterfindserver=0;
         this.batasserver=0;
         this.temp=new Customer();
+        this.counterPasienBaru=0;
+        this.counterPasienLama=0;
+        this.counterPasienEmergency=0;
     }
     
     ServerPetugas(){
@@ -91,6 +97,12 @@ public class ServerPetugas extends Thread implements Server {
             double delaytime=0;
             double servicetime=0;
             System.out.println("i : "+i);
+            if(getTemp().equals("BPJS Lama")){
+                this.counterPasienLama++;
+            }
+            else if(getTemp().equals("BPJS Baru")){
+                this.counterPasienBaru++;
+            }
             if(getServerclock()<getTemp().getArrivaltimepoli()){
                 setServerclock(getTemp().getArrivaltimepoli());
                 if(i==0){
@@ -139,7 +151,12 @@ public class ServerPetugas extends Thread implements Server {
             this.setServerclock(bd.doubleValue());
             String realtime=stat.convertSeconds(servicetime);
             String realtime2=stat.convertSeconds(this.getServerclock());
-            gui.setOutputValue4("Pasien nomot urut "+getTemp().getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+            //gui.setOutputValue4("Pasien nomot urut "+getTemp().getNumberinpoli()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+            gui.setOutputValue11("Petugas ke - "+this.getServernumber(),this.servernumber-1);
+            gui.setOutputValue12(getTemp().getNumberinpoli()+"",this.servernumber-1);
+            gui.setOutputValue13(getTemp().getJenis()+"",this.servernumber-1);
+            gui.setOutputValue14(realtime2+"",this.servernumber-1);
+            gui.setOutputValue142(realtime+"",this.servernumber-1);
             try {
                 Thread.sleep(this.slidervalue);
             } catch (Exception ex) {
@@ -453,6 +470,20 @@ public class ServerPetugas extends Thread implements Server {
      */
     public void setTemp(Customer temp) {
         this.temp = temp;
+    }
+
+    /**
+     * @return the counterPasienLama
+     */
+    public int getCounterPasienLama() {
+        return counterPasienLama;
+    }
+
+    /**
+     * @return the counterPasienBaru
+     */
+    public int getCounterPasienBaru() {
+        return counterPasienBaru;
     }
     
 }

@@ -43,7 +43,13 @@ public class ServerAwal extends Thread implements Server{
     private Queue<Customer> queuereport;
     private LinkedList<Customer> queuereport2;
     private int counter;
-   
+    private double totalWaitingTimeBPJSLama;
+    private double totalWaitingTimeBPJSBaru;
+    private double totalServiceTimeBPJSLama;
+    private double totalServiceTimeBPJSBaru;
+    private int counterPasienLama;
+    private int counterPasienBaru;
+    private int counterPasienEmergency;
     public ServerAwal(int servernumber, StatisticsGenerator stat,InterfaceGUI4 gui ){
         super();
         this.stat=stat;
@@ -62,6 +68,13 @@ public class ServerAwal extends Thread implements Server{
         this.queuereport2=new LinkedList<Customer>();
         this.counterCustomer=0;
         this.counter=0;
+        this.totalServiceTimeBPJSBaru=0;
+        this.totalServiceTimeBPJSLama=0;
+        this.totalWaitingTimeBPJSBaru=0;
+        this.totalWaitingTimeBPJSLama=0;
+        this.counterPasienBaru=0;
+        this.counterPasienLama=0;
+        this.counterPasienEmergency=0;
     }
     
     ServerAwal(){
@@ -111,6 +124,7 @@ public class ServerAwal extends Thread implements Server{
                     double delaytime=0;
                     System.out.println("i : "+i);
                     if(temp.getJenis().equals("BPJS Lama")){
+                        this.counterPasienLama++;
                         if(getServerclock()<temp.getArrivaltime()){
                             setServerclock(temp.getArrivaltime());
                             temp.setTimeServiceBegin(getServerclock());
@@ -127,6 +141,8 @@ public class ServerAwal extends Thread implements Server{
                             totalservicetime+=servicetime;
                             totalWaitingTime+=waitingtime;
                             totalDelayTime+=delaytime;
+                            totalServiceTimeBPJSLama+=servicetime;
+                            totalWaitingTimeBPJSLama+=waitingtime;
                             temp.setArrivaltimepoli(getServerclock());
                             temp.setTimeServiceEnd(getServerclock());
                             this.setTimeServiceEnd(getServerclock());
@@ -152,6 +168,8 @@ public class ServerAwal extends Thread implements Server{
                             totalservicetime+=servicetime;
                             totalWaitingTime+=waitingtime;
                             totalDelayTime+=delaytime;
+                            totalServiceTimeBPJSBaru+=servicetime;
+                            totalWaitingTimeBPJSBaru+=waitingtime;
                             temp.setArrivaltimepoli(getServerclock());
                             temp.setTimeServiceEnd(getServerclock());
                             this.setTimeServiceEnd(getServerclock());
@@ -164,6 +182,7 @@ public class ServerAwal extends Thread implements Server{
                         }
                     }
                     else if(temp.getJenis().equals("BPJS Baru")){
+                            this.counterPasienBaru++;
                             if(getServerclock()<temp.getArrivaltime()){
                                 setServerclock(temp.getArrivaltime());
                                 temp.setTimeServiceBegin(getServerclock());
@@ -234,8 +253,13 @@ public class ServerAwal extends Thread implements Server{
                     this.setServerclock(bd.doubleValue());
                     String realtime=stat.convertSeconds(servicetime);
                     String realtime2=stat.convertSeconds(this.getServerclock());
-                    gui.setOutputValue3("Pasien nomot urut "+temp.getNumber()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
-                        try {
+                    //gui.setOutputValue3("Pasien nomot urut "+temp.getNumber()+" -"+"Server Clock : "+realtime2+"-"+"Service Time : "+realtime,this.servernumber);
+                    gui.setOutputValue7(this.servernumber+"",this.servernumber-1);  
+                    gui.setOutputValue8(temp.getNumber()+"",this.servernumber-1);
+                    gui.setOutputValue9(temp.getJenis()+"",this.servernumber-1);
+                    gui.setOutputValue10(realtime2+"",this.servernumber-1);  
+                    gui.setOutputValue102(realtime+"",this.servernumber-1);  
+                    try {
                              Thread.sleep(this.slidervalue);
                         } catch (Exception ex) {
                             System.out.println(ex.getMessage());;
@@ -472,5 +496,54 @@ public class ServerAwal extends Thread implements Server{
      */
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    /**
+     * @return the totalWaitingTimeBPJSLama
+     */
+    public double getTotalWaitingTimeBPJSLama() {
+        return totalWaitingTimeBPJSLama;
+    }
+
+    /**
+     * @return the totalWaitingTimeBPJSBaru
+     */
+    public double getTotalWaitingTimeBPJSBaru() {
+        return totalWaitingTimeBPJSBaru;
+    }
+
+    /**
+     * @return the totalServiceTimeBPJSLama
+     */
+    public double getTotalServiceTimeBPJSLama() {
+        return totalServiceTimeBPJSLama;
+    }
+
+    /**
+     * @return the totalServiceTimeBPJSBaru
+     */
+    public double getTotalServiceTimeBPJSBaru() {
+        return totalServiceTimeBPJSBaru;
+    }
+
+    /**
+     * @return the counterPasienLama
+     */
+    public int getCounterPasienLama() {
+        return counterPasienLama;
+    }
+
+    /**
+     * @return the counterPasienBaru
+     */
+    public int getCounterPasienBaru() {
+        return counterPasienBaru;
+    }
+
+    /**
+     * @return the counterPasienEmergency
+     */
+    public int getCounterPasienEmergency() {
+        return counterPasienEmergency;
     }
 }

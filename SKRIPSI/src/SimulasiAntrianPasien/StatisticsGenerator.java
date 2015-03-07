@@ -25,6 +25,7 @@ public class StatisticsGenerator  {
     private Poisson poisson;
     private Exponential exponential;
     private Exponential exponential2;
+    private Exponential exponential3;
     private Random rand;
     private double meanservicetime;
     private double meanarrivaltime;
@@ -50,11 +51,11 @@ public class StatisticsGenerator  {
         
         temp=1/meanservicetime2;
         this.meanservicetime2=temp;
-        System.out.println("mean service time 2 : "+this.meanservicetime);
+        System.out.println("mean service time 2 : "+this.meanservicetime2);
         bd = new BigDecimal(this.meanservicetime2);
         bd = bd.setScale(2,BigDecimal.ROUND_UP);  
         this.meanservicetime2=bd.doubleValue();
-        System.out.println("mean service time 2-2 : "+this.meanservicetime);
+        System.out.println("mean service time 2-2 : "+this.meanservicetime2);
         
         temp=1/meanservicetimepoli;
         this.meanservicetimepoli=temp;
@@ -68,6 +69,7 @@ public class StatisticsGenerator  {
         this.poisson=new Poisson(this.meanarrivaltime,(int)rand.nextDouble());
         this.exponential=new Exponential(this.meanservicetime,1);
         this.exponential2=new Exponential(this.meanservicetime2,1);
+        this.exponential3=new Exponential(this.meanservicetimepoli,1);
     }
     
     public StatisticsGenerator( double meanservicetimepoli){
@@ -78,6 +80,7 @@ public class StatisticsGenerator  {
         bd = new BigDecimal(this.meanservicetimepoli);
         bd = bd.setScale(2,BigDecimal.ROUND_UP);  
         this.meanservicetimepoli=bd.doubleValue();
+        this.exponential3=new Exponential(this.meanservicetimepoli,1);
         System.out.println("mean service time poli 2 : "+this.meanservicetimepoli);
     }
     
@@ -97,17 +100,13 @@ public class StatisticsGenerator  {
     }
 
      public double generateServiceTimePoli(){
-        double servicetime=this.exponential(this.rand,this.meanservicetimepoli);
+        //double servicetime=this.exponential(this.rand,this.meanservicetimepoli);
+        double servicetime=this.exponential3.gen();
         bd = new BigDecimal(servicetime); 
         bd = bd.setScale(2,BigDecimal.ROUND_UP);
         return bd.doubleValue();
     }
-    
-    public  double exponential(Random rng, double mean) {
-        return -mean * Math.log(rng.nextDouble());
-    } 
-    
-    
+
     public double generateArrivalTime(){
         bd = new BigDecimal(this.poisson.gen()); 
         bd = bd.setScale(2,BigDecimal.ROUND_UP);
@@ -361,6 +360,14 @@ public class StatisticsGenerator  {
          return counterpasien;
     }
      
+    public LinkedList<int[]> getPasienCounter(ExcelInputSimulation.ServerAwal[] arrayServer){
+         LinkedList<int[]> counterpasien=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             counterpasien.add(this.getPasienCounter(arrayServer[i].getQueueReport2()));
+         }
+         return counterpasien;
+    }
+     
      public int[] getPasienCounter(LinkedList<Customer> customer){
          int[] pasien=new int[3];
          pasien[0]=0;
@@ -388,6 +395,14 @@ public class StatisticsGenerator  {
          return pasien;
      }
      
+      public LinkedList<int[]> getPasienDelayTime(ExcelInputSimulation.ServerAwal[] arrayServer){
+         LinkedList<int[]> pasien=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             pasien.add(this.getPasienDelayTime(arrayServer[i].getQueueReport2()));
+         }
+         return pasien;
+     }
+     
      public int[] getPasienDelayTime(LinkedList<Customer> customer){
          int[] pasien=new int[3];
          pasien[0]=0;
@@ -407,6 +422,111 @@ public class StatisticsGenerator  {
          return pasien;
      }
      
+      public LinkedList<int[]> getPasienDelayTimePetugas(ServerPetugas[] arrayServer){
+         LinkedList<int[]> pasien=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             pasien.add(this.getPasienDelayTimePetugas(arrayServer[i].getQueueReport2()));
+         }
+         return pasien;
+     }
+      
+      public LinkedList<int[]> getPasienDelayTimePetugas(ExcelInputSimulation.ServerPetugas[] arrayServer){
+         LinkedList<int[]> pasien=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             pasien.add(this.getPasienDelayTimePetugas(arrayServer[i].getQueueReport2()));
+         }
+         return pasien;
+     }
+     
+     public int[] getPasienDelayTimePetugas(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli());
+             }
+         }
+         return pasien;
+     }
+     
+       public LinkedList<int[]> getPasienDelayTimePerawat(ServerPerawat[] arrayServer){
+         LinkedList<int[]> pasien=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             pasien.add(this.getPasienDelayTimePerawat(arrayServer[i].getQueueReport2()));
+         }
+         return pasien;
+     }
+       
+        public LinkedList<int[]> getPasienDelayTimePerawat(ExcelInputSimulation.ServerPerawat[] arrayServer){
+         LinkedList<int[]> pasien=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             pasien.add(this.getPasienDelayTimePerawat(arrayServer[i].getQueueReport2()));
+         }
+         return pasien;
+     }
+     
+     public int[] getPasienDelayTimePerawat(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli2());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli2());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli2());
+             }
+         }
+         return pasien;
+     }
+     
+    public LinkedList<int[]> getPasienDelayTimeDokter(ServerDokter[] arrayServer){
+         LinkedList<int[]> pasien=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             pasien.add(this.getPasienDelayTimeDokter(arrayServer[i].getQueueReport2()));
+         }
+         return pasien;
+     }
+       
+    public LinkedList<int[]> getPasienDelayTimeDokter(ExcelInputSimulation.ServerDokter[] arrayServer){
+         LinkedList<int[]> pasien=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             pasien.add(this.getPasienDelayTimeDokter(arrayServer[i].getQueueReport2()));
+         }
+         return pasien;
+     }
+     
+     public int[] getPasienDelayTimeDokter(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli3());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli3());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getDelaytimepoli3());
+             }
+         }
+         return pasien;
+     }
+     
      public int getMaxArrivalTimePoli(ServerAwal[] arrayServer){
          double max=this.getMaxArrivalTimeCustomer(arrayServer[0].getQueueReport2());
          for(int i=1;i<arrayServer.length;i++){
@@ -418,12 +538,156 @@ public class StatisticsGenerator  {
          return max2;
      }
      
-     public double getMaxArrivalTimeCustomer(LinkedList<Customer> cust){
-         double cari=cust.get(0).getArrivaltimepoli();
-         for(int i=1;i<cust.size();i++){
-             if(cari<cust.get(i).getArrivaltimepoli()){
-                 cari=cust.get(i).getArrivaltimepoli();
+      public int getMaxArrivalTimePoli(ExcelInputSimulation.ServerAwal[] arrayServer){
+         double max=this.getMaxArrivalTimeCustomer(arrayServer[0].getQueueReport2());
+         for(int i=1;i<arrayServer.length;i++){
+             if(max<this.getMaxArrivalTimeCustomer(arrayServer[i].getQueueReport2())){
+                 max=this.getMaxArrivalTimeCustomer(arrayServer[i].getQueueReport2());
              }
+         }
+         int max2=this.convertSecondsForChart(max);
+         return max2;
+     }
+     
+     public double getMaxArrivalTimeCustomer(LinkedList<Customer> cust){
+         double cari=0;
+         if(cust.size()>0){
+            cari=cust.get(0).getArrivaltimepoli();
+            for(int i=1;i<cust.size();i++){
+                if(cari<cust.get(i).getArrivaltimepoli()){
+                    cari=cust.get(i).getArrivaltimepoli();
+                }
+            }
+         }
+         return cari;
+     }
+     
+      public int getMaxArrivalTimePoli2(ServerPetugas[] arrayServer){
+            double max=this.getMaxArrivalTimeCustomer2(arrayServer[0].getQueueReport2());
+            System.out.println("max petugas 0 : "+max);
+            for(int i=1;i<arrayServer.length;i++){
+                if(max<this.getMaxArrivalTimeCustomer2(arrayServer[i].getQueueReport2())){
+                    max=this.getMaxArrivalTimeCustomer2(arrayServer[i].getQueueReport2());
+                    System.out.println("max petugas "+i+" : "+max);
+                }
+            }
+            System.out.println("max petugas last : "+max);
+            int max2=this.convertSecondsForChart(max);
+            return max2;
+     }
+      
+      public int getMaxArrivalTimePoli2(ExcelInputSimulation.ServerPetugas[] arrayServer){
+            double max=this.getMaxArrivalTimeCustomer2(arrayServer[0].getQueueReport2());
+            for(int i=1;i<arrayServer.length;i++){
+                if(max<this.getMaxArrivalTimeCustomer2(arrayServer[i].getQueueReport2())){
+                    max=this.getMaxArrivalTimeCustomer2(arrayServer[i].getQueueReport2());
+                }
+            }
+            int max2=this.convertSecondsForChart(max);
+            return max2;
+     }
+      
+       public double getMaxArrivalTimeCustomer2(LinkedList<Customer> cust){
+         double cari=0;
+         if(cust.size()>0){
+            cari=cust.get(0).getArrivaltimepoli2();
+            for(int i=1;i<cust.size();i++){
+                if(cari<cust.get(i).getArrivaltimepoli2()){
+                    cari=cust.get(i).getArrivaltimepoli2();
+                }
+            }
+         }
+         System.out.println("cari 2 : "+cari);
+         return cari;
+     }
+       
+       public int getMaxArrivalTimePoli3(ServerPerawat[] arrayServer){
+            double max=this.getMaxArrivalTimeCustomer3(arrayServer[0].getQueueReport2());
+            System.out.println("max perawat 0 : "+max);
+            for(int i=1;i<arrayServer.length;i++){
+                if(max<this.getMaxArrivalTimeCustomer3(arrayServer[i].getQueueReport2())){
+                    max=this.getMaxArrivalTimeCustomer3(arrayServer[i].getQueueReport2());
+                    System.out.println("max perawat "+i+" : "+max);
+                }
+            }
+            System.out.println("max perawat last : "+max);
+            int max2=this.convertSecondsForChart(max);
+            return max2;
+     }
+       
+        public int getMaxArrivalTimePoli3(ExcelInputSimulation.ServerPerawat[] arrayServer){
+            double max=this.getMaxArrivalTimeCustomer3(arrayServer[0].getQueueReport2());
+            for(int i=1;i<arrayServer.length;i++){
+                if(max<this.getMaxArrivalTimeCustomer3(arrayServer[i].getQueueReport2())){
+                    max=this.getMaxArrivalTimeCustomer3(arrayServer[i].getQueueReport2());
+                }
+            }
+            int max2=this.convertSecondsForChart(max);
+            return max2;
+     }
+      
+       public double getMaxArrivalTimeCustomer3(LinkedList<Customer> cust){
+         double cari=0;
+         if(cust.size()>0){
+            cari=cust.get(0).getArrivaltimepoli3();
+            for(int i=1;i<cust.size();i++){
+                if(cari<cust.get(i).getArrivaltimepoli3()){
+                    cari=cust.get(i).getArrivaltimepoli3();
+                }
+            }
+         }
+         System.out.println("cari 3 : "+cari);
+         return cari;
+     }
+       
+    public int getMaxArrivalTimePoli4(ServerDokter[] arrayServer){
+        if(arrayServer.length>1){
+            double max=this.getMaxArrivalTimeCustomer4(arrayServer[0].getQueueReport2());
+            System.out.println("max dokter 0 : "+max);
+            for(int i=1;i<arrayServer.length;i++){
+                if(max<this.getMaxArrivalTimeCustomer4(arrayServer[i].getQueueReport2())){
+                    max=this.getMaxArrivalTimeCustomer4(arrayServer[i].getQueueReport2());
+                    System.out.println("max petugas "+i+" : "+max);
+                }
+            }
+            System.out.println("max dokter last : "+max);
+            int max2=this.convertSecondsForChart(max);
+            System.out.println("cari 4 : "+max);
+            return max2;
+        }
+        else{
+            double max=this.getMaxArrivalTimeCustomer4(arrayServer[0].getQueueReport2());
+            System.out.println("cari 4 : "+max);
+            return this.convertSecondsForChart(max);
+        }
+     }
+    
+    public int getMaxArrivalTimePoli4(ExcelInputSimulation.ServerDokter[] arrayServer){
+        if(arrayServer.length>1){
+            double max=this.getMaxArrivalTimeCustomer4(arrayServer[0].getQueueReport2());
+            for(int i=1;i<arrayServer.length;i++){
+                if(max<this.getMaxArrivalTimeCustomer4(arrayServer[i].getQueueReport2())){
+                    max=this.getMaxArrivalTimeCustomer4(arrayServer[i].getQueueReport2());
+                }
+            }
+            int max2=this.convertSecondsForChart(max);
+            return max2;
+        }
+        else{
+            double max=this.getMaxArrivalTimeCustomer4(arrayServer[0].getQueueReport2());
+            return this.convertSecondsForChart(max);
+        }
+     }
+      
+       public double getMaxArrivalTimeCustomer4(LinkedList<Customer> cust){
+         double cari=0;
+         if(cust.size()>0){
+            cari=cust.get(0).getTimeServiceEnd4();
+            for(int i=1;i<cust.size();i++){
+                if(cari<cust.get(i).getTimeServiceEnd4()){
+                    cari=cust.get(i).getTimeServiceEnd4();
+                }
+            }
          }
          return cari;
      }
@@ -439,10 +703,9 @@ public class StatisticsGenerator  {
              customer.add(waiting);
          }
          return customer;
-         
      }
      
-     public LinkedList<double[]> getServiceTimeServer(ServerAwal[] arrayServer){
+     public LinkedList<double[]> getWaitingTimeServer(ExcelInputSimulation.ServerAwal[] arrayServer){
          LinkedList<double[]> customer=new LinkedList<double[]>();
          for(int i=0;i<arrayServer.length;i++){
              double[] waiting=new double[2];
@@ -453,7 +716,1067 @@ public class StatisticsGenerator  {
              customer.add(waiting);
          }
          return customer;
+     }
+     
+      public LinkedList<int[]> getWaitingTimeServerPetugas(ServerPetugas[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getWaitingTimePetugas(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
          
+     }
+      
+     public LinkedList<int[]> getWaitingTimeServerPetugas(ExcelInputSimulation.ServerPetugas[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getWaitingTimePetugas(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+      
+      public int[] getWaitingTimePetugas(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli());
+             }
+         }
+         return pasien;
+     }
+      
+      public LinkedList<int[]> getWaitingTimeServerPerawat(ServerPerawat[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getWaitingTimePerawat(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+      
+       public LinkedList<int[]> getWaitingTimeServerPerawat(ExcelInputSimulation.ServerPerawat[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getWaitingTimePerawat(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+      
+      public int[] getWaitingTimePerawat(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli2());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli2());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli2());
+             }
+         }
+         return pasien;
+     }
+      
+    public LinkedList<int[]> getWaitingTimeServerDokter(ServerDokter[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getWaitingTimeDokter(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+      
+     public LinkedList<int[]> getWaitingTimeServerDokter(ExcelInputSimulation.ServerDokter[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getWaitingTimeDokter(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+      
+      public int[] getWaitingTimeDokter(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli3());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli3());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getWaitingtimepoli3());
+             }
+         }
+         return pasien;
+     }
+      
+      
+    public LinkedList<int[]> getServiceTimeServerPetugas(ServerPetugas[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getServiceTimePetugas(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+       
+    public LinkedList<int[]> getServiceTimeServerPetugas(ExcelInputSimulation.ServerPetugas[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getServiceTimePetugas(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+      
+      public int[] getServiceTimePetugas(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli());
+             }
+         }
+         return pasien;
+     }
+      
+       public LinkedList<int[]> getServiceTimeServerPerawat(ServerPerawat[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getServiceTimePerawat(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+       
+    public LinkedList<int[]> getServiceTimeServerPerawat(ExcelInputSimulation.ServerPerawat[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getServiceTimePerawat(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+      
+      public int[] getServiceTimePerawat(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli2());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli2());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli2());
+             }
+         }
+         return pasien;
+     }
+      
+    public LinkedList<int[]> getServiceTimeServerDokter(ServerDokter[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getServiceTimeDokter(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+    
+    public LinkedList<int[]> getServiceTimeServerDokter(ExcelInputSimulation.ServerDokter[] arrayServer){
+         LinkedList<int[]> customer=new LinkedList<int[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             customer.add(this.getServiceTimeDokter(arrayServer[i].getQueueReport2()));
+         }
+         return customer;
+         
+     }
+      
+      public int[] getServiceTimeDokter(LinkedList<Customer> customer){
+         int[] pasien=new int[3];
+         pasien[0]=0;
+         pasien[1]=0;
+         pasien[2]=0;
+         for(int i=0;i<customer.size();i++){
+             if(customer.get(i).getJenis().equals("BPJS Lama")){
+                 pasien[0]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli3());
+             }
+             else if(customer.get(i).getJenis().equals("BPJS Baru")){
+                 pasien[1]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli3());
+             }
+             else if(customer.get(i).getJenis().equals("Emergency")){
+                 pasien[2]+=this.convertSecondsForChart(customer.get(i).getServicetimepoli3());
+             }
+         }
+         return pasien;
+     }
+      
+     
+     public LinkedList<double[]> getServiceTimeServer(ServerAwal[] arrayServer){
+         LinkedList<double[]> customer=new LinkedList<double[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             double[] service=new double[2];
+             service[0]=this.convertSecondsForChart(arrayServer[i].getTotalServiceTimeBPJSLama());
+             System.out.println("waiting time lama : "+arrayServer[i].getTotalServiceTimeBPJSLama());
+             service[1]=this.convertSecondsForChart(arrayServer[i].getTotalServiceTimeBPJSBaru());
+             System.out.println("waiting time baru : "+arrayServer[i].getTotalServiceTimeBPJSBaru());
+             customer.add(service);
+         }
+         return customer;   
+     }
+     
+      public LinkedList<double[]> getServiceTimeServer(ExcelInputSimulation.ServerAwal[] arrayServer){
+         LinkedList<double[]> customer=new LinkedList<double[]>();
+         for(int i=0;i<arrayServer.length;i++){
+             double[] service=new double[2];
+             service[0]=this.convertSecondsForChart(arrayServer[i].getTotalServiceTimeBPJSLama());
+             System.out.println("waiting time lama : "+arrayServer[i].getTotalServiceTimeBPJSLama());
+             service[1]=this.convertSecondsForChart(arrayServer[i].getTotalServiceTimeBPJSBaru());
+             System.out.println("waiting time baru : "+arrayServer[i].getTotalServiceTimeBPJSBaru());
+             customer.add(service);
+         }
+         return customer;   
+     }
+     
+     public LinkedList<int[]> getCounterPasienPetugas(ServerPetugas[] serverpetugas){
+         LinkedList<int[]> counter=new LinkedList<int[]>();
+         for(int i=0;i<serverpetugas.length;i++){
+             counter.add(this.getPasienCounter(serverpetugas[i].getQueueReport2()));
+         }
+         return counter;
+     }
+     
+     
+     public LinkedList<int[]> getCounterPasienPetugas(ExcelInputSimulation.ServerPetugas[] serverpetugas){
+         LinkedList<int[]> counter=new LinkedList<int[]>();
+         for(int i=0;i<serverpetugas.length;i++){
+             counter.add(this.getPasienCounter(serverpetugas[i].getQueueReport2()));
+         }
+         return counter;
+     }
+     
+    
+     
+      public LinkedList<int[]> getCounterPasienPerawat(ServerPerawat[] serverperawat){
+         LinkedList<int[]> counter=new LinkedList<int[]>();
+         for(int i=0;i<serverperawat.length;i++){
+            counter.add(this.getPasienCounter(serverperawat[i].getQueueReport2()));
+         }
+         return counter;
+     }
+      
+       public LinkedList<int[]> getCounterPasienPerawat(ExcelInputSimulation.ServerPerawat[] serverperawat){
+         LinkedList<int[]> counter=new LinkedList<int[]>();
+         for(int i=0;i<serverperawat.length;i++){
+            counter.add(this.getPasienCounter(serverperawat[i].getQueueReport2()));
+         }
+         return counter;
+     }
+      
+   public LinkedList<int[]> getCounterPasienDokter(ServerDokter[] serverdokter){
+         LinkedList<int[]> counter=new LinkedList<int[]>();
+         for(int i=0;i<serverdokter.length;i++){
+             counter.add(this.getPasienCounter(serverdokter[i].getQueueReport2()));
+         }
+         return counter;
+     }
+       
+    public LinkedList<int[]> getCounterPasienDokter(ExcelInputSimulation.ServerDokter[] serverdokter){
+         LinkedList<int[]> counter=new LinkedList<int[]>();
+         for(int i=0;i<serverdokter.length;i++){
+             counter.add(this.getPasienCounter(serverdokter[i].getQueueReport2()));
+         }
+         return counter;
+     }
+     
+     public LinkedList<int[]> getCounterPasienperServer(ServerAwal[] arrayServer){
+        int max=getMaxArrivalTimePoli(arrayServer);
+        System.out.println(" max poli :"+max);
+        LinkedList<int[]> realcounter=new LinkedList<int[]>();
+        int begin=0;
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        while(begin<=(max)){
+            int i=0;
+            int[] counterpasien=new int[3];
+            while(i<arrayServer.length){
+                LinkedList<Customer> custtemp=arrayServer[i].getQueueReport2();
+                for(int k=0;k<custtemp.size();k++){
+                    if(custtemp.get(k).getArrivaltimepoli()<=begin){
+                        if(custtemp.get(k).getJenis().equals("BPJS Lama")){
+                            System.out.println("lama generate : "+custtemp.get(k).getArrivaltimepoli()+" begin : "+begin);
+                            counterpasien[0]++;
+                            System.out.println("Counter pasien lama : "+counterpasien[0]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("BPJS Baru")){
+                            System.out.println("baru generate : "+custtemp.get(k).getArrivaltimepoli()+" begin : "+begin);
+                            counterpasien[1]++;
+                            System.out.println("Counter pasien baru : "+counterpasien[1]);
+                        }
+                        else{
+                            counterpasien[2]++;
+                        }
+                    }
+                    if(custtemp.get(k).getArrivaltimepoli()>begin){
+                        k=custtemp.size();
+                    }
+                }
+                i++;
+                System.out.println(" i ke "+i);
+            }
+            System.out.println("counter pasien b4 queue : "+counterpasien[0]+" , "+counterpasien[1]);
+            realcounter.add(counterpasien);
+            for(int k=0;k<realcounter.size();k++){
+                System.out.println("cek realcounter dlm loop  : "+realcounter.get(k)[0]+" "+realcounter.get(k)[1]);
+            }
+            System.out.println("First element : "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
+            System.out.println("Size counter : "+realcounter.size());
+            begin+=5;
+        }
+        for(int i=0;i<realcounter.size();i++){
+            System.out.println("cek realcounter : "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
+        }
+        int[] counterpasien1=realcounter.get(0);
+        int compare1=counterpasien1[0];
+        int compare2=counterpasien1[1];
+        System.out.println("comp1 0 :"+compare1);
+        System.out.println("comp1 1 :"+compare2);
+        LinkedList<int[]> realcounter2=new LinkedList<int[]>();
+        realcounter2.add(counterpasien1);
+        for(int k=1;k<realcounter.size();k++){
+            int[] temp=realcounter.get(k);
+            int x=temp[0];
+            int y=temp[1];
+            System.out.println("temp 00 :"+temp[0]);
+            System.out.println("temp 11 :"+temp[1]);
+            temp[0]=x-compare1;
+            temp[1]=y-compare2;
+            System.out.println("temp 0 :"+temp[0]);
+            System.out.println("temp 1 :"+temp[1]);
+            realcounter2.add(temp);
+            compare1=x;
+            compare2=y;
+            System.out.println("comp 0 :"+compare1);
+            System.out.println("comp 1 :"+compare2);
+        }
+        return realcounter2;
+         
+     }
+     
+     public LinkedList<int[]> getCounterPasienperServer(ExcelInputSimulation.ServerAwal[] arrayServer){
+        int max=getMaxArrivalTimePoli(arrayServer);
+        System.out.println(" max poli :"+max);
+        LinkedList<int[]> realcounter=new LinkedList<int[]>();
+        int begin=0;
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        while(begin<=(max)){
+            int i=0;
+            int[] counterpasien=new int[3];
+            while(i<arrayServer.length){
+                LinkedList<Customer> custtemp=arrayServer[i].getQueueReport2();
+                for(int k=0;k<custtemp.size();k++){
+                    if(custtemp.get(k).getArrivaltimepoli()<=begin){
+                        if(custtemp.get(k).getJenis().equals("BPJS Lama")){
+                            System.out.println("lama generate : "+custtemp.get(k).getArrivaltimepoli()+" begin : "+begin);
+                            counterpasien[0]++;
+                            System.out.println("Counter pasien lama : "+counterpasien[0]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("BPJS Baru")){
+                            System.out.println("baru generate : "+custtemp.get(k).getArrivaltimepoli()+" begin : "+begin);
+                            counterpasien[1]++;
+                            System.out.println("Counter pasien baru : "+counterpasien[1]);
+                        }
+                        else{
+                            counterpasien[2]++;
+                        }
+                    }
+                    if(custtemp.get(k).getArrivaltimepoli()>begin){
+                        k=custtemp.size();
+                    }
+                }
+                i++;
+                System.out.println(" i ke "+i);
+            }
+            System.out.println("counter pasien b4 queue : "+counterpasien[0]+" , "+counterpasien[1]);
+            realcounter.add(counterpasien);
+            for(int k=0;k<realcounter.size();k++){
+                System.out.println("cek realcounter dlm loop  : "+realcounter.get(k)[0]+" "+realcounter.get(k)[1]);
+            }
+            System.out.println("First element : "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
+            System.out.println("Size counter : "+realcounter.size());
+            begin+=5;
+        }
+        for(int i=0;i<realcounter.size();i++){
+            System.out.println("cek realcounter : "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
+        }
+        int[] counterpasien1=realcounter.get(0);
+        int compare1=counterpasien1[0];
+        int compare2=counterpasien1[1];
+        System.out.println("comp1 0 :"+compare1);
+        System.out.println("comp1 1 :"+compare2);
+        LinkedList<int[]> realcounter2=new LinkedList<int[]>();
+        realcounter2.add(counterpasien1);
+        for(int k=1;k<realcounter.size();k++){
+            int[] temp=realcounter.get(k);
+            int x=temp[0];
+            int y=temp[1];
+            System.out.println("temp 00 :"+temp[0]);
+            System.out.println("temp 11 :"+temp[1]);
+            temp[0]=x-compare1;
+            temp[1]=y-compare2;
+            System.out.println("temp 0 :"+temp[0]);
+            System.out.println("temp 1 :"+temp[1]);
+            realcounter2.add(temp);
+            compare1=x;
+            compare2=y;
+            System.out.println("comp 0 :"+compare1);
+            System.out.println("comp 1 :"+compare2);
+        }
+        return realcounter2;
+         
+     }
+     
+     public LinkedList<int[]> getCounterPasienperServer2(ServerPetugas[] arrayServer){
+        int max=getMaxArrivalTimePoli2(arrayServer);
+        System.out.println(" max poli 2 :"+max);
+        LinkedList<int[]> realcounter=new LinkedList<int[]>();
+        int begin=0;
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        max+=5;
+        while(begin<=(max)){
+            int i=0;
+            int[] counterpasien=new int[3];
+            while(i<arrayServer.length){
+                LinkedList<Customer> custtemp=arrayServer[i].getQueueReport2();
+                for(int k=0;k<custtemp.size();k++){
+                    if(custtemp.get(k).getArrivaltimepoli2()<=begin){
+                        if(custtemp.get(k).getJenis().equals("BPJS Lama")){
+                            System.out.println("lama generate 2 : "+custtemp.get(k).getArrivaltimepoli2()+" begin : "+begin);
+                            counterpasien[0]++;
+                            System.out.println("Counter pasien lama  2: "+counterpasien[0]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("BPJS Baru")){
+                            System.out.println("baru generate 2 : "+custtemp.get(k).getArrivaltimepoli2()+" begin : "+begin);
+                            counterpasien[1]++;
+                            System.out.println("Counter pasien baru 2 : "+counterpasien[1]);
+                        }
+                        else{
+                            counterpasien[2]++;
+                        }
+                    }
+                    if(custtemp.get(k).getArrivaltimepoli2()>begin){
+                        k=custtemp.size();
+                    }
+                }
+                i++;
+                System.out.println(" i ke "+i);
+            }
+            System.out.println("counter pasien b4 queue 2 : "+counterpasien[0]+" , "+counterpasien[1]);
+            realcounter.add(counterpasien);
+            for(int k=0;k<realcounter.size();k++){
+                System.out.println("cek realcounter dlm loop  2: "+realcounter.get(k)[0]+" "+realcounter.get(k)[1]);
+            }
+            System.out.println("First element 2: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
+            System.out.println("Size counter 2: "+realcounter.size());
+            begin+=5;
+        }
+        for(int i=0;i<realcounter.size();i++){
+            System.out.println("cek realcounter 2: "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
+        }
+        int[] counterpasien1=realcounter.get(0);
+        int compare1=counterpasien1[0];
+        int compare2=counterpasien1[1];
+        System.out.println("comp1 0 2:"+compare1);
+        System.out.println("comp1 1 2:"+compare2);
+        LinkedList<int[]> realcounter2=new LinkedList<int[]>();
+        realcounter2.add(counterpasien1);
+        for(int k=1;k<realcounter.size();k++){
+            int[] temp=realcounter.get(k);
+            int x=temp[0];
+            int y=temp[1];
+            System.out.println("temp 00 2:"+temp[0]);
+            System.out.println("temp 11 2:"+temp[1]);
+            System.out.println("temp 22 2: "+temp[2]);
+            temp[0]=x-compare1;
+            temp[1]=y-compare2;
+            System.out.println("temp 0 2:"+temp[0]);
+            System.out.println("temp 1 2:"+temp[1]);
+            realcounter2.add(temp);
+            compare1=x;
+            compare2=y;
+            System.out.println("comp 0 2:"+compare1);
+            System.out.println("comp 1 2:"+compare2);
+        }
+        return realcounter2;
+         
+     }
+     
+     public LinkedList<int[]> getCounterPasienperServer2(ExcelInputSimulation.ServerPetugas[] arrayServer){
+        int max=getMaxArrivalTimePoli2(arrayServer);
+        System.out.println(" max poli 2 :"+max);
+        LinkedList<int[]> realcounter=new LinkedList<int[]>();
+        int begin=0;
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        while(begin<=(max)){
+            int i=0;
+            int[] counterpasien=new int[3];
+            while(i<arrayServer.length){
+                LinkedList<Customer> custtemp=arrayServer[i].getQueueReport2();
+                for(int k=0;k<custtemp.size();k++){
+                    if(custtemp.get(k).getArrivaltimepoli2()<=begin){
+                        if(custtemp.get(k).getJenis().equals("BPJS Lama")){
+                            System.out.println("lama generate 2 : "+custtemp.get(k).getArrivaltimepoli2()+" begin : "+begin);
+                            counterpasien[0]++;
+                            System.out.println("Counter pasien lama  2: "+counterpasien[0]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("BPJS Baru")){
+                            System.out.println("baru generate 2 : "+custtemp.get(k).getArrivaltimepoli2()+" begin : "+begin);
+                            counterpasien[1]++;
+                            System.out.println("Counter pasien baru 2 : "+counterpasien[1]);
+                        }
+                        else{
+                            counterpasien[2]++;
+                        }
+                    }
+                    if(custtemp.get(k).getArrivaltimepoli2()>begin){
+                        k=custtemp.size();
+                    }
+                }
+                i++;
+                System.out.println(" i ke "+i);
+            }
+            System.out.println("counter pasien b4 queue 2 : "+counterpasien[0]+" , "+counterpasien[1]);
+            realcounter.add(counterpasien);
+            for(int k=0;k<realcounter.size();k++){
+                System.out.println("cek realcounter dlm loop  2: "+realcounter.get(k)[0]+" "+realcounter.get(k)[1]);
+            }
+            System.out.println("First element 2: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
+            System.out.println("Size counter 2: "+realcounter.size());
+            begin+=5;
+        }
+        for(int i=0;i<realcounter.size();i++){
+            System.out.println("cek realcounter 2: "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
+        }
+        int[] counterpasien1=realcounter.get(0);
+        int compare1=counterpasien1[0];
+        int compare2=counterpasien1[1];
+        System.out.println("comp1 0 2:"+compare1);
+        System.out.println("comp1 1 2:"+compare2);
+        LinkedList<int[]> realcounter2=new LinkedList<int[]>();
+        realcounter2.add(counterpasien1);
+        for(int k=1;k<realcounter.size();k++){
+            int[] temp=realcounter.get(k);
+            int x=temp[0];
+            int y=temp[1];
+            System.out.println("temp 00 2:"+temp[0]);
+            System.out.println("temp 11 2:"+temp[1]);
+            System.out.println("temp 22 2: "+temp[2]);
+            temp[0]=x-compare1;
+            temp[1]=y-compare2;
+            System.out.println("temp 0 2:"+temp[0]);
+            System.out.println("temp 1 2:"+temp[1]);
+            realcounter2.add(temp);
+            compare1=x;
+            compare2=y;
+            System.out.println("comp 0 2:"+compare1);
+            System.out.println("comp 1 2:"+compare2);
+        }
+        return realcounter2;
+         
+     }
+     
+      public LinkedList<int[]> getCounterPasienperServer3(ServerPerawat[] arrayServer){
+        int max=getMaxArrivalTimePoli3(arrayServer);
+        System.out.println(" max poli 3:"+max);
+        LinkedList<int[]> realcounter=new LinkedList<int[]>();
+        int begin=0;
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        while(begin<=(max+5)){
+            int i=0;
+            int[] counterpasien=new int[3];
+            while(i<arrayServer.length){
+                LinkedList<Customer> custtemp=arrayServer[i].getQueueReport2();
+                for(int k=0;k<custtemp.size();k++){
+                    if(custtemp.get(k).getArrivaltimepoli3()<=begin){
+                        if(custtemp.get(k).getJenis().equals("BPJS Lama")){
+                            System.out.println("lama generate 3: "+custtemp.get(k).getArrivaltimepoli3()+" begin : "+begin);
+                            counterpasien[0]++;
+                            System.out.println("Counter pasien lama 3: "+counterpasien[0]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("BPJS Baru")){
+                            System.out.println("baru generate 3: "+custtemp.get(k).getArrivaltimepoli3()+" begin : "+begin);
+                            counterpasien[1]++;
+                            System.out.println("Counter pasien baru 3: "+counterpasien[1]);
+                        }
+                        else{
+                            counterpasien[2]++;
+                        }
+                    }
+                    if(custtemp.get(k).getArrivaltimepoli3()>begin){
+                        k=custtemp.size();
+                    }
+                }
+                i++;
+                System.out.println(" i ke "+i);
+            }
+            System.out.println("counter pasien b4 queue 3: "+counterpasien[0]+" , "+counterpasien[1]);
+            realcounter.add(counterpasien);
+            for(int k=0;k<realcounter.size();k++){
+                System.out.println("cek realcounter dlm loop  3: "+realcounter.get(k)[0]+" "+realcounter.get(k)[1]);
+            }
+            System.out.println("First element 3: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
+            System.out.println("Size counter 3: "+realcounter.size());
+            begin+=5;
+        }
+        for(int i=0;i<realcounter.size();i++){
+            System.out.println("cek realcounter 3: "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
+        }
+        int[] counterpasien1=realcounter.get(0);
+        int compare1=counterpasien1[0];
+        int compare2=counterpasien1[1];
+        System.out.println("comp1 0 3:"+compare1);
+        System.out.println("comp1 1 3:"+compare2);
+        LinkedList<int[]> realcounter2=new LinkedList<int[]>();
+        realcounter2.add(counterpasien1);
+        for(int k=1;k<realcounter.size();k++){
+            int[] temp=realcounter.get(k);
+            int x=temp[0];
+            int y=temp[1];
+            System.out.println("temp 00 3:"+temp[0]);
+            System.out.println("temp 11 3:"+temp[1]);
+            temp[0]=x-compare1;
+            temp[1]=y-compare2;
+            System.out.println("temp 0 3:"+temp[0]);
+            System.out.println("temp 1 3:"+temp[1]);
+            realcounter2.add(temp);
+            compare1=x;
+            compare2=y;
+            System.out.println("comp 0 3:"+compare1);
+            System.out.println("comp 1 3:"+compare2);
+        }
+        return realcounter2;
+         
+     }
+      
+      public LinkedList<int[]> getCounterPasienperServer3(ExcelInputSimulation.ServerPerawat[] arrayServer){
+        int max=getMaxArrivalTimePoli3(arrayServer);
+        System.out.println(" max poli 3:"+max);
+        LinkedList<int[]> realcounter=new LinkedList<int[]>();
+        int begin=0;
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        while(begin<=(max)){
+            int i=0;
+            int[] counterpasien=new int[3];
+            while(i<arrayServer.length){
+                LinkedList<Customer> custtemp=arrayServer[i].getQueueReport2();
+                for(int k=0;k<custtemp.size();k++){
+                    if(custtemp.get(k).getArrivaltimepoli3()<=begin){
+                        if(custtemp.get(k).getJenis().equals("BPJS Lama")){
+                            System.out.println("lama generate 3: "+custtemp.get(k).getArrivaltimepoli3()+" begin : "+begin);
+                            counterpasien[0]++;
+                            System.out.println("Counter pasien lama 3: "+counterpasien[0]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("BPJS Baru")){
+                            System.out.println("baru generate 3: "+custtemp.get(k).getArrivaltimepoli3()+" begin : "+begin);
+                            counterpasien[1]++;
+                            System.out.println("Counter pasien baru 3: "+counterpasien[1]);
+                        }
+                        else{
+                            counterpasien[2]++;
+                        }
+                    }
+                    if(custtemp.get(k).getArrivaltimepoli3()>begin){
+                        k=custtemp.size();
+                    }
+                }
+                i++;
+                System.out.println(" i ke "+i);
+            }
+            System.out.println("counter pasien b4 queue 3: "+counterpasien[0]+" , "+counterpasien[1]);
+            realcounter.add(counterpasien);
+            for(int k=0;k<realcounter.size();k++){
+                System.out.println("cek realcounter dlm loop  3: "+realcounter.get(k)[0]+" "+realcounter.get(k)[1]);
+            }
+            System.out.println("First element 3: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
+            System.out.println("Size counter 3: "+realcounter.size());
+            begin+=5;
+        }
+        for(int i=0;i<realcounter.size();i++){
+            System.out.println("cek realcounter 3: "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
+        }
+        int[] counterpasien1=realcounter.get(0);
+        int compare1=counterpasien1[0];
+        int compare2=counterpasien1[1];
+        System.out.println("comp1 0 3:"+compare1);
+        System.out.println("comp1 1 3:"+compare2);
+        LinkedList<int[]> realcounter2=new LinkedList<int[]>();
+        realcounter2.add(counterpasien1);
+        for(int k=1;k<realcounter.size();k++){
+            int[] temp=realcounter.get(k);
+            int x=temp[0];
+            int y=temp[1];
+            System.out.println("temp 00 3:"+temp[0]);
+            System.out.println("temp 11 3:"+temp[1]);
+            temp[0]=x-compare1;
+            temp[1]=y-compare2;
+            System.out.println("temp 0 3:"+temp[0]);
+            System.out.println("temp 1 3:"+temp[1]);
+            realcounter2.add(temp);
+            compare1=x;
+            compare2=y;
+            System.out.println("comp 0 3:"+compare1);
+            System.out.println("comp 1 3:"+compare2);
+        }
+        return realcounter2;
+         
+     }
+     
+      public LinkedList<int[]> getCounterPasienperServer4(ServerDokter[] arrayServer){
+        int max=getMaxArrivalTimePoli4(arrayServer);
+        System.out.println(" max poli 4:"+max);
+        LinkedList<int[]> realcounter=new LinkedList<int[]>();
+        int begin=0;
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        while(begin<=(max+5)){
+            int i=0;
+            int[] counterpasien=new int[3];
+            while(i<arrayServer.length){
+                LinkedList<Customer> custtemp=arrayServer[i].getQueueReport2();
+                for(int k=0;k<custtemp.size();k++){
+                    if(custtemp.get(k).getTimeServiceEnd4()<=begin){
+                        if(custtemp.get(k).getJenis().equals("BPJS Lama")){
+                            System.out.println("lama generate 4: "+custtemp.get(k).getTimeServiceEnd4()+" begin 4: "+begin);
+                            counterpasien[0]++;
+                            System.out.println("Counter pasien lama 4: "+counterpasien[0]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("BPJS Baru")){
+                            System.out.println("baru generate 4: "+custtemp.get(k).getTimeServiceEnd4()+" begin 4: "+begin);
+                            counterpasien[1]++;
+                            System.out.println("Counter pasien baru 4: "+counterpasien[1]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("Emergency")){
+                            System.out.println("emer generate 4: "+custtemp.get(k).getTimeServiceEnd4()+" begin 4: "+begin);
+                            counterpasien[2]++;
+                            System.out.println("Counter pasien emergency 4: "+counterpasien[2]);
+                        }
+                    }
+                    if(custtemp.get(k).getTimeServiceEnd4()>begin){
+                        k=custtemp.size();
+                    }
+                }
+                i++;
+                System.out.println(" i ke "+i);
+            }
+            System.out.println("counter pasien b4 queue 4: "+counterpasien[0]+" , "+counterpasien[1]+" , "+counterpasien[2]);
+            realcounter.add(counterpasien);
+            for(int k=0;k<realcounter.size();k++){
+                System.out.println("cek realcounter dlm loop  4: "+realcounter.get(k)[0]+" "+realcounter.get(k)[1]+" "+realcounter.get(k)[2]);
+            }
+            System.out.println("First element 4: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]+" "+realcounter.getFirst()[2]);
+            System.out.println("Size counter 4: "+realcounter.size());
+            begin+=5;
+        }
+        for(int i=0;i<realcounter.size();i++){
+            System.out.println("cek realcounter : "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]+" "+realcounter.get(i)[2]);
+        }
+        int[] counterpasien1=realcounter.get(0);
+        int compare1=counterpasien1[0];
+        int compare2=counterpasien1[1];
+        int compare3=counterpasien1[2];
+        System.out.println("comp1 0 4:"+compare1);
+        System.out.println("comp1 1 4:"+compare2);
+        System.out.println("comp1 2 4:"+compare3);
+        LinkedList<int[]> realcounter2=new LinkedList<int[]>();
+        realcounter2.add(counterpasien1);
+        for(int k=1;k<realcounter.size();k++){
+            int[] temp=realcounter.get(k);
+            int x=temp[0];
+            int y=temp[1];
+            int z=temp[2];
+            System.out.println("temp 00 4:"+temp[0]);
+            System.out.println("temp 11 4:"+temp[1]);
+            System.out.println("temp 22 4:"+temp[2]);
+            temp[0]=x-compare1;
+            temp[1]=y-compare2;
+            temp[2]=z-compare3;
+            System.out.println("temp 0 4:"+temp[0]);
+            System.out.println("temp 1 4:"+temp[1]);
+            System.out.println("temp 2 4:"+temp[2]);
+            realcounter2.add(temp);
+            compare1=x;
+            compare2=y;
+            compare3=z;
+            System.out.println("comp 0 4:"+compare1);
+            System.out.println("comp 1 4:"+compare2);
+            System.out.println("comp 2 4:"+compare3);
+        }
+        return realcounter2;
+         
+     }
+      
+     public LinkedList<int[]> getCounterPasienperServer4(ExcelInputSimulation.ServerDokter[] arrayServer){
+        int max=getMaxArrivalTimePoli4(arrayServer);
+        System.out.println(" max poli 4:"+max);
+        LinkedList<int[]> realcounter=new LinkedList<int[]>();
+        int begin=0;
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        while(begin<=(max)){
+            int i=0;
+            int[] counterpasien=new int[3];
+            while(i<arrayServer.length){
+                LinkedList<Customer> custtemp=arrayServer[i].getQueueReport2();
+                for(int k=0;k<custtemp.size();k++){
+                    if(custtemp.get(k).getTimeServiceEnd4()<=begin){
+                        if(custtemp.get(k).getJenis().equals("BPJS Lama")){
+                            System.out.println("lama generate 4: "+custtemp.get(k).getTimeServiceEnd4()+" begin 4: "+begin);
+                            counterpasien[0]++;
+                            System.out.println("Counter pasien lama 4: "+counterpasien[0]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("BPJS Baru")){
+                            System.out.println("baru generate 4: "+custtemp.get(k).getTimeServiceEnd4()+" begin 4: "+begin);
+                            counterpasien[1]++;
+                            System.out.println("Counter pasien baru 4: "+counterpasien[1]);
+                        }
+                        else if(custtemp.get(k).getJenis().equals("Emergency")){
+                            System.out.println("emer generate 4: "+custtemp.get(k).getTimeServiceEnd4()+" begin 4: "+begin);
+                            counterpasien[2]++;
+                            System.out.println("Counter pasien emergency 4: "+counterpasien[2]);
+                        }
+                    }
+                    if(custtemp.get(k).getTimeServiceEnd4()>begin){
+                        k=custtemp.size();
+                    }
+                }
+                i++;
+                System.out.println(" i ke "+i);
+            }
+            System.out.println("counter pasien b4 queue 4: "+counterpasien[0]+" , "+counterpasien[1]+" , "+counterpasien[2]);
+            realcounter.add(counterpasien);
+            for(int k=0;k<realcounter.size();k++){
+                System.out.println("cek realcounter dlm loop  4: "+realcounter.get(k)[0]+" "+realcounter.get(k)[1]+" "+realcounter.get(k)[2]);
+            }
+            System.out.println("First element 4: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]+" "+realcounter.getFirst()[2]);
+            System.out.println("Size counter 4: "+realcounter.size());
+            begin+=5;
+        }
+        for(int i=0;i<realcounter.size();i++){
+            System.out.println("cek realcounter : "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]+" "+realcounter.get(i)[2]);
+        }
+        int[] counterpasien1=realcounter.get(0);
+        int compare1=counterpasien1[0];
+        int compare2=counterpasien1[1];
+        int compare3=counterpasien1[2];
+        System.out.println("comp1 0 4:"+compare1);
+        System.out.println("comp1 1 4:"+compare2);
+        System.out.println("comp1 2 4:"+compare3);
+        LinkedList<int[]> realcounter2=new LinkedList<int[]>();
+        realcounter2.add(counterpasien1);
+        for(int k=1;k<realcounter.size();k++){
+            int[] temp=realcounter.get(k);
+            int x=temp[0];
+            int y=temp[1];
+            int z=temp[2];
+            System.out.println("temp 00 4:"+temp[0]);
+            System.out.println("temp 11 4:"+temp[1]);
+            System.out.println("temp 22 4:"+temp[2]);
+            temp[0]=x-compare1;
+            temp[1]=y-compare2;
+            temp[2]=z-compare3;
+            System.out.println("temp 0 4:"+temp[0]);
+            System.out.println("temp 1 4:"+temp[1]);
+            System.out.println("temp 2 4:"+temp[2]);
+            realcounter2.add(temp);
+            compare1=x;
+            compare2=y;
+            compare3=z;
+            System.out.println("comp 0 4:"+compare1);
+            System.out.println("comp 1 4:"+compare2);
+            System.out.println("comp 2 4:"+compare3);
+        }
+        return realcounter2;
+         
+     }
+      
+     public int getMaxPasien(ServerAwal[] arrayServer){
+        int max=getMaxArrivalTimePoli(arrayServer);
+        System.out.println(" max poli :"+max);
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        return max;
+     }
+     
+     public int getMaxPasien(ExcelInputSimulation.ServerAwal[] arrayServer){
+        int max=getMaxArrivalTimePoli(arrayServer);
+        System.out.println(" max poli :"+max);
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        return max;
+     }
+     
+      public int getMaxPasien2(ServerPetugas[] arrayServer){
+        int max=getMaxArrivalTimePoli2(arrayServer);
+        System.out.println(" max poli petugas:"+max);
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+         System.out.println(" max poli :"+max);
+        return max;
+     }
+      
+      public int getMaxPasien2(ExcelInputSimulation.ServerPetugas[] arrayServer){
+        int max=getMaxArrivalTimePoli2(arrayServer);
+        System.out.println(" max poli  :"+max);
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        System.out.println(" max poli :"+max);
+        return max;
+     }
+      
+    public int getMaxPasien3(ServerPerawat[] arrayServer){
+        int max=getMaxArrivalTimePoli3(arrayServer);
+        System.out.println(" max poli perawat :"+max);
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        return max;
+     }
+    
+    public int getMaxPasien3(ExcelInputSimulation.ServerPerawat[] arrayServer){
+        int max=getMaxArrivalTimePoli3(arrayServer);
+        System.out.println(" max poli :"+max);
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        return max;
+     }
+    
+    public int getMaxPasien4(ServerDokter[] arrayServer){
+        int max=getMaxArrivalTimePoli4(arrayServer);
+        System.out.println(" max poli :"+max);
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        return max;
+     }
+    
+    public int getMaxPasien4(ExcelInputSimulation.ServerDokter[] arrayServer){
+        int max=getMaxArrivalTimePoli4(arrayServer);
+        System.out.println(" max poli :"+max);
+        if(max%5!=0){
+            int temp=max;
+            int mod=max%5;
+            int kurang=5-mod;
+            max=temp+kurang;
+        }
+        return max;
+     }
+        
+        
+     
+     public int countPasienLama(ServerAwal[] arrayServer){
+         int count=0;
+         for(int i=0;i<arrayServer.length;i++){
+             LinkedList<Customer> temp=arrayServer[i].getQueueReport2();
+             for(int k=0;k<temp.size();k++){
+                 if(temp.get(k).getJenis().equals("BPJS Lama")){
+                     count++;
+                 }
+             }
+         }
+         return count;
      }
      
      public int countPasienBaru(ServerAwal[] arrayServer){
@@ -593,10 +1916,15 @@ public class StatisticsGenerator  {
                     total++;
                 }
             }
-            double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli3()/2.0;
-            bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-            bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            return bd.doubleValue();
+            if(queuecustomer[cari].getArrivaltimepoli3()>0){
+                double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli3()/2.0;
+                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                return bd.doubleValue();
+            }
+            else{
+                return 0;
+            }
          }
          else {
              return 0;
@@ -617,10 +1945,15 @@ public class StatisticsGenerator  {
                     total++;
                 }
             }
-            double sumArrivalTime=queuecustomer[cari].getArrivaltime()/2.0;
-            bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-            bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            return bd.doubleValue();
+            if(queuecustomer[cari].getArrivaltime()>0&&total>0){
+                double sumArrivalTime=queuecustomer[cari].getArrivaltime()/2.0;
+                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                return bd.doubleValue();
+            }
+            else{
+                return 0;
+            }
          }
          else{
              return 0;
@@ -641,10 +1974,15 @@ public class StatisticsGenerator  {
                         total++;
                     }
                 }
-                double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli()/2.0;
-                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-                bd = bd.setScale(2,BigDecimal.ROUND_UP);
-                return bd.doubleValue();
+                if(queuecustomer[cari].getArrivaltimepoli()>0&&total>0){
+                    double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli()/2.0;
+                    bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                    bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                    return bd.doubleValue();
+                }
+                else{
+                    return 0;
+                }
          }
          else{
              return 0;
@@ -666,10 +2004,15 @@ public class StatisticsGenerator  {
                         total++;
                     }
                 }
-                double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli2()/2.0;
-                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-                bd = bd.setScale(2,BigDecimal.ROUND_UP);
-                return bd.doubleValue();
+                if(queuecustomer[cari].getArrivaltimepoli2()>0&&total>0){
+                    double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli2()/2.0;
+                    bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                    bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                    return bd.doubleValue();
+                }
+                else{
+                    return 0;
+                }
          }
          else{
              return 0;
@@ -691,10 +2034,15 @@ public class StatisticsGenerator  {
                         total++;
                     }
                 }
-                double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli3()/2.0;
-                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-                bd = bd.setScale(2,BigDecimal.ROUND_UP);
-                return bd.doubleValue();
+                if(queuecustomer[cari].getArrivaltimepoli3()>0&&total>0){
+                    double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli3()/2.0;
+                    bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                    bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                    return bd.doubleValue();
+                }
+                else{
+                    return 0;
+                }
          }
          else{
              return 0;
@@ -974,11 +2322,48 @@ public class StatisticsGenerator  {
             String hours2="";
             String minutes2="";
             String seconds2="";
-            ret=minutes;
+            ret=up;
             
         }
         return ret;
     }
+    
+    public int getMaxJumlahPasienperServer(LinkedList<int[]> customer){
+        int max=customer.get(0)[0];
+        for(int i=1;i<customer.size();i++){
+            if(max<customer.get(i)[0]){
+                max=customer.get(i)[0];
+            }
+        }
+        int max2=customer.get(0)[1];
+        for(int i=1;i<customer.size();i++){
+            if(max2<customer.get(i)[1]){
+                max2=customer.get(i)[1];
+            }
+        }
+        int max3=customer.get(0)[2];
+        for(int i=1;i<customer.size();i++){
+            if(max3<customer.get(i)[2]){
+                max3=customer.get(i)[2];
+            }
+        }
+        if(max>max2&&max>max3){
+            System.out.println("Max pasien per server : "+max);
+            return max;
+            
+        }
+        else if(max2>max3&&max2>max){
+            System.out.println("Max pasien per server : "+max2);
+            return max2;
+            
+        }
+        else{
+            return max3;
+        }
+         
+    }
+    
+    
     
     public Object[][] generateUtilityServer(ServerAwal[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
@@ -1003,8 +2388,31 @@ public class StatisticsGenerator  {
         
     }
     
-    public Object[][] generateUtilityServerforChart(ServerAwal[] arrayServer){
-        Object[][] utility=new Object[1][arrayServer.length];
+    public double[][] generateUtilityServerforChart(ServerAwal[] arrayServer){
+        double[][] utility=new double[1][arrayServer.length];
+        for(int i=0;i<arrayServer.length;i++){
+           System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
+           if(arrayServer[i].getTotalservicetime()>0&&arrayServer[i].getCounter()>0){
+                double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
+                bd = new BigDecimal(temp); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                temp=bd.doubleValue();
+                System.out.println("temp : "+temp);
+                if(temp>100){
+                    temp=100;
+                }
+                utility[0][i]=temp;
+             }
+           else{
+               utility[0][i]=0;
+           }
+        }
+        return utility;
+        
+    }
+    
+    public double[][] generateUtilityServerforChart(ExcelInputSimulation.ServerAwal[] arrayServer){
+        double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
            if(arrayServer[i].getTotalservicetime()>0&&arrayServer[i].getCounter()>0){
@@ -1051,6 +2459,56 @@ public class StatisticsGenerator  {
         
     }
     
+     public double[][] generateUtilityServer2forChart(ServerPetugas[] arrayServer){
+        double[][] utility=new double[1][arrayServer.length];
+        for(int i=0;i<arrayServer.length;i++){
+            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
+            if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
+                utility[0][i]=0.0;
+            }
+            else{
+                double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
+                System.out.println("temp ? :"+temp);
+                bd = new BigDecimal(temp); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                temp=bd.doubleValue();
+                System.out.println("temp : "+temp);
+                if(temp>100){
+                        temp=100;
+                }
+                utility[0][i]=temp;
+            }
+            
+        }
+        return utility;
+        
+    }
+     
+      public double[][] generateUtilityServer2forChart(ExcelInputSimulation.ServerPetugas[] arrayServer){
+        double[][] utility=new double[1][arrayServer.length];
+        for(int i=0;i<arrayServer.length;i++){
+            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
+            if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
+                utility[0][i]=0.0;
+            }
+            else{
+                double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
+                System.out.println("temp ? :"+temp);
+                bd = new BigDecimal(temp); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                temp=bd.doubleValue();
+                System.out.println("temp : "+temp);
+                if(temp>100){
+                        temp=100;
+                }
+                utility[0][i]=temp;
+            }
+            
+        }
+        return utility;
+        
+    }
+    
      public Object[][] generateUtilityServer3(ServerPerawat[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
@@ -1069,6 +2527,56 @@ public class StatisticsGenerator  {
                         temp=100;
                 }
                 utility[0][i]=temp+" %";
+            }
+            
+        }
+        return utility;
+        
+    }
+     
+     public double[][] generateUtilityServer3forChart(ServerPerawat[] arrayServer){
+        double[][] utility=new double[1][arrayServer.length];
+        for(int i=0;i<arrayServer.length;i++){
+            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
+            if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
+                utility[0][i]=0.0;
+            }
+            else{
+                double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
+                System.out.println("temp ? :"+temp);
+                bd = new BigDecimal(temp); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                temp=bd.doubleValue();
+                System.out.println("temp : "+temp);
+                if(temp>100){
+                        temp=100;
+                }
+                utility[0][i]=temp;
+            }
+            
+        }
+        return utility;
+        
+    }
+     
+     public double[][] generateUtilityServer3forChart(ExcelInputSimulation.ServerPerawat[] arrayServer){
+        double[][] utility=new double[1][arrayServer.length];
+        for(int i=0;i<arrayServer.length;i++){
+            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
+            if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
+                utility[0][i]=0.0;
+            }
+            else{
+                double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
+                System.out.println("temp ? :"+temp);
+                bd = new BigDecimal(temp); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                temp=bd.doubleValue();
+                System.out.println("temp : "+temp);
+                if(temp>100){
+                        temp=100;
+                }
+                utility[0][i]=temp;
             }
             
         }
@@ -1120,6 +2628,56 @@ public class StatisticsGenerator  {
                         temp=100;
                 }
                 utility[0][i]=temp+" %";
+            }
+            
+        }
+        return utility;
+        
+    }
+      
+      public double[][] generateUtilityServer4forChart(ServerDokter[] arrayServer){
+        double[][] utility=new double[1][arrayServer.length];
+        for(int i=0;i<arrayServer.length;i++){
+            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
+            if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
+                utility[0][i]=0;
+            }
+            else{
+                double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
+                System.out.println("temp ? :"+temp);
+                bd = new BigDecimal(temp); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                temp=bd.doubleValue();
+                System.out.println("temp : "+temp);
+                if(temp>100){
+                        temp=100;
+                }
+                utility[0][i]=temp;
+            }
+            
+        }
+        return utility;
+        
+    }
+      
+    public double[][] generateUtilityServer4forChart(ExcelInputSimulation.ServerDokter[] arrayServer){
+        double[][] utility=new double[1][arrayServer.length];
+        for(int i=0;i<arrayServer.length;i++){
+            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
+            if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
+                utility[0][i]=0;
+            }
+            else{
+                double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
+                System.out.println("temp ? :"+temp);
+                bd = new BigDecimal(temp); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                temp=bd.doubleValue();
+                System.out.println("temp : "+temp);
+                if(temp>100){
+                        temp=100;
+                }
+                utility[0][i]=temp;
             }
             
         }
