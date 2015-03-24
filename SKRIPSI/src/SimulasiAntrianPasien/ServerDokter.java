@@ -98,7 +98,9 @@ public class ServerDokter extends Thread implements Server  {
                             this.setTimeServiceBegin(this.getServerclock());
                        }
                    temp.setTimeServiceBegin4(this.serverclock);
-                   getTemp().setTimeServiceBegin2(this.serverclock);
+                   if(temp.getJenis().equals("Emergency")){
+                     getTemp().setTimeServiceBegin2(this.serverclock);
+                   }
                    servicetime=stat.generateServiceTimePoli();
                    delaytime=(Math.abs(temp.getArrivaltimepoli3()-(getServerclock())));
                    temp.setDelaytimepoli3(delaytime);
@@ -116,7 +118,9 @@ public class ServerDokter extends Thread implements Server  {
                             this.setTimeServiceBegin(this.getServerclock());
                    }
                    temp.setTimeServiceBegin4(this.serverclock);
-                   getTemp().setTimeServiceBegin2(this.serverclock);
+                   if(temp.getJenis().equals("Emergency")){
+                        getTemp().setTimeServiceBegin2(this.serverclock);
+                   }
                    servicetime=stat.generateServiceTimePoli();
                    delaytime=(Math.abs(temp.getArrivaltimepoli3()-(getServerclock())));
                    temp.setDelaytimepoli3(delaytime);

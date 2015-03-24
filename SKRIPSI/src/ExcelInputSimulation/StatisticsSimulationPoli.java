@@ -7,7 +7,7 @@
 package ExcelInputSimulation;
 
 import GUI.InterfaceGUI1;
-import GUI.InterfaceGUI4;
+import GUI.InterfaceGUI2;
 import SimulasiAntrianPasien.Customer;
 import SimulasiAntrianPasien.CustomerQ;
 import SimulasiAntrianPasien.StatisticsGenerator;
@@ -24,7 +24,7 @@ public class StatisticsSimulationPoli extends Thread{
     private StatisticsGenerator gen;
     private int numOfCustomer;
     private ServerPetugas[] serverpetugasqueue;
-    private InterfaceGUI4 MainGUI;
+    private InterfaceGUI2 MainGUI;
     private int counterpasien1;
     private int counterpasien2;
     private int counterpasien3;
@@ -38,7 +38,7 @@ public class StatisticsSimulationPoli extends Thread{
     private int counterfindserver2;
     private Customer temp;
     private ExcelReader excel;
-    public StatisticsSimulationPoli(ServerPetugas[] ServerPetugas,StatisticsGenerator gen,InterfaceGUI4 MainGUI,ExcelReader excel){
+    public StatisticsSimulationPoli(ServerPetugas[] ServerPetugas,StatisticsGenerator gen,InterfaceGUI2 MainGUI,ExcelReader excel){
         this.customerqueue=new CustomerQ();
         this.number=1;
         this.numOfCustomer=numOfCustomer;

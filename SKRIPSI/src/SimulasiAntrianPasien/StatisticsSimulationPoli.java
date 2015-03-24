@@ -64,7 +64,6 @@ public class StatisticsSimulationPoli extends Thread{
     
     public  synchronized void addCustomer(Customer cust){
         this.customerqueue.add(cust);
-        System.out.println("poli");
         notifyAll();
     }
     
@@ -73,7 +72,6 @@ public class StatisticsSimulationPoli extends Thread{
         BigDecimal bd=new BigDecimal(this.getCounterPasien());
         bd = bd.setScale(0,BigDecimal.ROUND_UP); 
         this.setCounterPasien(bd.doubleValue());
-        System.out.println("Jumlah pasien poli : "+this.getCounterPasien());
     }
     
     public Customer processArrival(){
@@ -81,7 +79,6 @@ public class StatisticsSimulationPoli extends Thread{
         double arrivaltime=temp.getArrivaltime();
         clock=clock+arrivaltime;
         temp.setNumberinpoli(number);
-        System.out.println("Jenis pasien "+temp.getJenis());
         String realtime=gen.convertSeconds(temp.getArrivaltimepoli());
         MainGUI.setOutputValue2(temp.getNumber()+" "+temp.getJenis()+" "+realtime);
         if(temp.getJenis().equals("BPJS Lama")){
@@ -107,14 +104,11 @@ public class StatisticsSimulationPoli extends Thread{
         int cari=-1;
         if(this.counterfindserver==0){
             for(int i=batasserver;i<this.serverpetugasqueue.length;i++){
-                System.out.println("CARI PETUGAS : "+i+" clock sekarang : "+this.clock);
-                System.out.println("STATUS PETUGAS : "+this.serverpetugasqueue[i].isStatus()+" queue size : "+this.serverpetugasqueue[i].getQueueSize()+" server clock : "+this.serverpetugasqueue[i].getServerclock());
                 if(this.serverpetugasqueue[i].isStatus()==false&&this.serverpetugasqueue[i].getQueueSize()==0&&(this.serverpetugasqueue[i].getServerclock()+this.serverpetugasqueue[i].getTemp().getServicetimepoli())<=this.clock){
                     cari=i;
                     i=this.serverpetugasqueue.length;
                 }
             }
-            System.out.println("DAPAT PETUGAS : "+cari);
             if(cari==-1){
                 for(int i=0;i<batasserver;i++){
                     if(this.serverpetugasqueue[i].isStatus()==false&&this.serverpetugasqueue[i].getQueueSize()==0&&(this.serverpetugasqueue[i].getServerclock()+this.serverpetugasqueue[i].getTemp().getServicetimepoli())<=this.clock){
@@ -124,21 +118,17 @@ public class StatisticsSimulationPoli extends Thread{
                 }
             }
             if(cari==-1){
-                System.out.println("cari server petugas 3");
                 cari=getSmallestServerClock(this.serverpetugasqueue);
             }
             this.counterfindserver++;
         }
         else{
             for(int i=batasserver+1;i<this.serverpetugasqueue.length;i++){
-                System.out.println("CARI PETUGAS : "+i+" clock sekarang : "+this.clock);
-                System.out.println("STATUS PETUGAS : "+this.serverpetugasqueue[i].isStatus()+" queue size : "+this.serverpetugasqueue[i].getQueueSize()+" server clock : "+this.serverpetugasqueue[i].getServerclock());
                 if(this.serverpetugasqueue[i].isStatus()==false&&this.serverpetugasqueue[i].getQueueSize()==0&&(this.serverpetugasqueue[i].getServerclock()+this.serverpetugasqueue[i].getTemp().getServicetimepoli())<=this.clock){
                     cari=i;
                     i=this.serverpetugasqueue.length;
                 }
             }
-            System.out.println("DAPAT PETUGAS : "+cari);
             if(cari==-1){
                 for(int i=0;i<batasserver;i++){
                     if(this.serverpetugasqueue[i].isStatus()==false&&this.serverpetugasqueue[i].getQueueSize()==0&&(this.serverpetugasqueue[i].getServerclock()+this.serverpetugasqueue[i].getTemp().getServicetimepoli())<=this.clock){
@@ -148,7 +138,6 @@ public class StatisticsSimulationPoli extends Thread{
                 }
             }
             if(cari==-1){
-                System.out.println("cari server petugas 3");
                 cari=getSmallestServerClock(this.serverpetugasqueue);
             }
             this.counterfindserver++;
@@ -173,18 +162,13 @@ public class StatisticsSimulationPoli extends Thread{
         int cari=-1;
         if(this.counterfindserver2==0){
             for(int i=batasserver2;i<this.serverdokter.length;i++){
-                System.out.println("CARI DOKTER EMERGENCY : "+i+" clock sekarang : "+this.clock);
-                System.out.println("STATUS DOKTER EMERGENCY : "+this.serverdokter[i].isStatus()+" clock : "+this.serverdokter[i].getServerclock()+" queue size : "+this.serverdokter[i].getQueueSize());
-                if(this.serverdokter[i].isStatus()==false&&this.serverdokter[i].getQueueSize()==0&&this.serverdokter[i].getServerclock()<=this.clock){
+               if(this.serverdokter[i].isStatus()==false&&this.serverdokter[i].getQueueSize()==0&&this.serverdokter[i].getServerclock()<=this.clock){
                     cari=i;
                     i=this.serverdokter.length;
                 }
             }
-            System.out.println("DAPAT DOKTER EMERGENCY : "+cari);
             if(cari==-1){
                 for(int i=0;i<batasserver2;i++){
-                    System.out.println("CARI DOKTER EMERGENCY : "+i+" clock sekarang : "+this.clock);
-                    System.out.println("STATUS DOKTER EMERGENCY : "+this.serverdokter[i].isStatus()+" clock : "+this.serverdokter[i].getServerclock()+" queue size : "+this.serverdokter[i].getQueueSize());
                     if(this.serverdokter[i].isStatus()==false&&this.serverdokter[i].getQueueSize()==0&&this.serverdokter[i].getServerclock()<=this.clock){
                         cari=i;
                         i=this.serverdokter.length;
@@ -199,18 +183,13 @@ public class StatisticsSimulationPoli extends Thread{
         }
         else{
             for(int i=batasserver2+1;i<this.serverdokter.length;i++){
-                System.out.println("CARI DOKTER EMERGENCY : "+i+" clock sekarang : "+this.clock);
-                System.out.println("STATUS DOKTER EMERGENCY : "+this.serverdokter[i].isStatus()+" clock : "+this.serverdokter[i].getServerclock()+" queue size : "+this.serverdokter[i].getQueueSize());
                 if(this.serverdokter[i].isStatus()==false&&this.serverdokter[i].getQueueSize()==0&&this.serverdokter[i].getServerclock()<=this.clock){
                     cari=i;
                     i=this.serverdokter.length;
                 }
             }
-            System.out.println("DAPAT DOKTER EMERGENCY : "+cari);
             if(cari==-1){
                 for(int i=0;i<batasserver2;i++){
-                    System.out.println("CARI DOKTER EMERGENCY : "+i+" clock sekarang : "+this.clock);
-                    System.out.println("STATUS DOKTER EMERGENCY : "+this.serverdokter[i].isStatus()+" clock : "+this.serverdokter[i].getServerclock()+" queue size : "+this.serverdokter[i].getQueueSize());
                     if(this.serverdokter[i].isStatus()==false&&this.serverdokter[i].getQueueSize()==0&&this.serverdokter[i].getServerclock()<=this.clock){
                         cari=i;
                         i=this.serverdokter.length;
@@ -238,11 +217,8 @@ public class StatisticsSimulationPoli extends Thread{
         return i;
     }
     
-    
-    
-    
+
     public void runSimulation(){
-            System.out.println("Customer poli:"+this.customerqueue.getSize());
             Customer temp=new Customer();
             int server=this.findServer();
             temp=this.processArrival();

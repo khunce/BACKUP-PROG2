@@ -40,105 +40,295 @@ public class ExcelReader {
     private int totalpasienpoli;
     private LinkedList<String> arrivaltime;
     private LinkedList<String> servicetime;
+    private LinkedList<String>  servicepetugas;
+    private LinkedList<String> serviceperawat;
+    private LinkedList<String> servicedokter;
+    private int serverawal;
+    private int serverpetugas;
+    private int serverperawat;
+    private int serverdokter;
+    private int kapasitasantrian;
     public ExcelReader(String filepath,String filename){
         this.filename=filename;
         this.filepath=filepath;
         this.queuecustomer=new LinkedList<Customer>();
         this.arrivaltime=new LinkedList<String>();
         this.servicetime=new LinkedList<String>();
+        this.servicepetugas=new LinkedList<String>();
+        this.serviceperawat=new LinkedList<String>();
+        this.servicedokter=new LinkedList<String>();
         this.totalbaru=0;
         this.totallama=0;
         this.emergency=0;
         this.totalpasienpoli=0;
+        this.serverpetugas=0;
+        this.serverawal=0;
+        this.serverdokter=0;
+        this.serverperawat=0;
     }
     
     public ExcelReader(){
         
     }
     
-    public void createFile(){
-        try {
-            this.file=new FileInputStream(new File(this.filepath));
-        } catch (FileNotFoundException ex) {
-
+    public boolean createFile(){
+        boolean create=true;
+        if(filename.endsWith(".xlsx")||filename.endsWith(".xls")){
+            try {
+                this.file=new FileInputStream(new File(this.filepath));
+            } catch (FileNotFoundException ex) {
+                create=false;
+            }
         }
+        else{
+            create=false;
+        }
+        return create;
     }
     
-    public void readExcel(){
-        try {
-            this.workbook = new XSSFWorkbook(this.file);
-        } catch (IOException ex) {
-            
-        }
-			XSSFSheet sheet = workbook.getSheetAt(0);
-			Iterator<Row> rowIterator = sheet.iterator();
-                        StatisticsGenerator gen=new StatisticsGenerator();
-                        int counterrow=0;
-			while (rowIterator.hasNext()) 
-			{
-				Row row = rowIterator.next();
-				Iterator<Cell> cellIterator = row.cellIterator();
-                                if(counterrow>0){
-                                    int i=0;
-                                    Customer temp=new Customer();
-                                    while (cellIterator.hasNext()) 
-                                    {
-                                            
-                                            Cell cell = cellIterator.next();
-                                            if(i==0){
-                                                temp.setNumber((int)cell.getNumericCellValue());
-                                                System.out.print( cell.getNumericCellValue()+ "\t");
-                                            }
-                                            else if(i==1){
-                                                System.out.print(cell.getStringCellValue());
-                                                temp.setJenis(cell.getStringCellValue());
-                                                if(temp.getJenis().equals("BPJS Lama")){
-                                                    this.totallama++;
-                                                }
-                                                else if(temp.getJenis().equals("BPJS Baru")){
-                                                    this.totalbaru++;
-                                                }
-                                                else{
-                                                    this.emergency++;
-                                                }
-                                            }
-                                            else if(i==2){
-                                                String temprealtime=cell.getStringCellValue();
-                                                temp.setArrivaltime(gen.convertToRealTime(temprealtime));
-                                                this.getArrivaltime().add(temprealtime);
-                                                System.out.print(temprealtime+ "\t"+ " "+temp.getArrivaltime()+" "+gen.convertSeconds(temp.getArrivaltime())+" \t");
-                                            }
-                                            else if(i==3){
-                                                String temprealtime=cell.getStringCellValue();
-                                                temp.setServicetime(gen.convertToRealTime(temprealtime));
-                                                this.getServicetime().add(temprealtime);
-                                                System.out.print(temprealtime+ "\t");
-                                            }
-                                            else if(i==4){
-                                                String tempboolean=cell.getStringCellValue();
-                                                if(tempboolean.contains("Y")){
-                                                    this.totalpasienpoli++;
-                                                    temp.setToPoliklinik(true);
-                                                }
-                                                else{
-                                                    temp.setToPoliklinik(false);
-                                                }
-                                                System.out.print(tempboolean+ "\t");
-                                            }
-                                            i++;
+    public boolean readExcelLimited(){
+         boolean create=true;
+         if(filename.endsWith(".xlsx")||filename.endsWith(".xls")){
+                try {
+                    this.workbook = new XSSFWorkbook(this.file);
+                    XSSFSheet sheet = workbook.getSheetAt(0);
+                                         Iterator<Row> rowIterator = sheet.iterator();
+                                         StatisticsGenerator gen=new StatisticsGenerator();
+                                         int counterrow=0;
+                                         while (rowIterator.hasNext()) 
+                                         {
+                                                 Row row = rowIterator.next();
+                                                 Iterator<Cell> cellIterator = row.cellIterator();
+                                                 if(counterrow==0){
+                                                     int k=0;
+                                                     while (cellIterator.hasNext()) 
+                                                     {
 
-                                    }
-                                    getQueuecustomer().add(temp);
-                                }
-                                System.out.println("");
-                                counterrow++;
-                        }
-                      
+                                                             Cell cell = cellIterator.next();
+                                                             if(k==9){
+                                                                 this.kapasitasantrian=(int)cell.getNumericCellValue();
+                                                                 System.out.print( this.kapasitasantrian);
+                                                             }
+                                                             k++;
+
+
+                                                     }
+
+                                                 }
+                                                 if(counterrow>1){
+                                                     int i=0;
+                                                     Customer temp=new Customer();
+                                                     while (cellIterator.hasNext()) 
+                                                     {
+
+                                                             Cell cell = cellIterator.next();
+                                                             if(i==0){
+                                                                 temp.setNumber((int)cell.getNumericCellValue());
+                                                                 System.out.print( cell.getNumericCellValue()+ "\t");
+                                                             }
+                                                             else if(i==1){
+                                                                 System.out.print(cell.getStringCellValue());
+                                                                 temp.setJenis(cell.getStringCellValue());
+                                                                 if(temp.getJenis().equals("BPJS Lama")){
+                                                                     this.totallama++;
+                                                                 }
+                                                                 else if(temp.getJenis().equals("BPJS Baru")){
+                                                                     this.totalbaru++;
+                                                                 }
+                                                                 else{
+                                                                     this.emergency++;
+                                                                 }
+                                                             }
+                                                             else if(i==2){
+                                                                 String temprealtime=cell.getStringCellValue();
+                                                                 temp.setArrivaltime(gen.convertToRealTime(temprealtime));
+                                                                 this.getArrivaltime().add(temprealtime);
+                                                                 System.out.print(temprealtime+ "\t"+ " "+temp.getArrivaltime()+" "+gen.convertSeconds(temp.getArrivaltime())+" \t");
+                                                             }
+                                                             else if(i==3){
+                                                                 String temprealtime=cell.getStringCellValue();
+                                                                 temp.setServicetime(gen.convertToRealTime(temprealtime));
+                                                                 this.getServicetime().add(temprealtime);
+                                                                 System.out.print(temprealtime+ "\t");
+                                                             }
+                                                             else if(i==4){
+                                                                 String tempboolean=cell.getStringCellValue();
+                                                                 if(tempboolean.contains("Y")){
+                                                                     this.totalpasienpoli++;
+                                                                     temp.setToPoliklinik(true);
+                                                                 }
+                                                                 else{
+                                                                     temp.setToPoliklinik(false);
+                                                                 }
+                                                                 System.out.print(tempboolean+ "\t");
+                                                             }
+                                                             else if(i==5){
+                                                                 String temprealtime=cell.getStringCellValue();
+                                                                 temp.setServicetimepoli(gen.convertToRealTime(temprealtime));
+                                                                 this.getServicepetugas().add(temprealtime);
+                                                             }
+                                                             else if(i==6){
+                                                                 String temprealtime=cell.getStringCellValue();
+                                                                 temp.setServicetimepoli2(gen.convertToRealTime(temprealtime));
+                                                                 this.getServiceperawat().add(temprealtime);
+                                                             }
+                                                             else if(i==7){
+                                                                 String temprealtime=cell.getStringCellValue();
+                                                                 temp.setServicetimepoli3(gen.convertToRealTime(temprealtime));
+                                                                 this.getServicedokter().add(temprealtime);
+                                                             }
+                                                             i++;
+
+                                                     }
+                                                     getQueuecustomer().add(temp);
+                                                 }
+                                                 System.out.println("");
+                                                 counterrow++;
+                                         }
+                }
+                catch (IOException ex) {
+                    create=false;
+                }   
+        }
+        else{
+                    create=false;
+         }    
         try {
             file.close();
         } catch (IOException ex) {
-            
+             create=false;
         }
+        return create;
+         
+    }
+    
+    public boolean readExcel(){
+        boolean create=true;
+        if(filename.endsWith(".xlsx")||filename.endsWith(".xls")){
+               try {
+                this.workbook = new XSSFWorkbook(this.file);
+                XSSFSheet sheet = workbook.getSheetAt(0);
+                            Iterator<Row> rowIterator = sheet.iterator();
+                            StatisticsGenerator gen=new StatisticsGenerator();
+                            int counterrow=0;
+                            while (rowIterator.hasNext()) 
+                            {
+                                    Row row = rowIterator.next();
+                                    Iterator<Cell> cellIterator = row.cellIterator();
+                                    if(counterrow==0){
+                                        int k=0;
+                                        while (cellIterator.hasNext()) 
+                                        {
+
+                                                Cell cell = cellIterator.next();
+                                                if(k==1){
+                                                   this.serverawal=(int)cell.getNumericCellValue();
+                                                   System.out.print( this.serverawal);
+                                                }
+                                                else if(k==3){
+                                                   this.serverpetugas=(int)cell.getNumericCellValue();
+                                                   System.out.print( this.serverpetugas);
+                                                }
+                                                else if(k==5){
+                                                    this.serverperawat=(int)cell.getNumericCellValue();
+                                                    System.out.print( this.serverperawat);
+                                                }
+                                                else if(k==7){
+                                                    this.serverdokter=(int)cell.getNumericCellValue();
+                                                    System.out.print( this.serverdokter);
+                                                }
+                                                else if(k==9){
+                                                    this.kapasitasantrian=(int)cell.getNumericCellValue();
+                                                    System.out.print( this.kapasitasantrian);
+                                                }
+                                                k++;
+                                        }
+
+                                    }
+                                    if(counterrow>1){
+                                        int i=0;
+                                        Customer temp=new Customer();
+                                        while (cellIterator.hasNext()) 
+                                        {
+
+                                                Cell cell = cellIterator.next();
+                                                if(i==0){
+                                                    temp.setNumber((int)cell.getNumericCellValue());
+                                                    System.out.print( cell.getNumericCellValue()+ "\t");
+                                                }
+                                                else if(i==1){
+                                                    System.out.print(cell.getStringCellValue());
+                                                    temp.setJenis(cell.getStringCellValue());
+                                                    if(temp.getJenis().equals("BPJS Lama")){
+                                                        this.totallama++;
+                                                    }
+                                                    else if(temp.getJenis().equals("BPJS Baru")){
+                                                        this.totalbaru++;
+                                                    }
+                                                    else{
+                                                        this.emergency++;
+                                                    }
+                                                }
+                                                else if(i==2){
+                                                    String temprealtime=cell.getStringCellValue();
+                                                    temp.setArrivaltime(gen.convertToRealTime(temprealtime));
+                                                    this.getArrivaltime().add(temprealtime);
+                                                    System.out.print(temprealtime+ "\t"+ " "+temp.getArrivaltime()+" "+gen.convertSeconds(temp.getArrivaltime())+" \t");
+                                                }
+                                                else if(i==3){
+                                                    String temprealtime=cell.getStringCellValue();
+                                                    temp.setServicetime(gen.convertToRealTime(temprealtime));
+                                                    this.getServicetime().add(temprealtime);
+                                                    System.out.print(temprealtime+ "\t");
+                                                }
+                                                else if(i==4){
+                                                    String tempboolean=cell.getStringCellValue();
+                                                    if(tempboolean.contains("Y")){
+                                                        this.totalpasienpoli++;
+                                                        temp.setToPoliklinik(true);
+                                                    }
+                                                    else{
+                                                        temp.setToPoliklinik(false);
+                                                    }
+                                                    System.out.print(tempboolean+ "\t");
+                                                }
+                                                else if(i==5){
+                                                    String temprealtime=cell.getStringCellValue();
+                                                    temp.setServicetimepoli(gen.convertToRealTime(temprealtime));
+                                                    this.getServicepetugas().add(temprealtime);
+                                                }
+                                                else if(i==6){
+                                                    String temprealtime=cell.getStringCellValue();
+                                                    temp.setServicetimepoli2(gen.convertToRealTime(temprealtime));
+                                                    this.getServiceperawat().add(temprealtime);
+                                                }
+                                                else if(i==7){
+                                                    String temprealtime=cell.getStringCellValue();
+                                                    temp.setServicetimepoli3(gen.convertToRealTime(temprealtime));
+                                                    this.getServicedokter().add(temprealtime);
+                                                }
+                                                i++;
+
+                                        }
+                                        getQueuecustomer().add(temp);
+                                    }
+                                    System.out.println("");
+                                    counterrow++;
+                            }
+            }
+            catch (IOException ex) {
+                create=false;
+            }
+        } 
+        else{
+                create=false;
+         }
+        try {
+            file.close();
+        } catch (IOException ex) {
+            create=false;
+        }
+        return create;
         
     }
 
@@ -271,5 +461,117 @@ public class ExcelReader {
      */
     public void setQueuecustomer(LinkedList<Customer> queuecustomer) {
         this.queuecustomer = queuecustomer;
+    }
+
+    /**
+     * @return the serverawal
+     */
+    public int getServerawal() {
+        return serverawal;
+    }
+
+    /**
+     * @param serverawal the serverawal to set
+     */
+    public void setServerawal(int serverawal) {
+        this.serverawal = serverawal;
+    }
+
+    /**
+     * @return the serverpetugas
+     */
+    public int getServerpetugas() {
+        return serverpetugas;
+    }
+
+    /**
+     * @param serverpetugas the serverpetugas to set
+     */
+    public void setServerpetugas(int serverpetugas) {
+        this.serverpetugas = serverpetugas;
+    }
+
+    /**
+     * @return the serverperawat
+     */
+    public int getServerperawat() {
+        return serverperawat;
+    }
+
+    /**
+     * @param serverperawat the serverperawat to set
+     */
+    public void setServerperawat(int serverperawat) {
+        this.serverperawat = serverperawat;
+    }
+
+    /**
+     * @return the serverdokter
+     */
+    public int getServerdokter() {
+        return serverdokter;
+    }
+
+    /**
+     * @param serverdokter the serverdokter to set
+     */
+    public void setServerdokter(int serverdokter) {
+        this.serverdokter = serverdokter;
+    }
+
+    /**
+     * @return the kapasitasantrian
+     */
+    public int getKapasitasantrian() {
+        return kapasitasantrian;
+    }
+
+    /**
+     * @param kapasitasantrian the kapasitasantrian to set
+     */
+    public void setKapasitasantrian(int kapasitasantrian) {
+        this.kapasitasantrian = kapasitasantrian;
+    }
+
+    /**
+     * @return the servicepetugas
+     */
+    public LinkedList<String> getServicepetugas() {
+        return servicepetugas;
+    }
+
+    /**
+     * @param servicepetugas the servicepetugas to set
+     */
+    public void setServicepetugas(LinkedList<String> servicepetugas) {
+        this.servicepetugas = servicepetugas;
+    }
+
+    /**
+     * @return the serviceperawat
+     */
+    public LinkedList<String> getServiceperawat() {
+        return serviceperawat;
+    }
+
+    /**
+     * @param serviceperawat the serviceperawat to set
+     */
+    public void setServiceperawat(LinkedList<String> serviceperawat) {
+        this.serviceperawat = serviceperawat;
+    }
+
+    /**
+     * @return the servicedokter
+     */
+    public LinkedList<String> getServicedokter() {
+        return servicedokter;
+    }
+
+    /**
+     * @param servicedokter the servicedokter to set
+     */
+    public void setServicedokter(LinkedList<String> servicedokter) {
+        this.servicedokter = servicedokter;
     }
 }

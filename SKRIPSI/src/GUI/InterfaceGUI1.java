@@ -5,6 +5,7 @@
  */
 
 package GUI;
+import ExcelInputSimulation.ExcelWriter;
 import SimulasiAntrianPasien.Customer;
 import SimulasiAntrianPasien.ServerAwal;
 import SimulasiAntrianPasien.ServerDokter;
@@ -15,6 +16,7 @@ import SimulasiAntrianPasien.StatisticsSimulationAwal;
 import SimulasiAntrianPasien.StatisticsSimulationPoli;
 import java.awt.*;
 import java.awt.*;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -74,6 +76,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     Queue<Customer> queuereport2;
     Object[][] data;
     Object[][] data2;
+    JTable tabel_awal;
+    JScrollPane scrollPane;
+    ExcelWriter writer;
     
     /**
      * Creates new form IntAwal
@@ -133,7 +138,49 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         for (int i = 0; i < tabel2.getColumnCount(); i++) {
              tabel2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer29);
          }
+        tabel_awal=new JTable();
+        scrollPane=new JScrollPane();
+        hideLoading();
+        hideLoadingPoli();
+        disableSave();
+        disableParamGrafik();
     }
+    
+    public void disableParamGrafik(){
+        param_grafik.setEnabled(false);
+        jButton3.setEnabled(false);
+        param_grafik2.setEnabled(false);
+        jButton4.setEnabled(false);
+    }
+    
+    public void enableParamGrafik(){
+        param_grafik.setEnabled(true);
+        jButton3.setEnabled(true);
+        param_grafik2.setEnabled(true);
+        jButton4.setEnabled(true);
+    }
+    
+    public void disableSave(){
+        save_table1.setEnabled(false);
+        save_table2.setEnabled(false);
+    }
+    
+    public void enableSave(){
+        save_table1.setEnabled(true);
+        save_table2.setEnabled(true);
+    }
+    
+     public void showLoadingChart(){
+         loadingpoli3.setVisible(true);
+         loadingpoli4.setVisible(true);
+         loadingpoli5.setVisible(true);
+     }
+     
+     public void hideLoadingChart(){
+         loadingpoli3.setVisible(false);
+         loadingpoli4.setVisible(false);
+         loadingpoli5.setVisible(false);
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -165,13 +212,25 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jSeparator14 = new javax.swing.JSeparator();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         panel_grafik_poli = new javax.swing.JPanel();
+        loadingpoli = new javax.swing.JLabel();
         panel_grafik_poli2 = new javax.swing.JPanel();
+        loadingpoli1 = new javax.swing.JLabel();
         panel_grafik_poli3 = new javax.swing.JPanel();
+        loadingpoli2 = new javax.swing.JLabel();
         panel_grafik_poli4 = new javax.swing.JPanel();
+        loadingpoli3 = new javax.swing.JLabel();
         panel_grafik_poli5 = new javax.swing.JPanel();
+        loadingpoli4 = new javax.swing.JLabel();
         panel_grafik_poli6 = new javax.swing.JPanel();
+        loadingpoli5 = new javax.swing.JLabel();
         jScrollPane8 = new javax.swing.JScrollPane();
         tabel2 = new javax.swing.JTable();
+        label_grafik4 = new javax.swing.JLabel();
+        label_grafik5 = new javax.swing.JLabel();
+        jSeparator19 = new javax.swing.JSeparator();
+        param_grafik2 = new javax.swing.JSpinner();
+        label_grafik6 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         frame_report = new javax.swing.JFrame();
         panel_tabel = new javax.swing.JPanel();
@@ -181,6 +240,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         pasien_baru = new javax.swing.JLabel();
         pasien_emergency = new javax.swing.JLabel();
         total = new javax.swing.JLabel();
+        save_table1 = new javax.swing.JButton();
         frame_report2 = new javax.swing.JFrame();
         jLabel56 = new javax.swing.JLabel();
         jSeparator18 = new javax.swing.JSeparator();
@@ -189,6 +249,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         total_bpjsb_poli = new javax.swing.JLabel();
         total_bpjsl_poli = new javax.swing.JLabel();
         total_emergency_poli = new javax.swing.JLabel();
+        save_table2 = new javax.swing.JButton();
         frame_report3 = new javax.swing.JFrame();
         jLabel53 = new javax.swing.JLabel();
         jSeparator15 = new javax.swing.JSeparator();
@@ -202,6 +263,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel_pasien = new javax.swing.JPanel();
         panel_service_rate = new javax.swing.JPanel();
         panel_delay_time = new javax.swing.JPanel();
+        save_report_awal = new javax.swing.JButton();
         frame_report4 = new javax.swing.JFrame();
         tab1 = new javax.swing.JTabbedPane();
         panel_petugas = new javax.swing.JPanel();
@@ -215,6 +277,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel6 = new javax.swing.JPanel();
         panel7 = new javax.swing.JPanel();
         panel8 = new javax.swing.JPanel();
+        save_report_petugas = new javax.swing.JButton();
         panel_perawat = new javax.swing.JPanel();
         panel9 = new javax.swing.JPanel();
         panel10 = new javax.swing.JPanel();
@@ -226,6 +289,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel16 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         output_perawat = new javax.swing.JTextArea();
+        save_report_perawat = new javax.swing.JButton();
         panel_dokter = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         output_dokter = new javax.swing.JTextArea();
@@ -237,8 +301,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel22 = new javax.swing.JPanel();
         panel23 = new javax.swing.JPanel();
         panel24 = new javax.swing.JPanel();
+        save_report_dokter = new javax.swing.JButton();
         jLabel54 = new javax.swing.JLabel();
         jSeparator16 = new javax.swing.JSeparator();
+        fs = new javax.swing.JFileChooser();
+        jSeparator12 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -305,17 +372,26 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jSeparator9 = new javax.swing.JSeparator();
         jSeparator10 = new javax.swing.JSeparator();
         jSeparator11 = new javax.swing.JSeparator();
-        jSeparator12 = new javax.swing.JSeparator();
         jSeparator13 = new javax.swing.JSeparator();
         report = new javax.swing.JButton();
         back = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         panelanimasi = new javax.swing.JPanel();
+        loading = new javax.swing.JLabel();
         panelanimasi2 = new javax.swing.JPanel();
+        loading1 = new javax.swing.JLabel();
         panelanimasi3 = new javax.swing.JPanel();
+        loading2 = new javax.swing.JLabel();
         panelanimasi4 = new javax.swing.JPanel();
+        loading3 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         tabel1 = new javax.swing.JTable();
+        param_grafik = new javax.swing.JSpinner();
+        label_grafik1 = new javax.swing.JLabel();
+        label_grafik3 = new javax.swing.JLabel();
+        label_grafik2 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JSeparator();
 
         jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         jFrame1.setTitle("Simulasi Antrian Poliklinik");
@@ -377,7 +453,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
         jLabel49.setText("Output Pelayanan Poliklinik : ");
         jFrame1.getContentPane().add(jLabel49);
-        jLabel49.setBounds(670, 60, 149, 17);
+        jLabel49.setBounds(670, 60, 180, 14);
 
         jLabel50.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel50.setText("jLabel50");
@@ -404,81 +480,57 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jFrame1.getContentPane().add(jSeparator14);
         jSeparator14.setBounds(0, 35, 1140, 10);
 
-        javax.swing.GroupLayout panel_grafik_poliLayout = new javax.swing.GroupLayout(panel_grafik_poli);
-        panel_grafik_poli.setLayout(panel_grafik_poliLayout);
-        panel_grafik_poliLayout.setHorizontalGroup(
-            panel_grafik_poliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
-        );
-        panel_grafik_poliLayout.setVerticalGroup(
-            panel_grafik_poliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
-        );
+        panel_grafik_poli.setLayout(null);
+
+        loadingpoli.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loadingpoli.setText("Generating chart ...");
+        panel_grafik_poli.add(loadingpoli);
+        loadingpoli.setBounds(276, 129, 160, 17);
 
         jTabbedPane2.addTab("Grafik 1", panel_grafik_poli);
 
-        javax.swing.GroupLayout panel_grafik_poli2Layout = new javax.swing.GroupLayout(panel_grafik_poli2);
-        panel_grafik_poli2.setLayout(panel_grafik_poli2Layout);
-        panel_grafik_poli2Layout.setHorizontalGroup(
-            panel_grafik_poli2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
-        );
-        panel_grafik_poli2Layout.setVerticalGroup(
-            panel_grafik_poli2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
-        );
+        panel_grafik_poli2.setLayout(null);
+
+        loadingpoli1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loadingpoli1.setText("Generating chart ...");
+        panel_grafik_poli2.add(loadingpoli1);
+        loadingpoli1.setBounds(276, 129, 160, 17);
 
         jTabbedPane2.addTab("Grafik 2", panel_grafik_poli2);
 
-        javax.swing.GroupLayout panel_grafik_poli3Layout = new javax.swing.GroupLayout(panel_grafik_poli3);
-        panel_grafik_poli3.setLayout(panel_grafik_poli3Layout);
-        panel_grafik_poli3Layout.setHorizontalGroup(
-            panel_grafik_poli3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
-        );
-        panel_grafik_poli3Layout.setVerticalGroup(
-            panel_grafik_poli3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
-        );
+        panel_grafik_poli3.setLayout(null);
+
+        loadingpoli2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loadingpoli2.setText("Generating chart ...");
+        panel_grafik_poli3.add(loadingpoli2);
+        loadingpoli2.setBounds(276, 129, 160, 17);
 
         jTabbedPane2.addTab("Grafik 3", panel_grafik_poli3);
 
-        javax.swing.GroupLayout panel_grafik_poli4Layout = new javax.swing.GroupLayout(panel_grafik_poli4);
-        panel_grafik_poli4.setLayout(panel_grafik_poli4Layout);
-        panel_grafik_poli4Layout.setHorizontalGroup(
-            panel_grafik_poli4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
-        );
-        panel_grafik_poli4Layout.setVerticalGroup(
-            panel_grafik_poli4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
-        );
+        panel_grafik_poli4.setLayout(null);
+
+        loadingpoli3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loadingpoli3.setText("Generating chart ...");
+        panel_grafik_poli4.add(loadingpoli3);
+        loadingpoli3.setBounds(276, 129, 160, 17);
 
         jTabbedPane2.addTab("Grafik 4", panel_grafik_poli4);
 
-        javax.swing.GroupLayout panel_grafik_poli5Layout = new javax.swing.GroupLayout(panel_grafik_poli5);
-        panel_grafik_poli5.setLayout(panel_grafik_poli5Layout);
-        panel_grafik_poli5Layout.setHorizontalGroup(
-            panel_grafik_poli5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
-        );
-        panel_grafik_poli5Layout.setVerticalGroup(
-            panel_grafik_poli5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
-        );
+        panel_grafik_poli5.setLayout(null);
+
+        loadingpoli4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loadingpoli4.setText("Generating chart ...");
+        panel_grafik_poli5.add(loadingpoli4);
+        loadingpoli4.setBounds(276, 129, 160, 17);
 
         jTabbedPane2.addTab("Grafik 5", panel_grafik_poli5);
 
-        javax.swing.GroupLayout panel_grafik_poli6Layout = new javax.swing.GroupLayout(panel_grafik_poli6);
-        panel_grafik_poli6.setLayout(panel_grafik_poli6Layout);
-        panel_grafik_poli6Layout.setHorizontalGroup(
-            panel_grafik_poli6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 655, Short.MAX_VALUE)
-        );
-        panel_grafik_poli6Layout.setVerticalGroup(
-            panel_grafik_poli6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
-        );
+        panel_grafik_poli6.setLayout(null);
+
+        loadingpoli5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        loadingpoli5.setText("Generating chart ...");
+        panel_grafik_poli6.add(loadingpoli5);
+        loadingpoli5.setBounds(276, 129, 160, 17);
 
         jTabbedPane2.addTab("Grafik 6", panel_grafik_poli6);
 
@@ -523,8 +575,43 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jFrame1.getContentPane().add(jScrollPane8);
         jScrollPane8.setBounds(670, 160, 480, 310);
 
-        frame_report.setBounds(new java.awt.Rectangle(0, 0, 800, 505));
+        label_grafik4.setFont(new java.awt.Font("Comic Sans MS", 1, 11)); // NOI18N
+        label_grafik4.setText("Ubah Parameter X Grafik :");
+        jFrame1.getContentPane().add(label_grafik4);
+        label_grafik4.setBounds(10, 500, 220, 17);
+
+        label_grafik5.setFont(new java.awt.Font("Comic Sans MS", 0, 10)); // NOI18N
+        label_grafik5.setText("Jumlah pasien dilayani per");
+        jFrame1.getContentPane().add(label_grafik5);
+        label_grafik5.setBounds(10, 530, 140, 14);
+        jFrame1.getContentPane().add(jSeparator19);
+        jSeparator19.setBounds(0, 488, 660, 2);
+
+        param_grafik2.setFont(new java.awt.Font("Comic Sans MS", 0, 10)); // NOI18N
+        param_grafik2.setModel(new javax.swing.SpinnerNumberModel(4, 4, 15, 1));
+        jFrame1.getContentPane().add(param_grafik2);
+        param_grafik2.setBounds(140, 530, 50, 20);
+
+        label_grafik6.setFont(new java.awt.Font("Comic Sans MS", 0, 10)); // NOI18N
+        label_grafik6.setText("menit");
+        jFrame1.getContentPane().add(label_grafik6);
+        label_grafik6.setBounds(200, 530, 26, 14);
+
+        jButton4.setFont(new java.awt.Font("Comic Sans MS", 0, 10)); // NOI18N
+        jButton4.setText("Apply");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jFrame1.getContentPane().add(jButton4);
+        jButton4.setBounds(40, 555, 57, 20);
+
+        frame_report.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        frame_report.setBounds(new java.awt.Rectangle(0, 0, 800, 660));
         frame_report.getContentPane().setLayout(null);
+
+        panel_tabel.setAutoscrolls(true);
 
         javax.swing.GroupLayout panel_tabelLayout = new javax.swing.GroupLayout(panel_tabel);
         panel_tabel.setLayout(panel_tabelLayout);
@@ -567,7 +654,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         frame_report.getContentPane().add(total);
         total.setBounds(10, 480, 260, 18);
 
-        frame_report2.setBounds(new java.awt.Rectangle(500, 0, 798, 500));
+        save_table1.setText("Save Table");
+        save_table1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_table1ActionPerformed(evt);
+            }
+        });
+        frame_report.getContentPane().add(save_table1);
+        save_table1.setBounds(270, 560, 120, 23);
+
+        frame_report2.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        frame_report2.setBounds(new java.awt.Rectangle(500, 0, 798, 660));
         frame_report2.setForeground(java.awt.Color.white);
         frame_report2.setMinimumSize(new java.awt.Dimension(250, 100));
         frame_report2.getContentPane().setLayout(null);
@@ -577,13 +674,13 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         frame_report2.getContentPane().add(jLabel56);
         jLabel56.setBounds(180, 0, 470, 30);
         frame_report2.getContentPane().add(jSeparator18);
-        jSeparator18.setBounds(0, 40, 780, 10);
+        jSeparator18.setBounds(0, 40, 880, 10);
 
         javax.swing.GroupLayout panel_poliLayout = new javax.swing.GroupLayout(panel_poli);
         panel_poli.setLayout(panel_poliLayout);
         panel_poliLayout.setHorizontalGroup(
             panel_poliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 780, Short.MAX_VALUE)
+            .addGap(0, 880, Short.MAX_VALUE)
         );
         panel_poliLayout.setVerticalGroup(
             panel_poliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -591,7 +688,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
 
         frame_report2.getContentPane().add(panel_poli);
-        panel_poli.setBounds(0, 60, 780, 420);
+        panel_poli.setBounds(0, 60, 880, 420);
 
         total_poli.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
         total_poli.setText("jLabel57");
@@ -613,7 +710,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         frame_report2.getContentPane().add(total_emergency_poli);
         total_emergency_poli.setBounds(560, 530, 270, 18);
 
-        frame_report3.setBounds(new java.awt.Rectangle(0, 0, 987, 523));
+        save_table2.setText("Save Table");
+        save_table2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_table2ActionPerformed(evt);
+            }
+        });
+        frame_report2.getContentPane().add(save_table2);
+        save_table2.setBounds(290, 570, 160, 23);
+
+        frame_report3.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        frame_report3.setBounds(new java.awt.Rectangle(0, 0, 987, 660));
         frame_report3.getContentPane().setLayout(null);
 
         jLabel53.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -647,7 +754,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jScrollPane3.setViewportView(hasil);
 
         frame_report3.getContentPane().add(jScrollPane3);
-        jScrollPane3.setBounds(740, 60, 300, 600);
+        jScrollPane3.setBounds(740, 60, 300, 370);
 
         javax.swing.GroupLayout panel_averageLayout = new javax.swing.GroupLayout(panel_average);
         panel_average.setLayout(panel_averageLayout);
@@ -747,6 +854,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         frame_report3.getContentPane().add(panel_delay_time);
         panel_delay_time.setBounds(0, 470, 730, 80);
 
+        save_report_awal.setText("Save to Excel");
+        save_report_awal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_report_awalActionPerformed(evt);
+            }
+        });
+        frame_report3.getContentPane().add(save_report_awal);
+        save_report_awal.setBounds(840, 460, 110, 23);
+
+        frame_report4.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         frame_report4.getContentPane().setLayout(null);
 
         panel_petugas.setLayout(null);
@@ -759,11 +876,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel1);
-        panel1.setBounds(0, 0, 750, 60);
+        panel1.setBounds(0, 0, 750, 70);
 
         output_petugas.setEditable(false);
         output_petugas.setColumns(20);
@@ -771,7 +888,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jScrollPane4.setViewportView(output_petugas);
 
         panel_petugas.add(jScrollPane4);
-        jScrollPane4.setBounds(749, 1, 300, 620);
+        jScrollPane4.setBounds(749, 1, 300, 380);
 
         javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
         panel2.setLayout(panel2Layout);
@@ -781,11 +898,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         );
         panel2Layout.setVerticalGroup(
             panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 80, Short.MAX_VALUE)
+            .addGap(0, 70, Short.MAX_VALUE)
         );
 
         panel_petugas.add(panel2);
-        panel2.setBounds(0, 60, 750, 80);
+        panel2.setBounds(0, 70, 750, 70);
 
         javax.swing.GroupLayout panel3Layout = new javax.swing.GroupLayout(panel3);
         panel3.setLayout(panel3Layout);
@@ -870,6 +987,15 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
         panel_petugas.add(panel8);
         panel8.setBounds(0, 540, 750, 80);
+
+        save_report_petugas.setText("Save to Excel");
+        save_report_petugas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_report_petugasActionPerformed(evt);
+            }
+        });
+        panel_petugas.add(save_report_petugas);
+        save_report_petugas.setBounds(850, 400, 120, 23);
 
         tab1.addTab("Petugas", panel_petugas);
 
@@ -993,7 +1119,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jScrollPane5.setViewportView(output_perawat);
 
         panel_perawat.add(jScrollPane5);
-        jScrollPane5.setBounds(760, 0, 290, 620);
+        jScrollPane5.setBounds(760, 0, 290, 410);
+
+        save_report_perawat.setText("Save to Excel");
+        save_report_perawat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_report_perawatActionPerformed(evt);
+            }
+        });
+        panel_perawat.add(save_report_perawat);
+        save_report_perawat.setBounds(850, 440, 120, 23);
 
         tab1.addTab("Perawat", panel_perawat);
 
@@ -1005,7 +1140,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jScrollPane6.setViewportView(output_dokter);
 
         panel_dokter.add(jScrollPane6);
-        jScrollPane6.setBounds(740, 0, 300, 600);
+        jScrollPane6.setBounds(740, 0, 300, 380);
 
         javax.swing.GroupLayout panel17Layout = new javax.swing.GroupLayout(panel17);
         panel17.setLayout(panel17Layout);
@@ -1119,6 +1254,15 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel_dokter.add(panel24);
         panel24.setBounds(0, 530, 730, 70);
 
+        save_report_dokter.setText("Save to Excel");
+        save_report_dokter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_report_dokterActionPerformed(evt);
+            }
+        });
+        panel_dokter.add(save_report_dokter);
+        save_report_dokter.setBounds(850, 410, 110, 23);
+
         tab1.addTab("Dokter", panel_dokter);
 
         frame_report4.getContentPane().add(tab1);
@@ -1131,6 +1275,10 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         frame_report4.getContentPane().add(jSeparator16);
         jSeparator16.setBounds(0, 40, 1040, 10);
 
+        fs.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+
+        jSeparator12.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simulasi Pendaftaran Awal");
         setBackground(new java.awt.Color(255, 204, 51));
@@ -1141,7 +1289,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel1.setText("Jumlah Server  Pendaftaran Awal : ");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(20, 50, 159, 13);
+        jLabel1.setBounds(10, 50, 159, 13);
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1214,7 +1362,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
         jLabel8.setText("Real Time");
         getContentPane().add(jLabel8);
-        jLabel8.setBounds(180, 650, 80, 17);
+        jLabel8.setBounds(180, 650, 80, 14);
 
         jLabel9.setText("Slower");
         getContentPane().add(jLabel9);
@@ -1222,7 +1370,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
         jLabel10.setText("Faster");
         getContentPane().add(jLabel10);
-        jLabel10.setBounds(370, 650, 40, 17);
+        jLabel10.setBounds(370, 650, 40, 14);
 
         ratio.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         ratio.addActionListener(new java.awt.event.ActionListener() {
@@ -1266,7 +1414,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         server_awal.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         server_awal.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
         getContentPane().add(server_awal);
-        server_awal.setBounds(180, 50, 39, 20);
+        server_awal.setBounds(170, 50, 50, 20);
 
         customer.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         customer.addActionListener(new java.awt.event.ActionListener() {
@@ -1453,7 +1601,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             }
         });
         getContentPane().add(jButton2);
-        jButton2.setBounds(790, 590, 155, 23);
+        jButton2.setBounds(940, 590, 155, 23);
 
         slider.setMaximum(900);
         slider.setMinimum(100);
@@ -1465,7 +1613,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             }
         });
         getContentPane().add(slider);
-        slider.setBounds(10, 620, 390, 23);
+        slider.setBounds(10, 620, 390, 26);
         getContentPane().add(jSeparator2);
         jSeparator2.setBounds(290, 50, 0, 70);
         getContentPane().add(jSeparator3);
@@ -1483,7 +1631,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         getContentPane().add(jSeparator8);
         jSeparator8.setBounds(670, 30, 10, 140);
         getContentPane().add(jSeparator9);
-        jSeparator9.setBounds(670, 170, 430, 20);
+        jSeparator9.setBounds(670, 170, 450, 20);
 
         jSeparator10.setOrientation(javax.swing.SwingConstants.VERTICAL);
         getContentPane().add(jSeparator10);
@@ -1492,10 +1640,6 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jSeparator11.setOrientation(javax.swing.SwingConstants.VERTICAL);
         getContentPane().add(jSeparator11);
         jSeparator11.setBounds(680, 610, 20, 60);
-
-        jSeparator12.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        getContentPane().add(jSeparator12);
-        jSeparator12.setBounds(1100, 0, 10, 700);
         getContentPane().add(jSeparator13);
         jSeparator13.setBounds(0, 30, 1100, 10);
 
@@ -1518,71 +1662,51 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             }
         });
         getContentPane().add(back);
-        back.setBounds(790, 633, 160, 30);
+        back.setBounds(940, 630, 160, 30);
 
         panelanimasi.setAutoscrolls(true);
         panelanimasi.setPreferredSize(new java.awt.Dimension(0, 0));
+        panelanimasi.setLayout(null);
 
-        javax.swing.GroupLayout panelanimasiLayout = new javax.swing.GroupLayout(panelanimasi);
-        panelanimasi.setLayout(panelanimasiLayout);
-        panelanimasiLayout.setHorizontalGroup(
-            panelanimasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 675, Short.MAX_VALUE)
-        );
-        panelanimasiLayout.setVerticalGroup(
-            panelanimasiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 379, Short.MAX_VALUE)
-        );
+        loading.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        loading.setText("Generating chart ...");
+        panelanimasi.add(loading);
+        loading.setBounds(280, 150, 180, 22);
 
         jTabbedPane1.addTab("Grafik 1", panelanimasi);
 
         panelanimasi2.setAutoscrolls(true);
+        panelanimasi2.setLayout(null);
 
-        javax.swing.GroupLayout panelanimasi2Layout = new javax.swing.GroupLayout(panelanimasi2);
-        panelanimasi2.setLayout(panelanimasi2Layout);
-        panelanimasi2Layout.setHorizontalGroup(
-            panelanimasi2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 675, Short.MAX_VALUE)
-        );
-        panelanimasi2Layout.setVerticalGroup(
-            panelanimasi2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 379, Short.MAX_VALUE)
-        );
+        loading1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        loading1.setText("Generating chart ...");
+        panelanimasi2.add(loading1);
+        loading1.setBounds(280, 150, 210, 22);
 
         jTabbedPane1.addTab("Grafik 2", panelanimasi2);
 
         panelanimasi3.setAutoscrolls(true);
+        panelanimasi3.setLayout(null);
 
-        javax.swing.GroupLayout panelanimasi3Layout = new javax.swing.GroupLayout(panelanimasi3);
-        panelanimasi3.setLayout(panelanimasi3Layout);
-        panelanimasi3Layout.setHorizontalGroup(
-            panelanimasi3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 675, Short.MAX_VALUE)
-        );
-        panelanimasi3Layout.setVerticalGroup(
-            panelanimasi3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 379, Short.MAX_VALUE)
-        );
+        loading2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        loading2.setText("Generating chart ...");
+        panelanimasi3.add(loading2);
+        loading2.setBounds(280, 150, 190, 22);
 
         jTabbedPane1.addTab("Grafik 3", panelanimasi3);
 
-        javax.swing.GroupLayout panelanimasi4Layout = new javax.swing.GroupLayout(panelanimasi4);
-        panelanimasi4.setLayout(panelanimasi4Layout);
-        panelanimasi4Layout.setHorizontalGroup(
-            panelanimasi4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 675, Short.MAX_VALUE)
-        );
-        panelanimasi4Layout.setVerticalGroup(
-            panelanimasi4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 379, Short.MAX_VALUE)
-        );
+        panelanimasi4.setLayout(null);
+
+        loading3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        loading3.setText("Generating chart ...");
+        panelanimasi4.add(loading3);
+        loading3.setBounds(280, 150, 200, 22);
 
         jTabbedPane1.addTab("Grafik 4", panelanimasi4);
 
         getContentPane().add(jTabbedPane1);
         jTabbedPane1.setBounds(0, 190, 680, 410);
 
-        tabel1.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         tabel1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -1601,7 +1725,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1612,13 +1736,48 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         tabel1.getTableHeader().setReorderingAllowed(false);
         jScrollPane7.setViewportView(tabel1);
         if (tabel1.getColumnModel().getColumnCount() > 0) {
-            tabel1.getColumnModel().getColumn(0).setPreferredWidth(2);
-            tabel1.getColumnModel().getColumn(1).setPreferredWidth(2);
-            tabel1.getColumnModel().getColumn(2).setPreferredWidth(8);
+            tabel1.getColumnModel().getColumn(0).setPreferredWidth(3);
+            tabel1.getColumnModel().getColumn(1).setPreferredWidth(3);
+            tabel1.getColumnModel().getColumn(2).setPreferredWidth(6);
+            tabel1.getColumnModel().getColumn(3).setPreferredWidth(5);
+            tabel1.getColumnModel().getColumn(4).setPreferredWidth(5);
         }
 
         getContentPane().add(jScrollPane7);
-        jScrollPane7.setBounds(680, 270, 420, 310);
+        jScrollPane7.setBounds(680, 270, 440, 310);
+
+        param_grafik.setFont(new java.awt.Font("Comic Sans MS", 0, 10)); // NOI18N
+        param_grafik.setModel(new javax.swing.SpinnerNumberModel(4, 4, 15, 1));
+        getContentPane().add(param_grafik);
+        param_grafik.setBounds(840, 620, 50, 20);
+
+        label_grafik1.setFont(new java.awt.Font("Comic Sans MS", 1, 11)); // NOI18N
+        label_grafik1.setText("Ubah Parameter X Grafik ");
+        getContentPane().add(label_grafik1);
+        label_grafik1.setBounds(690, 590, 160, 17);
+
+        label_grafik3.setFont(new java.awt.Font("Comic Sans MS", 0, 10)); // NOI18N
+        label_grafik3.setText("menit");
+        getContentPane().add(label_grafik3);
+        label_grafik3.setBounds(900, 620, 26, 14);
+
+        label_grafik2.setText("jumlah pasien dilayani per ");
+        getContentPane().add(label_grafik2);
+        label_grafik2.setBounds(690, 620, 150, 14);
+
+        jButton3.setFont(new java.awt.Font("Comic Sans MS", 0, 10)); // NOI18N
+        jButton3.setText("Apply");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3);
+        jButton3.setBounds(770, 650, 60, 23);
+
+        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        getContentPane().add(jSeparator6);
+        jSeparator6.setBounds(930, 580, 10, 100);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1630,14 +1789,6 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private void pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseActionPerformed
 
         // TODO add your handling code here:
-        play.setEnabled(true);
-        pause.setEnabled(false);
-        slider.setEnabled(true);
-        stop.setEnabled(true);
-        jButton1.setEnabled(true);
-        report.setEnabled(true);
-        back.setEnabled(true);
-        
         for(int i=0;i<arrayDokter.length;i++){
                         arrayDokter[i].suspend();
             }
@@ -1652,91 +1803,160 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
                         arrayServer[i].suspend();
             }
             sim.suspend();
+            play.setEnabled(true);
+            pause.setEnabled(false);
+            slider.setEnabled(false);
+            stop.setEnabled(true);
+            jButton1.setEnabled(false);
+            report.setEnabled(false);
+            back.setEnabled(false);
+            disableParamGrafik();
             counter=1;
     }//GEN-LAST:event_pauseActionPerformed
 
     private void playActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playActionPerformed
+
         // TODO add your handling code here:
         //Simulation sim;
         if(counter==0){
-            int serverawalvalue=(int)server_awal.getValue();
-            int serverpolivalue=(int)server_poli.getValue();
-            int serverpolivalue2=(int)server_poli2.getValue();
-            int serverpolivalue3=(int)server_poli3.getValue();
-            arrayServer=new ServerAwal[serverawalvalue];
-            arrayDokter=new ServerDokter[serverpolivalue];
-            arrayPerawat=new ServerPerawat[serverpolivalue2];
-            arrayPetugas=new ServerPetugas[serverpolivalue3];
-            int kapasitasantrian=(int)queue_capacity.getValue();
-            disablePanel();
-            disableTable();
-             output_poli.setText("");
             if(customer.getText().isEmpty()||arr_rate.getText().isEmpty()||ser_rate.getText().isEmpty()||ratio.getText().isEmpty()||servicerate_poli.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"Masih ada field yang kosong!","Alert",JOptionPane.ERROR_MESSAGE);
             }
             else{
-                play.setEnabled(false);
-                jButton2.setEnabled(false);
-                pause.setEnabled(true);
-                stop.setEnabled(true);
-                slider.setEnabled(true);
-                this.enableReportTable();
-                this.disableAllInput();
-                back.setEnabled(false);
-                jLabel30.setVisible(true);
-                jLabel31.setVisible(true);
-                jLabel32.setVisible(true);
-               
-                int customervalue=Integer.parseInt(customer.getText());
-                if(customervalue>700||customervalue<1){
-                  JOptionPane.showMessageDialog(this,"Angka tidak boleh melebihi 700 atau dibawah 1","Alert",JOptionPane.ERROR_MESSAGE);
+                boolean cek=true;
+                try{
+                   Double.valueOf(servicerate_poli.getText());
+                   Double.valueOf(servicerate_BPJSL.getText());
+                   Double.valueOf(ser_rate.getText());
+                   Double.valueOf(ratio.getText());
+                   Double.valueOf(arr_rate.getText());
+                   Double.valueOf(customer.getText());
                 }
-                else{
-                    double arrivalrate=Double.parseDouble(arr_rate.getText())*1.00;
-                    double ratio2=Double.parseDouble(ratio.getText())*1.00;
-                    System.out.println(arrivalrate);
-                    double servicerate1=Double.parseDouble(ser_rate.getText())*1.00;
-                    double servicerate2=Double.parseDouble(servicerate_BPJSL.getText())*1.00;
-                    double servicerate_poli2=Double.parseDouble(servicerate_poli.getText())*1.00;
-                    gen=new StatisticsGenerator(arrivalrate,servicerate1,servicerate2,servicerate_poli2);
-                    for(int i=0;i<arrayServer.length;i++){
-                        arrayServer[i]=new ServerAwal(i+1,gen,this);
-
+                catch(NumberFormatException e){
+                        cek=false;
+                        JOptionPane.showMessageDialog(this,"Field idak boleh berisi selain angka!","Alert",JOptionPane.ERROR_MESSAGE);     
+                }
+                if(cek==true){
+                    int customervalue=Integer.parseInt(customer.getText());
+                    if(customervalue>600||customervalue<1){
+                      JOptionPane.showMessageDialog(this,"Jumlah customer tidak boleh melebihi 600 atau dibawah 1","Alert",JOptionPane.ERROR_MESSAGE);
                     }
-                    sim=new StatisticsSimulationAwal(customervalue,arrayServer,gen,ratio2,this,kapasitasantrian);
-                    for(int i=0;i<arrayDokter.length;i++){
-                        arrayDokter[i]=new ServerDokter(i+1,gen,this);
-                        arrayDokter[i].start();
+                    else{
+                        if(Double.parseDouble(servicerate_poli.getText())>1||Double.parseDouble(servicerate_poli.getText())<0.1){
+                           JOptionPane.showMessageDialog(this,"Service rate poliklinik tidak boleh melebihi 1 atau dibawah 0.1","Alert",JOptionPane.ERROR_MESSAGE); 
+                        }
+                        else{
+                            if(Double.parseDouble(servicerate_BPJSL.getText())>3||Double.parseDouble(servicerate_BPJSL.getText())<0.1){
+                                JOptionPane.showMessageDialog(this,"Service rate BPJS Lama tidak boleh melebihi 3 atau dibawah 0.1","Alert",JOptionPane.ERROR_MESSAGE); 
+                            }
+                            else{
+                                if(Double.parseDouble(ser_rate.getText())>2||Double.parseDouble(ser_rate.getText())<0.1){
+                                    JOptionPane.showMessageDialog(this,"Service rate BPJS Baru tidak boleh melebihi 2 atau dibawah 0.1","Alert",JOptionPane.ERROR_MESSAGE); 
+                                }
+                                else{
+                                    if(Double.parseDouble(ratio.getText())>0.1||Double.parseDouble(ratio.getText())<0){
+                                        JOptionPane.showMessageDialog(this,"Proporsi pasien emergency tidak boleh melebihi 0.1 atau dibawah 0","Alert",JOptionPane.ERROR_MESSAGE); 
+                                    }
+                                    else{
+                                        if(Double.parseDouble(arr_rate.getText())>4||Double.parseDouble(arr_rate.getText())<0.1){
+                                            JOptionPane.showMessageDialog(this,"Arrival rate tidak boleh melebihi 4 atau dibawah 0.1","Alert",JOptionPane.ERROR_MESSAGE); 
+                                        }
+                                        else{
+                                            int serverawalvalue=(int)server_awal.getValue();  
+                                            int serverpolivalue=(int)server_poli.getValue();
+                                            int serverpolivalue2=(int)server_poli2.getValue();
+                                            int serverpolivalue3=(int)server_poli3.getValue();
+                                            arrayServer=new ServerAwal[serverawalvalue];
+                                            arrayDokter=new ServerDokter[serverpolivalue];
+                                            arrayPerawat=new ServerPerawat[serverpolivalue2];
+                                            arrayPetugas=new ServerPetugas[serverpolivalue3];
+                                            int kapasitasantrian=(int)queue_capacity.getValue();
+                                            disablePanel();
+                                            disableTable();
+                                            disableParamGrafik();
+                                            tabel_awal=new JTable();
+                                            scrollPane=new JScrollPane();
+                                            pasien_lama.setText("");
+                                            pasien_baru.setText("");
+                                            pasien_emergency.setText("");
+                                            output_poli.setText("");
+                                            hasil.setText("");
+                                            total_bpjsl_poli.setText("");
+                                            total_bpjsb_poli.setText("");
+                                            total_emergency_poli.setText("");
+                                            total.setText("");
+                                            total_poli.setText("");
+                                            output_petugas.setText("");
+                                            output_perawat.setText("");
+                                            output_dokter.setText("");
+                                            tabel_awal.removeAll();
+                                            scrollPane.removeAll();
+                                            panel_tabel.remove(tabel_awal);
+                                            panel_tabel.remove(scrollPane);
+                                            hideLoading();
+                                            hideLoadingPoli();
+                                            play.setEnabled(false);
+                                            jButton2.setEnabled(false);
+                                            pause.setEnabled(true);
+                                            stop.setEnabled(true);
+                                            slider.setEnabled(true);
+                                            this.disableReportTable();
+                                            this.disableAllInput();
+                                            back.setEnabled(false);
+                                            jLabel30.setVisible(true);
+                                            jLabel31.setVisible(true);
+                                            jLabel32.setVisible(true);
+                                            jLabel50.setVisible(false);
+                                            jLabel51.setVisible(false);
+                                            jLabel52.setVisible(false);
+                                            double arrivalrate=Double.parseDouble(arr_rate.getText())*1.00;
+                                            double ratio2=Double.parseDouble(ratio.getText())*1.00;
+                                            System.out.println(arrivalrate);
+                                            double servicerate1=Double.parseDouble(ser_rate.getText())*1.00;
+                                            double servicerate2=Double.parseDouble(servicerate_BPJSL.getText())*1.00;
+                                            double servicerate_poli2=Double.parseDouble(servicerate_poli.getText())*1.00;
+                                            gen=new StatisticsGenerator(arrivalrate,servicerate1,servicerate2,servicerate_poli2);
+                                            for(int i=0;i<arrayServer.length;i++){
+                                                arrayServer[i]=new ServerAwal(i+1,gen,this);
+                                            }
+                                            sim=new StatisticsSimulationAwal(customervalue,arrayServer,gen,ratio2,this,kapasitasantrian);
+                                            for(int i=0;i<arrayDokter.length;i++){
+                                                arrayDokter[i]=new ServerDokter(i+1,gen,this);
+                                                arrayDokter[i].start();
+                                            }
+                                            for(int i=0;i<arrayPerawat.length;i++){
+                                                arrayPerawat[i]=new ServerPerawat(i+1,gen,this,arrayDokter);
+                                                arrayPerawat[i].start();
+                                            }
+                                            for(int i=0;i<arrayPetugas.length;i++){
+                                                arrayPetugas[i]=new ServerPetugas(i+1,gen,this,arrayPerawat);
+                                                arrayPetugas[i].start();
+                                            }
+                                            sim2=new StatisticsSimulationPoli(arrayPetugas,gen,this,customervalue);
+                                            sim2.setServerperawat(arrayPerawat);
+                                            sim2.setServerdokter(arrayDokter);
+                                            sim2.start();
+                                            for(int i=0;i<arrayServer.length;i++){
+                                                arrayServer[i].setSim(sim2);
+                                                arrayServer[i].start();
+                                            }
+                                            sim.setPoli(sim2);
+                                            sim.setPetugas(arrayPetugas);
+                                            sim.setPerawat(arrayPerawat);
+                                            sim.setDokter(arrayDokter);
+                                            sim.start();
+                                            System.out.println("played");
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                    for(int i=0;i<arrayPerawat.length;i++){
-                        arrayPerawat[i]=new ServerPerawat(i+1,gen,this,arrayDokter);
-                        arrayPerawat[i].start();
-                    }
-                    for(int i=0;i<arrayPetugas.length;i++){
-                        arrayPetugas[i]=new ServerPetugas(i+1,gen,this,arrayPerawat);
-                        arrayPetugas[i].start();
-                    }
-                    sim2=new StatisticsSimulationPoli(arrayPetugas,gen,this,customervalue);
-                    sim2.setServerperawat(arrayPerawat);
-                    sim2.setServerdokter(arrayDokter);
-                    sim2.start();
-                    for(int i=0;i<arrayServer.length;i++){
-                        arrayServer[i].setSim(sim2);
-                        arrayServer[i].start();
-                    }
-                    sim.setPoli(sim2);
-                    sim.setPetugas(arrayPetugas);
-                    sim.setPerawat(arrayPerawat);
-                    sim.setDokter(arrayDokter);
-                    sim.start();
-                    System.out.println("played");
                 }
             }
            
         }
         else if (counter==1){
-            
-           
             for(int i=0;i<arrayDokter.length;i++){
                         arrayDokter[i].resume();
             }
@@ -1766,13 +1986,6 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
     private void stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopActionPerformed
         // TODO add your handling code here:
-        play.setEnabled(true);
-        slider.setEnabled(false);
-        stop.setEnabled(false);
-        pause.setEnabled(false);
-        jButton2.setEnabled(true);
-        this.enableAllInput();
-        back.setEnabled(false);
         for(int i=0;i<arrayDokter.length;i++){
                     arrayDokter[i].stop();
         }
@@ -1787,9 +2000,28 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
                     arrayServer[i].stop();
         }
         sim.stop();
+        for(int i=0;i<20.000;i++){
+            System.out.println("do loading");
+            showLoading();
+        }
+        hideLoading();
         sim.displayChart1();
+        for(int i=0;i<10.000;i++){
+            System.out.println("do loading");
+            showLoadingPoli();
+        }
+        hideLoadingPoli();
         sim.displayChart2();
+        play.setEnabled(true);
+        slider.setEnabled(false);
+        stop.setEnabled(false);
+        pause.setEnabled(false);
+        jButton2.setEnabled(true);
+        this.enableAllInput();
+        back.setEnabled(true);
+        enableParamGrafik();
         counter=0;
+        enableReportTable();
         
         
         
@@ -1803,10 +2035,10 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jFrame1.setState(Frame.ICONIFIED);
         frame_report3.setState(Frame.ICONIFIED);
         frame_report4.setState(Frame.ICONIFIED);
+        enableSave();
         String[] columnNames={"Nomor urut","Jenis Pasien","Arrival Time","Service time","Waktu mulai dilayani","Delay time","Departure time","Waiting time","Loket"};
         LinkedList<Customer> queuereport3=new LinkedList<Customer>();
         for(int i=0;i<arrayServer.length;i++){
-//            Queue<Customer> tempqueue=arrayServer[i].getQueueReport();
             LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
             System.out.println("Jumlah Server : "+arrayServer.length);
             System.out.println("Size  : "+queuetempreport.size());
@@ -1823,13 +2055,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
            arrayreport1[i]=queuereport3.get(i);
        }
        Arrays.sort(arrayreport1);
-//       JPanel topPanel = new JPanel();
+       panel_tabel.setVisible(true);
        panel_tabel.setLayout( new BorderLayout() );
        panel_tabel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Hasil Pemodelan dan Simulasi Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
-       getContentPane().add( panel_tabel );
-       data=gen.generateStatisticsReportAwal3(arrayreport1);
-       final JTable tabel_awal=new JTable(data,columnNames);
-       tabel_awal.setSize(750,300);
+       final Object[][] data=gen.generateStatisticsReportAwal3(arrayreport1);
+       tabel_awal=new JTable(data,columnNames);
        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
        tabel_awal.setDefaultRenderer(String.class, centerRenderer);
@@ -1840,9 +2070,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             tabel_awal.getColumnModel().getColumn(i).setWidth(120);
             tabel_awal.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
         }
-       JScrollPane scrollPane = new JScrollPane(tabel_awal);
+       panel_tabel.removeAll();
+       scrollPane = new JScrollPane(tabel_awal);
        scrollPane.setVisible(true);
-        panel_tabel.add( scrollPane );
+        getContentPane().add(scrollPane);
+        panel_tabel.add( scrollPane);
         int count1=0;
         int count2=0;
         for(int i=0;i<arrayServer.length;i++){
@@ -1853,14 +2085,10 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         pasien_baru.setText("Jumlah pasien BPJS Baru : "+(int)count2+"");
         pasien_emergency.setText("Jumlah pasien emergency : "+0);
         total.setText("Jumlah total pasien : "+(count1+count2));
-        frame_report.add(panel_tabel);
-        frame_report.pack();
-        frame_report.setSize(750,523);
-        frame_report.setBounds(0,0,750,523);
         frame_report.setVisible(true);      
         
        
-       String[] columnNames2={"Nomor urut","Jenis Pasien","Arrival Time","Service time","Waktu mulai dilayani","Delay time","Departure time","Waiting time"};
+       String[] columnNames2={"Nomor urut pend.awal","Nomor urut","Jenis Pasien","Arrival Time","Service time","Waktu mulai dilayani","Delay time","Departure time","Waiting time","Petugas","Perawat","Dokter"};
        LinkedList<Customer> queuereport4=new LinkedList<Customer>();
        for(int i=0;i<arrayDokter.length;i++){
            LinkedList<Customer> queuetempreport2=arrayDokter[i].getQueueReport2();
@@ -1878,12 +2106,12 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
            arrayreport2[i]=queuereport4.get(i);
        }
        Arrays.sort(arrayreport2);
+       panel_poli.setVisible(true);
        panel_poli.setLayout( new BorderLayout() );
        panel_poli.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Hasil Pemodelan dan Simulasi Poliklinik",TitledBorder.CENTER,TitledBorder.TOP));
-       getContentPane().add( panel_poli );
        data2=gen.generateStatisticsReportPoli3(arrayreport2);
        final JTable tabel_poli=new JTable(data2,columnNames2);
-       tabel_poli.setSize(700,300);
+       tabel_poli.setSize(850,300);
        DefaultTableCellRenderer centerRenderer2 = new DefaultTableCellRenderer();
        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
        tabel_poli.setDefaultRenderer(String.class, centerRenderer2);
@@ -1894,21 +2122,20 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             tabel_poli.getColumnModel().getColumn(i).setWidth(120);
             tabel_poli.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
         }
+       panel_poli.removeAll();
        JScrollPane scrollPane2 = new JScrollPane(tabel_poli);
        scrollPane2.setVisible(true);
+       getContentPane().add(scrollPane2);
        panel_poli.add( scrollPane2 );
-       total_bpjsl_poli.setText("Jumlah pasien BPJS Lama : "+(int)sim2.getCounterpasien1());
-       total_bpjsb_poli.setText("Jumlah pasien BPJS Baru : "+(int)sim2.getCounterpasien2());
+       total_bpjsl_poli.setText("Jumlah pasien BPJS Lama : "+(int)sim2.getCounterpasien2());
+       total_bpjsb_poli.setText("Jumlah pasien BPJS Baru : "+(int)sim2.getCounterpasien1());
        total_emergency_poli.setText("Jumlah pasien Emergency : "+(int)sim2.getCounterpasien3());
        int total=sim2.getCounterpasien1()+sim2.getCounterpasien2()+sim2.getCounterpasien3();
        total_poli.setText("Jumlah total pasien Poliklinik : "+total);
-       frame_report2.add(panel_poli);
        frame_report2.pack();
-       frame_report2.setSize(700,300);
-       frame_report2.setBounds(500,0,700,300);
-       frame_report2.setVisible(true);     
-       
-       
+       frame_report2.setSize(700,660);
+       frame_report2.setBounds(500,0,700,660);
+       frame_report2.setVisible(true); 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -1924,6 +2151,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         this.customer.setText("");
         this.ratio.setText("");
         this.queue_capacity.setValue(1);
+        disableParamGrafik();
         jLabel20.setVisible(false);
         jLabel21.setVisible(false);
         jLabel22.setVisible(false);
@@ -1996,12 +2224,14 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         jFrame1.setState(Frame.ICONIFIED);
         frame_report.setState(Frame.ICONIFIED);
         frame_report2.setState(Frame.ICONIFIED);
+        panel_petugas.setVisible(true);
+        enableSave();
         //frame report pendaftaran awal
         String[] columnNames2=gen.generateColumnNamesServer(arrayServer);
         data=gen.generateUtilityServer(arrayServer);
+        panel_tabel_utility.setVisible(true);
         panel_tabel_utility.setLayout( new BorderLayout() );
         panel_tabel_utility.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Utilitas Server Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(  panel_tabel_utility );
         final JTable tabel_utilitas=new JTable(data,columnNames2);
         tabel_utilitas.setSize(500,300);
         DefaultTableCellRenderer centerRenderer2 = new DefaultTableCellRenderer();
@@ -2014,15 +2244,15 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_utilitas.getColumnModel().getColumn(i).setWidth(100);
              tabel_utilitas.getColumnModel().getColumn(i).setCellRenderer( centerRenderer2);
          }
+        panel_tabel_utility.removeAll();
         JScrollPane scrollPane2 = new JScrollPane(tabel_utilitas);
         scrollPane2.setVisible(true);
+        getContentPane().add(scrollPane2);
         panel_tabel_utility.add( scrollPane2 );
-        frame_report3.add(panel_tabel_utility);
-        
-        
+     
+        panel_arrival_rate.setVisible(true);
         panel_arrival_rate.setLayout( new BorderLayout() );
         panel_arrival_rate.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Arrival Rate Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(  panel_arrival_rate );
         String[] columnNames3={"BPJS Lama","BPJS Baru","Summary"};
         LinkedList<Customer> queuereport3=new LinkedList<Customer>();
         for(int i=0;i<arrayServer.length;i++){
@@ -2040,7 +2270,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
        Customer[] arrayreport1=new Customer[queuereport3.size()];
        for(int i=0;i<arrayreport1.length;i++){
            arrayreport1[i]=queuereport3.get(i);
+           System.out.println(arrayreport1[i]+" array report 1 ");
        }
+       System.out.println("Length array report 1 : "+arrayreport1.length);
        Arrays.sort(arrayreport1);
        double summary=gen.generateSummaryArrivalTime(arrayreport1);
        double bpjslama=gen.generateArrivalTimeBPJSLama(arrayreport1);
@@ -2061,16 +2293,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_average.getColumnModel().getColumn(i).setWidth(150);
              tabel_average.getColumnModel().getColumn(i).setCellRenderer( centerRenderer3);
          }
+        panel_arrival_rate.removeAll();
         JScrollPane scrollPane3 = new JScrollPane(tabel_average);
         scrollPane3.setVisible(true);
+        getContentPane().add(scrollPane3);
         panel_arrival_rate.add( scrollPane3 );
-        frame_report3.add(panel_arrival_rate);
         
-        
-        
+
+        panel_interarrival.setVisible(true);
         panel_interarrival.setLayout( new BorderLayout() );
         panel_interarrival.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Interarrival Time Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel_interarrival);
         String[] columnNames4={"BPJS Lama","BPJS Baru","Summary"};
         LinkedList<Customer> queuereport4=new LinkedList<Customer>();
         for(int i=0;i<arrayServer.length;i++){
@@ -2080,7 +2312,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             int k=0;
             while(k<queuetempreport.size()){
                 Customer temp=queuetempreport.get(k);
-                System.out.println("queue report : "+temp.getNumber()+" "+temp.getArrivaltime()+" "+temp.getServicetime());
+                System.out.println("queue report 2 : "+temp.getNumber()+" "+temp.getArrivaltime()+" "+temp.getServicetime());
                 queuereport4.add(temp);
                 k++;
             }
@@ -2088,7 +2320,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
        Customer[] arrayreport2=new Customer[queuereport4.size()];
        for(int i=0;i<arrayreport2.length;i++){
            arrayreport2[i]=queuereport4.get(i);
+           System.out.println(arrayreport2[i]+" array report 2 ");
        }
+       System.out.println("Length array report 2 : "+arrayreport2.length);
        Arrays.sort(arrayreport2);
        double summary2=gen.generateAverageInterArrivalTime(arrayreport2);
        double bpjslama2=gen.generateAverageInterArrivalTimeBPJSLama(arrayreport2);
@@ -2109,14 +2343,15 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_inter.getColumnModel().getColumn(i).setWidth(100);
              tabel_inter.getColumnModel().getColumn(i).setCellRenderer( centerRenderer4);
          }
+        panel_interarrival.removeAll();
         JScrollPane scrollPane4 = new JScrollPane(tabel_inter);
         scrollPane4.setVisible(true);
+        getContentPane().add(scrollPane4);
         panel_interarrival.add( scrollPane4 );
-        frame_report3.add(panel_interarrival);
         
+       panel_service_rate.setVisible(true);
        panel_service_rate.setLayout( new BorderLayout() );
        panel_service_rate.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Service Rate Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
-       getContentPane().add(panel_service_rate);
        double summary22=gen.generateServiceRate(arrayServer);
        double bpjslama22=gen.generateServiceRateBPJSLama(arrayServer);
        double bpjsbaru22=gen.generateServiceRateBPJSBaru(arrayServer);
@@ -2134,15 +2369,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_service_rate.getColumnModel().getColumn(i).setWidth(100);
              tabel_service_rate.getColumnModel().getColumn(i).setCellRenderer( centerRenderer4);
          }
+        panel_service_rate.removeAll();
         JScrollPane scrollPane44 = new JScrollPane(tabel_service_rate);
         scrollPane44.setVisible(true);
+        getContentPane().add(scrollPane44);
         panel_service_rate.add( scrollPane44 );
-        frame_report3.add(panel_service_rate);
         
        
+        panel_average.setVisible(true);
         panel_average.setLayout( new BorderLayout() );
-        panel_average.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Service Time Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel_average);
+        panel_average.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Service Time Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));   
         String[] columnNames5=gen.generateColumnNamesServer(arrayServer);
         Object[][] averageservicetime=gen.generateAverageServiceTime(arrayServer);
         final JTable tabel_service=new JTable(averageservicetime,columnNames5);
@@ -2157,15 +2393,15 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_service.getColumnModel().getColumn(i).setWidth(100);
              tabel_service.getColumnModel().getColumn(i).setCellRenderer( centerRenderer5);
          }
+        panel_average.removeAll();
         JScrollPane scrollPane5 = new JScrollPane(tabel_service);
         scrollPane5.setVisible(true);
+        getContentPane().add(scrollPane5);
         panel_average.add( scrollPane5 );
-        frame_report3.add(panel_average);
         
-        
+        panel_waiting_time.setVisible(true);
         panel_waiting_time.setLayout( new BorderLayout() );
         panel_waiting_time.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Waiting Time Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel_waiting_time);
         String[] columnNames6=gen.generateColumnNamesServer(arrayServer);
         Object[][] averagewaitingtime=gen.generateAverageWaitingTime(arrayServer);
         final JTable tabel_waiting=new JTable(averagewaitingtime,columnNames6);
@@ -2180,15 +2416,15 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_waiting.getColumnModel().getColumn(i).setWidth(100);
              tabel_waiting.getColumnModel().getColumn(i).setCellRenderer( centerRenderer6);
          }
+        panel_waiting_time.removeAll();
         JScrollPane scrollPane6 = new JScrollPane(tabel_waiting);
         scrollPane6.setVisible(true);
+        getContentPane().add(scrollPane6);
         panel_waiting_time.add( scrollPane6 );
-        frame_report3.add(panel_waiting_time);
         
-        
+        panel_delay_time.setVisible(true);
         panel_delay_time.setLayout( new BorderLayout() );
         panel_delay_time.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Delay Time Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel_delay_time);
         String[] columnNames7=gen.generateColumnNamesServer(arrayServer);
         Object[][] averagedelaytime=gen.generateAverageDelayTime(arrayServer);
         final JTable tabel_delay=new JTable(averagedelaytime,columnNames7);
@@ -2203,15 +2439,15 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_delay.getColumnModel().getColumn(i).setWidth(100);
              tabel_delay.getColumnModel().getColumn(i).setCellRenderer( centerRenderer7);
          }
+        panel_delay_time.removeAll();
         JScrollPane scrollPane7 = new JScrollPane(tabel_delay);
         scrollPane7.setVisible(true);
+        getContentPane().add(scrollPane7);
         panel_delay_time.add( scrollPane7 );
-        frame_report3.add(panel_delay_time);
         
-        
+        panel_pasien.setVisible(true);
         panel_pasien.setLayout( new BorderLayout() );
         panel_pasien.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Total Spent Time in Server",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel_pasien);
         String[] columnNames8=gen.generateColumnNamesServer(arrayServer);
         Object[][] totalspenttime=gen.generateTotalSpentTimeServer(arrayServer);
         final JTable tabel_spent=new JTable(totalspenttime,columnNames8);
@@ -2226,10 +2462,11 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_spent.getColumnModel().getColumn(i).setWidth(100);
              tabel_spent.getColumnModel().getColumn(i).setCellRenderer( centerRenderer8);
          }
+        panel_pasien.removeAll();
         JScrollPane scrollPane8 = new JScrollPane(tabel_spent);
         scrollPane8.setVisible(true);
+        getContentPane().add(scrollPane8);
         panel_pasien.add( scrollPane8 );
-        frame_report3.add(panel_pasien);
         hasil.setBounds(550,0,300,300);
         hasil.setText(gen.generateSummaryOutput(arrayServer));
         frame_report3.pack();
@@ -2239,9 +2476,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         
         
         //frame report petugas
+        panel1.setVisible(true);
         panel1.setLayout( new BorderLayout() );
         panel1.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Total Spent Time Petugas",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel1);
         String[] columnNames9=gen.generateColumnNamesServer2(arrayPetugas);
         Object[][] totalspenttime2=gen.generateTotalSpentTimeServer2(arrayPetugas);
         final JTable tabel_spent2=new JTable(totalspenttime2,columnNames9);
@@ -2256,15 +2493,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_spent2.getColumnModel().getColumn(i).setWidth(100);
              tabel_spent2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer9);
          }
+        panel1.removeAll();
         JScrollPane scrollPane9 = new JScrollPane(tabel_spent2);
         scrollPane9.setVisible(true);
+        getContentPane().add(scrollPane9);
         panel1.add( scrollPane9 );
         panel_petugas.add(panel1);
         
         Object[][] data4=gen.generateUtilityServer2(arrayPetugas);
+        panel2.setVisible(true);
         panel2.setLayout( new BorderLayout() );
         panel2.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Utilitas Server Petugas",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(  panel2 );
         final JTable tabel_utilitas2=new JTable(data4,columnNames9);
         tabel_utilitas2.setSize(500,300);
         tabel_utilitas2.setDefaultRenderer(String.class, centerRenderer2);
@@ -2275,14 +2514,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_utilitas2.getColumnModel().getColumn(i).setWidth(100);
              tabel_utilitas2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer2);
          }
+        panel2.removeAll();
         JScrollPane scrollPane10 = new JScrollPane(tabel_utilitas2);
         scrollPane10.setVisible(true);
+        getContentPane().add(scrollPane10);
         panel2.add( scrollPane10 );
         panel_petugas.add(panel2);
         
+        panel3.setVisible(true);
         panel3.setLayout( new BorderLayout() );
         panel3.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Service Time Petugas",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel3);
         Object[][] averageservicetime2=gen.generateAverageServiceTime2(arrayPetugas);
         final JTable tabel_service2=new JTable(averageservicetime2,columnNames9);
         tabel_service2.setSize(500,300);
@@ -2294,14 +2535,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_service2.getColumnModel().getColumn(i).setWidth(100);
              tabel_service2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer5);
          }
+        panel3.removeAll();
         JScrollPane scrollPane11 = new JScrollPane(tabel_service2);
         scrollPane11.setVisible(true);
+        getContentPane().add(scrollPane11);
         panel3.add( scrollPane11 );
         panel_petugas.add(panel3);
         
+        panel4.setVisible(true);
         panel4.setLayout( new BorderLayout() );
         panel4.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Arrival Rate Petugas",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(  panel4 );
         LinkedList<Customer> queuereport5=new LinkedList<Customer>();
         for(int i=0;i<arrayPetugas.length;i++){
             LinkedList<Customer> queuetempreport=arrayPetugas[i].getQueueReport2();
@@ -2338,14 +2581,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_average2.getColumnModel().getColumn(i).setWidth(150);
              tabel_average2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer3);
          }
+        panel4.removeAll();
         JScrollPane scrollPane12 = new JScrollPane(tabel_average2);
         scrollPane12.setVisible(true);
+        getContentPane().add( scrollPane12);
         panel4.add( scrollPane12 );
         panel_petugas.add(panel4);
         
+        panel5.setVisible(true);
         panel5.setLayout( new BorderLayout() );
         panel5.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Interarrival Time Petugas",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel5);
         LinkedList<Customer> queuereport6=new LinkedList<Customer>();
         for(int i=0;i<arrayPetugas.length;i++){
             LinkedList<Customer> queuetempreport=arrayPetugas[i].getQueueReport2();
@@ -2381,14 +2626,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_inter2.getColumnModel().getColumn(i).setWidth(100);
              tabel_inter2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer4);
          }
+        panel5.removeAll();
         JScrollPane scrollPane13 = new JScrollPane(tabel_inter2);
         scrollPane13.setVisible(true);
+        getContentPane().add(scrollPane13);
         panel5.add( scrollPane13 );
         panel_petugas.add(panel5);
         
+        panel6.setVisible(true);
         panel6.setLayout( new BorderLayout() );
         panel6.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Waiting Time Petugas",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel6);
         Object[][] averagewaitingtime2=gen.generateAverageWaitingTime2(arrayPetugas);
         final JTable tabel_waiting2=new JTable(averagewaitingtime2,columnNames9);
         tabel_waiting2.setSize(500,300);
@@ -2400,15 +2647,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_waiting2.getColumnModel().getColumn(i).setWidth(100);
              tabel_waiting2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer6);
          }
+        panel6.removeAll();
         JScrollPane scrollPane14 = new JScrollPane(tabel_waiting2);
         scrollPane14.setVisible(true);
+        getContentPane().add(scrollPane14);
         panel6.add( scrollPane14 );
         panel_petugas.add(panel6);
         
         
+        panel7.setVisible(true);
         panel7.setLayout( new BorderLayout() );
         panel7.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Delay Time Petugas",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel7);
         Object[][] averagedelaytime2=gen.generateAverageDelayTime2(arrayPetugas);
         final JTable tabel_delay2=new JTable(averagedelaytime2,columnNames9);
         tabel_delay2.setSize(500,300);
@@ -2420,14 +2669,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_delay2.getColumnModel().getColumn(i).setWidth(100);
              tabel_delay2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer7);
          }
+        panel7.removeAll();
         JScrollPane scrollPane15 = new JScrollPane(tabel_delay2);
         scrollPane15.setVisible(true);
+        getContentPane().add(scrollPane15);
         panel7.add( scrollPane15 );
         panel_petugas.add(panel7);
         
+       panel8.setVisible(true);
        panel8.setLayout( new BorderLayout() );
        panel8.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Service Rate Petugas",TitledBorder.CENTER,TitledBorder.TOP));
-       getContentPane().add(panel8);
        double summary5=gen.generateServiceRate2(arrayPetugas);
        double bpjslama5=gen.generateServiceRateBPJSLama2(arrayPetugas);
        double bpjsbaru5=gen.generateServiceRateBPJSBaru2(arrayPetugas);
@@ -2445,21 +2696,19 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_service_rate2.getColumnModel().getColumn(i).setWidth(100);
              tabel_service_rate2.getColumnModel().getColumn(i).setCellRenderer( centerRenderer4);
          }
+        panel8.removeAll();
         JScrollPane scrollPane16 = new JScrollPane(tabel_service_rate2);
         scrollPane16.setVisible(true);
+        getContentPane().add(scrollPane16);
         panel8.add( scrollPane16 );
         panel_petugas.add(panel8);
         output_petugas.setText(gen.generateSummaryOutputPetugas(arrayPetugas));
-//        frame_report4.pack();
-//        frame_report4.setSize(950,487);
-//        frame_report4.setBounds(500,500,950,487);
-//        frame_report4.setVisible(true);
         
         
         //frame report perawat
+        panel9.setVisible(true);
         panel9.setLayout( new BorderLayout() );
         panel9.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Total Spent Time Perawat",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel9);
         String[] columnNames11=gen.generateColumnNamesServer3(arrayPerawat);
         Object[][] totalspenttime3=gen.generateTotalSpentTimeServer3(arrayPerawat);
         final JTable tabel_spent3=new JTable(totalspenttime3,columnNames11);
@@ -2472,16 +2721,18 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_spent3.getColumnModel().getColumn(i).setWidth(100);
              tabel_spent3.getColumnModel().getColumn(i).setCellRenderer( centerRenderer9);
          }
+        panel9.removeAll();
         JScrollPane scrollPane17 = new JScrollPane(tabel_spent3);
         scrollPane17.setVisible(true);
+        getContentPane().add(scrollPane17);
         panel9.add( scrollPane17 );
         panel_perawat.add(panel9);
         
 
         Object[][] data7=gen.generateUtilityServer3(arrayPerawat);
+        panel10.setVisible(true);
         panel10.setLayout( new BorderLayout() );
         panel10.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Utilitas Server Perawat",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(  panel10 );
         final JTable tabel_utilitas3=new JTable(data7,columnNames11);
         tabel_utilitas3.setSize(500,300);
         tabel_utilitas3.setDefaultRenderer(String.class, centerRenderer2);
@@ -2492,14 +2743,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_utilitas3.getColumnModel().getColumn(i).setWidth(100);
              tabel_utilitas3.getColumnModel().getColumn(i).setCellRenderer( centerRenderer2);
          }
+        panel10.removeAll();
         JScrollPane scrollPane18 = new JScrollPane(tabel_utilitas3);
         scrollPane18.setVisible(true);
+        getContentPane().add(scrollPane18);
         panel10.add( scrollPane18 );
         panel_perawat.add(panel10);
         
+        panel11.setVisible(true);
         panel11.setLayout( new BorderLayout() );
         panel11.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Service Time Perawat",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel11);
         Object[][] averageservicetime3=gen.generateAverageServiceTime3(arrayPerawat);
         final JTable tabel_service3=new JTable(averageservicetime3,columnNames11);
         tabel_service3.setSize(500,300);
@@ -2511,15 +2764,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_service3.getColumnModel().getColumn(i).setWidth(100);
              tabel_service3.getColumnModel().getColumn(i).setCellRenderer( centerRenderer5);
          }
+        panel11.removeAll();
         JScrollPane scrollPane19 = new JScrollPane(tabel_service3);
         scrollPane19.setVisible(true);
+        getContentPane().add(scrollPane19);
         panel11.add( scrollPane19 );
         panel_perawat.add(panel11);
         
         
+        panel12.setVisible(true);
         panel12.setLayout( new BorderLayout() );
         panel12.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Arrival Rate Perawat",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(  panel12 );
         LinkedList<Customer> queuereport7=new LinkedList<Customer>();
         for(int i=0;i<arrayPerawat.length;i++){
             LinkedList<Customer> queuetempreport=arrayPerawat[i].getQueueReport2();
@@ -2556,15 +2811,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_average3.getColumnModel().getColumn(i).setWidth(150);
              tabel_average3.getColumnModel().getColumn(i).setCellRenderer( centerRenderer3);
          }
+        panel12.removeAll();
         JScrollPane scrollPane20 = new JScrollPane(tabel_average3);
         scrollPane20.setVisible(true);
+        getContentPane().add(scrollPane20);
         panel12.add( scrollPane20 );
         panel_perawat.add(panel12);
         
         
+        panel13.setVisible(true);
         panel13.setLayout( new BorderLayout() );
         panel13.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Interarrival Time Perawat",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel13);
         LinkedList<Customer> queuereport8=new LinkedList<Customer>();
         for(int i=0;i<arrayPerawat.length;i++){
             LinkedList<Customer> queuetempreport=arrayPerawat[i].getQueueReport2();
@@ -2602,14 +2859,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_inter3.getColumnModel().getColumn(i).setWidth(100);
              tabel_inter3.getColumnModel().getColumn(i).setCellRenderer( centerRenderer4);
          }
+        panel13.removeAll();
         JScrollPane scrollPane21 = new JScrollPane(tabel_inter3);
         scrollPane21.setVisible(true);
+        getContentPane().add(scrollPane21);
         panel13.add( scrollPane21 );
         panel_perawat.add(panel13);
         
+        
+        panel14.setVisible(true);
         panel14.setLayout( new BorderLayout() );
         panel14.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Waiting Time Perawat",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel14);
         Object[][] averagewaitingtime3=gen.generateAverageWaitingTime3(arrayPerawat);
         final JTable tabel_waiting3=new JTable(averagewaitingtime3,columnNames11);
         tabel_waiting3.setSize(500,300);
@@ -2621,15 +2881,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_waiting3.getColumnModel().getColumn(i).setWidth(100);
              tabel_waiting3.getColumnModel().getColumn(i).setCellRenderer( centerRenderer6);
          }
+        panel14.removeAll();
         JScrollPane scrollPane22 = new JScrollPane(tabel_waiting3);
         scrollPane22.setVisible(true);
+        getContentPane().add(scrollPane22);
         panel14.add( scrollPane22 );
         panel_perawat.add(panel14);
         
         
+        panel15.setVisible(true);
         panel15.setLayout( new BorderLayout() );
         panel15.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Delay Time Perawat",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel15);
         Object[][] averagedelaytime3=gen.generateAverageDelayTime3(arrayPerawat);
         final JTable tabel_delay3=new JTable(averagedelaytime3,columnNames11);
         tabel_delay3.setSize(500,300);
@@ -2641,14 +2903,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_delay3.getColumnModel().getColumn(i).setWidth(100);
              tabel_delay3.getColumnModel().getColumn(i).setCellRenderer( centerRenderer7);
          }
+        panel15.removeAll();
         JScrollPane scrollPane23 = new JScrollPane(tabel_delay3);
         scrollPane23.setVisible(true);
+        getContentPane().add(scrollPane23);
         panel15.add( scrollPane23 );
         panel_perawat.add(panel15);
         
+       
+       panel16.setVisible(true); 
        panel16.setLayout( new BorderLayout() );
        panel16.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Service Rate Perawat",TitledBorder.CENTER,TitledBorder.TOP));
-       getContentPane().add(panel16);
        double summary8=gen.generateServiceRate3(arrayPerawat);
        double bpjslama8=gen.generateServiceRateBPJSLama3(arrayPerawat);
        double bpjsbaru8=gen.generateServiceRateBPJSBaru3(arrayPerawat);
@@ -2666,17 +2931,19 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_service_rate3.getColumnModel().getColumn(i).setWidth(100);
              tabel_service_rate3.getColumnModel().getColumn(i).setCellRenderer( centerRenderer4);
          }
+        panel16.removeAll();
         JScrollPane scrollPane24 = new JScrollPane(tabel_service_rate3);
         scrollPane24.setVisible(true);
+        getContentPane().add(scrollPane24);
         panel16.add( scrollPane24 );
         panel_perawat.add(panel16);
         output_perawat.setText(gen.generateSummaryOutputPerawat(arrayPerawat));
         
         
         //frame report dokter
+        panel17.setVisible(true);
         panel17.setLayout( new BorderLayout() );
         panel17.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Total Spent Time Dokter",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel17);
         String[] columnNames13=gen.generateColumnNamesServer4(arrayDokter);
         Object[][] totalspenttime4=gen.generateTotalSpentTimeServer4(arrayDokter);
         final JTable tabel_spent4=new JTable(totalspenttime4,columnNames13);
@@ -2689,16 +2956,18 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_spent4.getColumnModel().getColumn(i).setWidth(100);
              tabel_spent4.getColumnModel().getColumn(i).setCellRenderer( centerRenderer9);
          }
+        panel17.removeAll();
         JScrollPane scrollPane25 = new JScrollPane(tabel_spent4);
         scrollPane25.setVisible(true);
+        getContentPane().add(scrollPane25);
         panel17.add( scrollPane25 );
         panel_dokter.add(panel17);
         
 
         Object[][] data10=gen.generateUtilityServer4(arrayDokter);
+        panel18.setVisible(true);
         panel18.setLayout( new BorderLayout() );
         panel18.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Utilitas Server Dokter",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(  panel18 );
         final JTable tabel_utilitas4=new JTable(data10,columnNames13);
         tabel_utilitas4.setSize(500,300);
         tabel_utilitas4.setDefaultRenderer(String.class, centerRenderer2);
@@ -2709,14 +2978,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_utilitas4.getColumnModel().getColumn(i).setWidth(100);
              tabel_utilitas4.getColumnModel().getColumn(i).setCellRenderer( centerRenderer2);
          }
+        panel18.removeAll();
         JScrollPane scrollPane26 = new JScrollPane(tabel_utilitas4);
         scrollPane26.setVisible(true);
+        getContentPane().add(scrollPane26);
         panel18.add( scrollPane26 );
         panel_dokter.add(panel18);
         
+        
+        panel19.setVisible(true);
         panel19.setLayout( new BorderLayout() );
         panel19.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Service Time Dokter",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel19);
         Object[][] averageservicetime4=gen.generateAverageServiceTime4(arrayDokter);
         final JTable tabel_service4=new JTable(averageservicetime4,columnNames13);
         tabel_service4.setSize(500,300);
@@ -2728,15 +3000,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_service4.getColumnModel().getColumn(i).setWidth(100);
              tabel_service4.getColumnModel().getColumn(i).setCellRenderer( centerRenderer5);
          }
+        panel19.removeAll();
         JScrollPane scrollPane27 = new JScrollPane(tabel_service4);
         scrollPane27.setVisible(true);
+        getContentPane().add(scrollPane27);
         panel19.add( scrollPane27 );
         panel_dokter.add(panel19);
         
         
+        panel20.setVisible(true);
         panel20.setLayout( new BorderLayout() );
         panel20.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Arrival Rate Dokter",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(  panel20 );
         LinkedList<Customer> queuereport9=new LinkedList<Customer>();
         for(int i=0;i<arrayDokter.length;i++){
             LinkedList<Customer> queuetempreport=arrayDokter[i].getQueueReport2();
@@ -2775,15 +3049,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_average4.getColumnModel().getColumn(i).setWidth(150);
              tabel_average4.getColumnModel().getColumn(i).setCellRenderer( centerRenderer3);
         }
+       panel20.removeAll();
        JScrollPane scrollPane28 = new JScrollPane(tabel_average4);
        scrollPane28.setVisible(true);
+       getContentPane().add(scrollPane28);
        panel20.add( scrollPane28 );
        panel_dokter.add(panel20);
         
         
-        panel21.setLayout( new BorderLayout() );
+       panel21.setVisible(true); 
+       panel21.setLayout( new BorderLayout() );
         panel21.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Interarrival Time Dokter",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel21);
         LinkedList<Customer> queuereport10=new LinkedList<Customer>();
         for(int i=0;i<arrayDokter.length;i++){
             LinkedList<Customer> queuetempreport=arrayDokter[i].getQueueReport2();
@@ -2821,14 +3097,16 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_inter4.getColumnModel().getColumn(i).setWidth(100);
              tabel_inter4.getColumnModel().getColumn(i).setCellRenderer( centerRenderer4);
          }
+        panel21.removeAll();
         JScrollPane scrollPane29 = new JScrollPane(tabel_inter4);
         scrollPane29.setVisible(true);
+        getContentPane().add(scrollPane29);
         panel21.add( scrollPane29 );
         panel_dokter.add(panel21);
         
+        panel22.setVisible(true);
         panel22.setLayout( new BorderLayout() );
         panel22.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Waiting Time Dokter",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel22);
         Object[][] averagewaitingtime4=gen.generateAverageWaitingTime4(arrayDokter);
         final JTable tabel_waiting4=new JTable(averagewaitingtime4,columnNames13);
         tabel_waiting4.setSize(500,300);
@@ -2840,15 +3118,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_waiting4.getColumnModel().getColumn(i).setWidth(100);
              tabel_waiting4.getColumnModel().getColumn(i).setCellRenderer( centerRenderer6);
          }
+        panel22.removeAll();
         JScrollPane scrollPane30 = new JScrollPane(tabel_waiting4);
         scrollPane30.setVisible(true);
+        getContentPane().add(scrollPane30);
         panel22.add( scrollPane30 );
         panel_dokter.add(panel22);
         
         
+        panel23.setVisible(true);
         panel23.setLayout( new BorderLayout() );
         panel23.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Average of Delay Time Dokter",TitledBorder.CENTER,TitledBorder.TOP));
-        getContentPane().add(panel23);
         Object[][] averagedelaytime4=gen.generateAverageDelayTime4(arrayDokter);
         final JTable tabel_delay4=new JTable(averagedelaytime4,columnNames13);
         tabel_delay4.setSize(500,300);
@@ -2860,14 +3140,17 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_delay4.getColumnModel().getColumn(i).setWidth(100);
              tabel_delay4.getColumnModel().getColumn(i).setCellRenderer( centerRenderer7);
          }
+        panel23.removeAll();
         JScrollPane scrollPane31 = new JScrollPane(tabel_delay4);
         scrollPane31.setVisible(true);
+        getContentPane().add(scrollPane31);
         panel23.add( scrollPane31);
         panel_dokter.add(panel23);
         
+       
+       panel24.setVisible(true);
        panel24.setLayout( new BorderLayout() );
        panel24.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Tabel Service Rate Dokter",TitledBorder.CENTER,TitledBorder.TOP));
-       getContentPane().add(panel24);
        double summary11=gen.generateServiceRate4(arrayDokter);
        double bpjslama11=gen.generateServiceRateBPJSLama4(arrayDokter);
        double bpjsbaru11=gen.generateServiceRateBPJSBaru4(arrayDokter);
@@ -2887,8 +3170,10 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
              tabel_service_rate4.getColumnModel().getColumn(i).setWidth(100);
              tabel_service_rate4.getColumnModel().getColumn(i).setCellRenderer( centerRenderer4);
          }
+        panel24.removeAll();
         JScrollPane scrollPane32 = new JScrollPane(tabel_service_rate4);
         scrollPane32.setVisible(true);
+        getContentPane().add(scrollPane32);
         panel24.add( scrollPane32 );
         panel_dokter.add(panel24);
         output_dokter.setText(gen.generateSummaryOutputDokter(arrayDokter));
@@ -2905,9 +3190,326 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         InterfaceAwal home=new InterfaceAwal();
         home.pack();
         home.setVisible(true);
-        this.setVisible(false);
         jFrame1.setVisible(false);
+        frame_report.setVisible(false);
+        frame_report2.setVisible(false);
+        frame_report3.setVisible(false);
+        frame_report4.setVisible(false);
+        this.setVisible(false);
+        
     }//GEN-LAST:event_backActionPerformed
+
+    private void save_table1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_table1ActionPerformed
+        // TODO add your handling code here:
+        if(evt.getSource()==save_table1){
+            int returnVal = fs.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fs.getSelectedFile();
+                //This is where a real application would open the file.
+                System.out.println(file.getName());
+                System.out.println(file.getPath());
+                this.writer=new ExcelWriter(file.getPath());
+                LinkedList<Object[]> data=gen.saveIntoTable3(arrayServer);
+                boolean cek=writer.writeExcelFile(data);
+                if(cek==true){
+                    JOptionPane.showMessageDialog(this,"Sukses menyimpan file ke disk","Alert",JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this,"Gagal menyimpan file ke disk","Alert",JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                fs.cancelSelection();
+            }
+        }
+    }//GEN-LAST:event_save_table1ActionPerformed
+
+    private void save_table2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_table2ActionPerformed
+        // TODO add your handling code here:
+        if(evt.getSource()==save_table2){
+            int returnVal = fs.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fs.getSelectedFile();
+                //This is where a real application would open the file.
+                System.out.println(file.getName());
+                System.out.println(file.getPath());
+                this.writer=new ExcelWriter(file.getPath());
+                LinkedList<Object[]> data=gen.saveIntoTable4(arrayDokter);
+                boolean cek=writer.writeExcelFilePoli(data);
+                if(cek==true){
+                    JOptionPane.showMessageDialog(this,"Sukses menyimpan file ke disk","Alert",JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                     JOptionPane.showMessageDialog(this,"Gagal menyimpan file ke disk","Alert",JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                fs.cancelSelection();
+            }
+        }
+    }//GEN-LAST:event_save_table2ActionPerformed
+
+    private void save_report_awalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_report_awalActionPerformed
+        // TODO add your handling code here:
+         if(evt.getSource()==save_report_awal){
+            int returnVal = fs.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fs.getSelectedFile();
+                //This is where a real application would open the file.
+                System.out.println(file.getName());
+                System.out.println(file.getPath());
+                this.writer=new ExcelWriter(file.getPath());
+                Object[][] data=gen.generateUtilityServer(arrayServer);
+                Customer[] arrayreport1=gen.sortCustomer5(arrayServer); 
+                
+               String[] columnNames2=gen.generateColumnNamesServer(arrayServer);
+               double summary=gen.generateSummaryArrivalTime(arrayreport1);
+               double bpjslama=gen.generateArrivalTimeBPJSLama(arrayreport1);
+               double bpjsbaru=gen.generateArrivalTimeBPJSBaru(arrayreport1);
+               Object[] arrivaltime=new Object[3];
+               arrivaltime[0]=summary+" pasien per 2 menit";
+               arrivaltime[1]=bpjslama+" pasien per 2 menit ";
+               arrivaltime[2]=bpjsbaru+" pasien per 2 menit ";
+               
+               double summary2=gen.generateAverageInterArrivalTime(arrayreport1);
+               double bpjslama2=gen.generateAverageInterArrivalTimeBPJSLama(arrayreport1);
+               double bpjsbaru2=gen.generateAverageInterArrivalTimeBPJSBaru(arrayreport1);
+               Object[] inter=new Object[3];
+               inter[0]=gen.convertSeconds(summary2)+" ";
+               inter[1]=gen.convertSeconds(bpjslama2)+" ";
+               inter[2]=gen.convertSeconds(bpjsbaru2)+" ";
+                       
+               double summary22=gen.generateServiceRate(arrayServer);
+               double bpjslama22=gen.generateServiceRateBPJSLama(arrayServer);
+               double bpjsbaru22=gen.generateServiceRateBPJSBaru(arrayServer);
+               Object[] service=new Object[3];
+               service[0]=summary22+" pasien per menit";
+               service[1]=bpjslama22+" pasien per menit";
+               service[2]=bpjsbaru22+" pasien per menit";
+               
+               Object[][] averageservicetime=gen.generateAverageServiceTime(arrayServer);
+               Object[][] averagewaitingtime=gen.generateAverageWaitingTime(arrayServer);
+               Object[][] averagedelaytime=gen.generateAverageDelayTime(arrayServer);
+               Object[][] totalspenttime=gen.generateTotalSpentTimeServer(arrayServer);
+               String s=gen.generateSummaryOutput(arrayServer);
+               boolean cek=writer.writeExcelFileReportAwal(columnNames2,data,arrivaltime,inter,service,averageservicetime,averagewaitingtime,averagedelaytime,totalspenttime,s);
+                if(cek==true){
+                    JOptionPane.showMessageDialog(this,"Sukses menyimpan file ke disk","Alert",JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                     JOptionPane.showMessageDialog(this,"Gagal menyimpan file ke disk","Alert",JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                fs.cancelSelection();
+            }
+        }
+    }//GEN-LAST:event_save_report_awalActionPerformed
+
+    private void save_report_petugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_report_petugasActionPerformed
+        // TODO add your handling code here:
+        if(evt.getSource()==save_report_petugas){
+            int returnVal = fs.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fs.getSelectedFile();
+                //This is where a real application would open the file.
+                System.out.println(file.getName());
+                System.out.println(file.getPath());
+                this.writer=new ExcelWriter(file.getPath());
+                Object[][] data=gen.generateUtilityServer2(arrayPetugas);
+                Customer[] arrayreport1=gen.sortCustomer6(arrayPetugas); 
+                
+               String[] columnNames2=gen.generateColumnNamesServer2(arrayPetugas);
+               double summary=gen.generateSummaryArrivalTime2(arrayreport1);
+               double bpjslama=gen.generateArrivalTimeBPJSLama2(arrayreport1);
+               double bpjsbaru=gen.generateArrivalTimeBPJSBaru2(arrayreport1);
+               Object[] arrivaltime=new Object[3];
+               arrivaltime[0]=summary+" pasien per 2 menit ";
+               arrivaltime[1]=bpjslama+" pasien per 2 menit ";
+               arrivaltime[2]=bpjsbaru+" pasien per 2 menit";
+               
+               double summary2=gen.generateAverageInterArrivalTime2(arrayreport1);
+               double bpjslama2=gen.generateAverageInterArrivalTimeBPJSLama2(arrayreport1);
+               double bpjsbaru2=gen.generateAverageInterArrivalTimeBPJSBaru2(arrayreport1);
+               Object[] inter=new Object[3];
+               inter[0]=gen.convertSeconds(summary2)+" ";
+               inter[1]=gen.convertSeconds(bpjslama2)+" ";
+               inter[2]=gen.convertSeconds(bpjsbaru2)+" ";
+                       
+               double summary22=gen.generateServiceRate2(arrayPetugas);
+               double bpjslama22=gen.generateServiceRateBPJSLama2(arrayPetugas);
+               double bpjsbaru22=gen.generateServiceRateBPJSBaru2(arrayPetugas);
+               Object[] service=new Object[3];
+               service[0]=summary22+"  pasien per menit ";
+               service[1]=bpjslama22+" pasien per menit";
+               service[2]=bpjsbaru22+" pasien per menit";
+               
+               Object[][] averageservicetime=gen.generateAverageServiceTime2(arrayPetugas);
+               Object[][] averagewaitingtime=gen.generateAverageWaitingTime2(arrayPetugas);
+               Object[][] averagedelaytime=gen.generateAverageDelayTime2(arrayPetugas);
+               Object[][] totalspenttime=gen.generateTotalSpentTimeServer2(arrayPetugas);
+               String s=gen.generateSummaryOutputPetugas(arrayPetugas);
+               boolean cek=writer.writeExcelFileReportPetugas(columnNames2,data,arrivaltime,inter,service,averageservicetime,averagewaitingtime,averagedelaytime,totalspenttime,s);
+                if(cek==true){
+                    JOptionPane.showMessageDialog(this,"Sukses menyimpan file ke disk","Alert",JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                     JOptionPane.showMessageDialog(this,"Gagal menyimpan file ke disk","Alert",JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                fs.cancelSelection();
+            }
+        }
+    }//GEN-LAST:event_save_report_petugasActionPerformed
+
+    private void save_report_perawatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_report_perawatActionPerformed
+        // TODO add your handling code here:
+        if(evt.getSource()==save_report_perawat){
+            int returnVal = fs.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fs.getSelectedFile();
+                //This is where a real application would open the file.
+                System.out.println(file.getName());
+                System.out.println(file.getPath());
+                this.writer=new ExcelWriter(file.getPath());
+                Object[][] data=gen.generateUtilityServer3(arrayPerawat);
+                Customer[] arrayreport1=gen.sortCustomer7(arrayPerawat); 
+                
+               String[] columnNames2=gen.generateColumnNamesServer3(arrayPerawat);
+               double summary=gen.generateSummaryArrivalTime3(arrayreport1);
+               double bpjslama=gen.generateArrivalTimeBPJSLama3(arrayreport1);
+               double bpjsbaru=gen.generateArrivalTimeBPJSBaru3(arrayreport1);
+               Object[] arrivaltime=new Object[3];
+               arrivaltime[0]=summary+" pasien per 2 menit ";
+               arrivaltime[1]=bpjslama+" pasien per 2 menit ";
+               arrivaltime[2]=bpjsbaru+" pasien per 2 menit ";
+               
+               double summary2=gen.generateAverageInterArrivalTime3(arrayreport1);
+               double bpjslama2=gen.generateAverageInterArrivalTimeBPJSLama3(arrayreport1);
+               double bpjsbaru2=gen.generateAverageInterArrivalTimeBPJSBaru3(arrayreport1);
+               Object[] inter=new Object[3];
+               inter[0]=gen.convertSeconds(summary2)+" ";
+               inter[1]=gen.convertSeconds(bpjslama2)+" ";
+               inter[2]=gen.convertSeconds(bpjsbaru2)+" ";
+                       
+               double summary22=gen.generateServiceRate3(arrayPerawat);
+               double bpjslama22=gen.generateServiceRateBPJSLama3(arrayPerawat);
+               double bpjsbaru22=gen.generateServiceRateBPJSBaru3(arrayPerawat);
+               Object[] service=new Object[3];
+               service[0]=summary22+" pasien per menit";
+               service[1]=bpjslama22+" pasien per menit";
+               service[2]=bpjsbaru22+" pasien per menit";
+               
+               Object[][] averageservicetime=gen.generateAverageServiceTime3(arrayPerawat);
+               Object[][] averagewaitingtime=gen.generateAverageWaitingTime3(arrayPerawat);
+               Object[][] averagedelaytime=gen.generateAverageDelayTime3(arrayPerawat);
+               Object[][] totalspenttime=gen.generateTotalSpentTimeServer3(arrayPerawat);
+               String s=gen.generateSummaryOutputPerawat(arrayPerawat);
+               boolean cek=writer.writeExcelFileReportPerawat(columnNames2,data,arrivaltime,inter,service,averageservicetime,averagewaitingtime,averagedelaytime,totalspenttime,s);
+                if(cek==true){
+                    JOptionPane.showMessageDialog(this,"Sukses menyimpan file ke disk","Alert",JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                     JOptionPane.showMessageDialog(this,"Gagal menyimpan file ke disk","Alert",JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                fs.cancelSelection();
+            }
+        }
+    }//GEN-LAST:event_save_report_perawatActionPerformed
+
+    private void save_report_dokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_report_dokterActionPerformed
+        // TODO add your handling code here:
+        if(evt.getSource()==save_report_dokter){
+            int returnVal = fs.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fs.getSelectedFile();
+                //This is where a real application would open the file.
+                System.out.println(file.getName());
+                System.out.println(file.getPath());
+                this.writer=new ExcelWriter(file.getPath());
+                Object[][] data=gen.generateUtilityServer4(arrayDokter);
+                Customer[] arrayreport1=gen.sortCustomer8(arrayDokter); 
+                
+               String[] columnNames2=gen.generateColumnNamesServer4(arrayDokter);
+               double summary=gen.generateSummaryArrivalTime4(arrayreport1);
+               double bpjslama=gen.generateArrivalTimeBPJSLama4(arrayreport1);
+               double bpjsbaru=gen.generateArrivalTimeBPJSBaru4(arrayreport1);
+               double emergency=gen.generateArrivalTimeEmergency(arrayreport1);
+               Object[] arrivaltime=new Object[4];
+               arrivaltime[0]=summary+" pasien per 2 menit ";
+               arrivaltime[1]=bpjslama+" pasien per 2 menit ";
+               arrivaltime[2]=bpjsbaru+" pasien per 2 menit ";
+               arrivaltime[3]=emergency+" pasien per 2 menit ";
+               
+               double summary2=gen.generateAverageInterArrivalTime4(arrayreport1);
+               double bpjslama2=gen.generateAverageInterArrivalTimeBPJSLama4(arrayreport1);
+               double bpjsbaru2=gen.generateAverageInterArrivalTimeBPJSBaru4(arrayreport1);
+               double emergency2=gen.generateAverageInterArrivalTimeEmergency(arrayreport1);
+               Object[] inter=new Object[4];
+               inter[0]=gen.convertSeconds(summary2)+" ";
+               inter[1]=gen.convertSeconds(bpjslama2)+" ";
+               inter[2]=gen.convertSeconds(bpjsbaru2)+" ";
+               inter[3]=gen.convertSeconds(emergency2)+" ";
+                
+               double summary22=gen.generateServiceRate4(arrayDokter);
+               double bpjslama22=gen.generateServiceRateBPJSLama4(arrayDokter);
+               double bpjsbaru22=gen.generateServiceRateBPJSBaru4(arrayDokter);
+               double emergency3=gen.generateServiceRateEmergency(arrayDokter);
+               Object[] service=new Object[4];
+               service[0]=summary22+" pasien per menit";
+               service[1]=bpjslama22+" pasien per menit";
+               service[2]=bpjsbaru22+" pasien per menit";
+               service[3]=emergency3+" pasien per menit";
+               
+               Object[][] averageservicetime=gen.generateAverageServiceTime4(arrayDokter);
+               Object[][] averagewaitingtime=gen.generateAverageWaitingTime4(arrayDokter);
+               Object[][] averagedelaytime=gen.generateAverageDelayTime4(arrayDokter);
+               Object[][] totalspenttime=gen.generateTotalSpentTimeServer4(arrayDokter);
+               String s=gen.generateSummaryOutputDokter(arrayDokter);
+               boolean cek=writer.writeExcelFileReportPerawat(columnNames2,data,arrivaltime,inter,service,averageservicetime,averagewaitingtime,averagedelaytime,totalspenttime,s);
+                if(cek==true){
+                    JOptionPane.showMessageDialog(this,"Sukses menyimpan file ke disk","Alert",JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                     JOptionPane.showMessageDialog(this,"Gagal menyimpan file ke disk","Alert",JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                fs.cancelSelection();
+            }
+        }
+    }//GEN-LAST:event_save_report_dokterActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int param=(int)param_grafik.getValue();
+        sim.setParamxchart(param);
+        for(int i=0;i<10.000;i++){
+            System.out.println("loading");
+            showLoadingAwal();
+        }
+        hideLoadingAwal();
+        sim.displayChart4();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+     public void showLoadingAwal(){
+        loading3.setVisible(true);
+        
+    }
+    
+    public void hideLoadingAwal(){
+        loading3.setVisible(false);
+        
+    }
+    
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        int param=(int)param_grafik2.getValue();
+        sim.setParamxchart2(param);
+        for(int i=0;i<10.000;i++){
+            System.out.println("loading");
+            showLoadingChart();
+        }
+        hideLoadingChart();
+        sim.displayChart3();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -3027,8 +3629,9 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     }
     
     public void enableResetButton(){
+        enableParamGrafik();
         jButton2.setEnabled(true);
-        slider.setEnabled(true);
+        slider.setEnabled(false);
         play.setEnabled(true);
         slider.setValue(500);
         this.enableAllInput();
@@ -3036,11 +3639,18 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         pause.setEnabled(false);
         stop.setEnabled(false);
         this.counter=0;
+        enableSave();
+        enableReportTable();
     }
     
     public void enableReportTable(){
         jButton1.setEnabled(true);
         report.setEnabled(true);
+    }
+    
+    public void disableReportTable(){
+        jButton1.setEnabled(false);
+        report.setEnabled(false);
     }
     
     public void disableAllInput(){
@@ -3470,20 +4080,20 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
   }
       
-     public void initFxComponents5(final LinkedList<int[]> pasien,final int max,final int max2){
+     public void initFxComponents5(final LinkedList<int[]> pasien,final int max,final int max2,final int paramx){
 
       Platform.runLater(new Runnable() {
           @Override
          public void run() {
             GridPane grid = new GridPane();
             Scene scene = new Scene(grid,600, 400);
-            final NumberAxis xAxis = new NumberAxis(0,max,5);
+            final NumberAxis xAxis = new NumberAxis(0,max,paramx);
                 final NumberAxis yAxis = new NumberAxis(0,max2,5);
                 final LineChart<Number,Number> sc = new
                 LineChart<Number,Number>(xAxis,yAxis);
                 xAxis.setLabel("Menit ke-");
                 yAxis.setLabel("Jumlah pasien");
-                sc.setTitle("Jumlah pasien terlayani per 5 menit");
+                sc.setTitle("Jumlah pasien dilayani per "+paramx+" menit");
                 XYChart.Series series1 = new XYChart.Series();
                 series1.setName("BPJS Lama");
                 int size3=pasien.size();
@@ -3510,14 +4120,14 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
   }
      
-      public void initFxComponents8(final LinkedList<int[]> pasien,final int max,final int max2){
+      public void initFxComponents8(final LinkedList<int[]> pasien,final int max,final int max2,final int paramx){
 
       Platform.runLater(new Runnable() {
           @Override
          public void run() {
             GridPane grid = new GridPane();
             Scene scene = new Scene(grid,600, 400);
-            final NumberAxis xAxis = new NumberAxis(0,max,5);
+            final NumberAxis xAxis = new NumberAxis(0,max,paramx);
                 final NumberAxis yAxis = new NumberAxis(0,max2,2);
                 final LineChart<Number,Number> sc = new
                 LineChart<Number,Number>(xAxis,yAxis);
@@ -3525,7 +4135,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
                 System.out.println("max 1 : "+max+" max 2 : "+max2);
                 xAxis.setLabel("Menit ke-");
                 yAxis.setLabel("Jumlah pasien");
-                sc.setTitle("Jumlah pasien terlayani per 5 menit oleh petugas");
+                sc.setTitle("Jumlah pasien dilayani per "+paramx+" menit oleh petugas");
                 XYChart.Series series1 = new XYChart.Series();
                 series1.setName("BPJS Lama");
                 int size3=pasien.size();
@@ -3552,14 +4162,14 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
   }
       
-      public void initFxComponents9(final LinkedList<int[]> pasien,final int max,final int max2){
+      public void initFxComponents9(final LinkedList<int[]> pasien,final int max,final int max2,final int paramx){
 
       Platform.runLater(new Runnable() {
           @Override
          public void run() {
             GridPane grid = new GridPane();
             Scene scene = new Scene(grid,600, 400);
-            final NumberAxis xAxis = new NumberAxis(0,max,5);
+            final NumberAxis xAxis = new NumberAxis(0,max,paramx);
                 final NumberAxis yAxis = new NumberAxis(0,max2,2);
                 final LineChart<Number,Number> sc = new
                 LineChart<Number,Number>(xAxis,yAxis);
@@ -3567,7 +4177,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
                 System.out.println("max 1 : "+max+" max 2 : "+max2);
                 xAxis.setLabel("Menit ke-");
                 yAxis.setLabel("Jumlah pasien");
-                sc.setTitle("Jumlah pasien terlayani per 5 menit oleh perawat");
+                sc.setTitle("Jumlah pasien dilayani per "+paramx+" menit oleh perawat");
                 XYChart.Series series1 = new XYChart.Series();
                 series1.setName("BPJS Lama");
                 int size3=pasien.size();
@@ -3594,22 +4204,22 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
 
   }
       
-      public void initFxComponents10(final LinkedList<int[]> pasien,final int max,final int max2){
+      public void initFxComponents10(final LinkedList<int[]> pasien,final int max,final int max2,final int paramx){
 
       Platform.runLater(new Runnable() {
           @Override
          public void run() {
             GridPane grid = new GridPane();
             Scene scene = new Scene(grid,600, 400);
-            final NumberAxis xAxis = new NumberAxis(0,max,5);
-                final NumberAxis yAxis = new NumberAxis(0,max2,2);
+            final NumberAxis xAxis = new NumberAxis(0,max,paramx);
+                final NumberAxis yAxis = new NumberAxis(0,max2,1);
                 final LineChart<Number,Number> sc = new
                 LineChart<Number,Number>(xAxis,yAxis);
                 System.out.println("max 1 : "+max+" max 2 : "+max2);
                 sc.setPrefSize(600,300);
                 xAxis.setLabel("Menit ke-");
                 yAxis.setLabel("Jumlah pasien");
-                sc.setTitle("Jumlah pasien terlayani per 5 menit oleh dokter");
+                sc.setTitle("Jumlah pasien dilayani per "+paramx+" menit oleh dokter");
                 XYChart.Series series1 = new XYChart.Series();
                 series1.setName("BPJS Lama");
                 int size3=pasien.size();
@@ -3659,7 +4269,23 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     return data;
   }
   
-  public void setChart(int bpjsb,int bpjsl,int emr, LinkedList<int[]> listcounterpasien,double[][] utility,int length,LinkedList<int[]> delaytime,LinkedList<double[]> waitingtime,LinkedList<double[]> servicetime,LinkedList<int[]> counterpasien,int maxtime,int maxpasien){
+  public void setChartAwal(int paramx,LinkedList<int[]> counter1,int max1,int max2){
+         initFxComponents5(counter1,max1,max2,paramx);
+  }
+  
+  public void setChartPoli42(int paramx,LinkedList<int[]> counter1,int max1,int max2){
+        initFxComponents8(counter1,max1,max2,paramx);
+  }
+   
+  public void setChartPoli52(int paramx,LinkedList<int[]> counter1,int max1,int max2){
+        initFxComponents9(counter1,max1,max2,paramx);
+  }
+    
+  public void setChartPoli62(int paramx,LinkedList<int[]> counter1,int max1,int max2)  { 
+        initFxComponents10(counter1,max1,max2,paramx);
+  }
+     
+  public void setChart(int paramx,int bpjsb,int bpjsl,int emr, LinkedList<int[]> listcounterpasien,double[][] utility,int length,LinkedList<int[]> delaytime,LinkedList<double[]> waitingtime,LinkedList<double[]> servicetime,LinkedList<int[]> counterpasien,int maxtime,int maxpasien){
         panelanimasi.setVisible(true);
         panelanimasi.setLayout( new BorderLayout() );
         panelanimasi.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Pendaftaran Awal",TitledBorder.CENTER,TitledBorder.TOP));
@@ -3683,7 +4309,7 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         initFxComponents(bpjsb,bpjsl,emr,listcounterpasien);
         initFxComponents3(utility,length,delaytime);
         initFxComponents4(waitingtime,servicetime);
-        initFxComponents5(counterpasien,maxtime,maxpasien);
+        initFxComponents5(counterpasien,maxtime,maxpasien,paramx);
         panelanimasi.add(fxPanel,BorderLayout.CENTER);
         panelanimasi2.add(fxPanel3,BorderLayout.CENTER);
         panelanimasi3.add(fxPanel4,BorderLayout.CENTER);
@@ -3721,33 +4347,33 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
         panel_grafik_poli3.add(fxPanel7,BorderLayout.CENTER);
   }
   
-   public void setChartPoli4(LinkedList<int[]> counter1,int max1,int max2){
+   public void setChartPoli4(int paramx,LinkedList<int[]> counter1,int max1,int max2){
         panel_grafik_poli4.setVisible(true);
         panel_grafik_poli4.setLayout( new BorderLayout() );
         panel_grafik_poli4.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Poliklinik",TitledBorder.CENTER,TitledBorder.TOP));
         fxPanel8.setVisible(true);
         getContentPane().add(  fxPanel8 );
-        initFxComponents8(counter1,max1,max2);
+        initFxComponents8(counter1,max1,max2,paramx);
         panel_grafik_poli4.add(fxPanel8,BorderLayout.CENTER);
   }
    
-    public void setChartPoli5(LinkedList<int[]> counter1,int max1,int max2){
+    public void setChartPoli5(int paramx,LinkedList<int[]> counter1,int max1,int max2){
         panel_grafik_poli5.setVisible(true);
         panel_grafik_poli5.setLayout( new BorderLayout() );
         panel_grafik_poli5.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Poliklinik",TitledBorder.CENTER,TitledBorder.TOP));
         fxPanel9.setVisible(true);
         getContentPane().add(  fxPanel9 );
-        initFxComponents9(counter1,max1,max2);
+        initFxComponents9(counter1,max1,max2,paramx);
         panel_grafik_poli5.add(fxPanel9,BorderLayout.CENTER);
   }
     
-     public void setChartPoli6(LinkedList<int[]> counter1,int max1,int max2)  { 
+     public void setChartPoli6(int paramx,LinkedList<int[]> counter1,int max1,int max2)  { 
         panel_grafik_poli6.setVisible(true);
         panel_grafik_poli6.setLayout( new BorderLayout() );
         panel_grafik_poli6.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),"Grafik Poliklinik",TitledBorder.CENTER,TitledBorder.TOP));
         fxPanel10.setVisible(true);
         getContentPane().add(  fxPanel10 );
-        initFxComponents10(counter1,max1,max2);
+        initFxComponents10(counter1,max1,max2,paramx);
         panel_grafik_poli6.add(fxPanel10,BorderLayout.CENTER);
   }
      
@@ -3768,10 +4394,45 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             }
      }
      
-     public void disablePanel(){
+     public void showLoading(){
+         loading.setVisible(true);
+         loading1.setVisible(true);
+         loading2.setVisible(true);
+         loading3.setVisible(true);
+     }
+     
+     public void hideLoading(){
+         loading.setVisible(false);
+         loading1.setVisible(false);
+         loading2.setVisible(false);
+         loading3.setVisible(false);
+     }
+     
+     public void showLoadingPoli(){
+         loadingpoli.setVisible(true);
+         loadingpoli1.setVisible(true);
+         loadingpoli2.setVisible(true);
+         loadingpoli3.setVisible(true);
+         loadingpoli4.setVisible(true);
+         loadingpoli5.setVisible(true);
+     }
+     
+     public void hideLoadingPoli(){
+         loadingpoli.setVisible(false);
+         loadingpoli1.setVisible(false);
+         loadingpoli2.setVisible(false);
+         loadingpoli3.setVisible(false);
+         loadingpoli4.setVisible(false);
+         loadingpoli5.setVisible(false);
+     }
+     
+      public void disablePanel(){
             panelanimasi.setVisible(false);
             panelanimasi2.setVisible(false);
             panelanimasi3.setVisible(false);
+            panel_tabel.setVisible(false);
+            panel_poli.setVisible(false);
+            panel_petugas.setVisible(false);
             fxPanel.setVisible(false);
             fxPanel2.setVisible(false);
             fxPanel3.setVisible(false);
@@ -3788,6 +4449,39 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
             panel_grafik_poli4.setVisible(false);
             panel_grafik_poli5.setVisible(false);
             panel_grafik_poli6.setVisible(false);
+            panel1.setVisible(false);
+            panel10.setVisible(false);
+            panel11.setVisible(false);
+            panel12.setVisible(false);
+            panel13.setVisible(false);
+            panel14.setVisible(false);
+            panel15.setVisible(false);
+            panel16.setVisible(false);
+            panel17.setVisible(false);
+            panel18.setVisible(false);
+            panel19.setVisible(false);
+            panel20.setVisible(false);
+            panel21.setVisible(false);
+            panel22.setVisible(false);
+            panel23.setVisible(false);
+            panel24.setVisible(false);
+            panel2.setVisible(false);
+            panel3.setVisible(false);
+            panel4.setVisible(false);
+            panel5.setVisible(false);
+            panel6.setVisible(false);
+            panel7.setVisible(false);
+            panel8.setVisible(false);
+            panel9.setVisible(false);
+            panel_arrival_rate.setVisible(false);
+            panel_average.setVisible(false);
+            panel_delay_time.setVisible(false);
+            panel_interarrival.setVisible(false);
+            panel_service_rate.setVisible(false);
+            panel_tabel_utility.setVisible(false);
+            panel_waiting_time.setVisible(false);
+            panel_pasien.setVisible(false);
+            
      }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField arr_rate;
@@ -3797,9 +4491,12 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private javax.swing.JFrame frame_report2;
     private javax.swing.JFrame frame_report3;
     private javax.swing.JFrame frame_report4;
+    private javax.swing.JFileChooser fs;
     private javax.swing.JTextArea hasil;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -3875,16 +4572,34 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private javax.swing.JSeparator jSeparator16;
     private javax.swing.JSeparator jSeparator17;
     private javax.swing.JSeparator jSeparator18;
+    private javax.swing.JSeparator jSeparator19;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JLabel label_grafik1;
+    private javax.swing.JLabel label_grafik2;
+    private javax.swing.JLabel label_grafik3;
+    private javax.swing.JLabel label_grafik4;
+    private javax.swing.JLabel label_grafik5;
+    private javax.swing.JLabel label_grafik6;
+    private javax.swing.JLabel loading;
+    private javax.swing.JLabel loading1;
+    private javax.swing.JLabel loading2;
+    private javax.swing.JLabel loading3;
+    private javax.swing.JLabel loadingpoli;
+    private javax.swing.JLabel loadingpoli1;
+    private javax.swing.JLabel loadingpoli2;
+    private javax.swing.JLabel loadingpoli3;
+    private javax.swing.JLabel loadingpoli4;
+    private javax.swing.JLabel loadingpoli5;
     private javax.swing.JTextArea output2;
     private javax.swing.JTextArea output_dokter;
     private javax.swing.JTextArea output_perawat;
@@ -3937,6 +4652,8 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private javax.swing.JPanel panelanimasi2;
     private javax.swing.JPanel panelanimasi3;
     private javax.swing.JPanel panelanimasi4;
+    private javax.swing.JSpinner param_grafik;
+    private javax.swing.JSpinner param_grafik2;
     private javax.swing.JLabel pasien_baru;
     private javax.swing.JLabel pasien_emergency;
     private javax.swing.JLabel pasien_lama;
@@ -3945,6 +4662,12 @@ public class InterfaceGUI1 extends javax.swing.JFrame implements Runnable{
     private javax.swing.JSpinner queue_capacity;
     private javax.swing.JTextField ratio;
     private javax.swing.JButton report;
+    private javax.swing.JButton save_report_awal;
+    private javax.swing.JButton save_report_dokter;
+    private javax.swing.JButton save_report_perawat;
+    private javax.swing.JButton save_report_petugas;
+    private javax.swing.JButton save_table1;
+    private javax.swing.JButton save_table2;
     private javax.swing.JTextField ser_rate;
     private javax.swing.JSpinner server_awal;
     private javax.swing.JSpinner server_poli;

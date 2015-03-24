@@ -7,7 +7,7 @@
 package ExcelInputSimulation;
 
 import GUI.InterfaceGUI1;
-import GUI.InterfaceGUI4;
+import GUI.InterfaceGUI2;
 import SimulasiAntrianPasien.Customer;
 import SimulasiAntrianPasien.Server;
 import SimulasiAntrianPasien.StatisticsGenerator;
@@ -32,7 +32,7 @@ public class ServerPetugas extends Thread implements Server {
     private StatisticsGenerator stat;
     private double serverclock;
     private String write;
-    private InterfaceGUI4 gui;
+    private InterfaceGUI2 gui;
     private ServerPerawat[] serverperawat;
     private int i;
     private int slidervalue;
@@ -41,7 +41,8 @@ public class ServerPetugas extends Thread implements Server {
     private int counterfindserver;
     private int batasserver;
     private Customer temp;
-    public ServerPetugas(int servernumber, StatisticsGenerator stat,InterfaceGUI4 gui,ServerPerawat[] serverperawat){
+    private ExcelReader reader;
+    public ServerPetugas(int servernumber, StatisticsGenerator stat,InterfaceGUI2 gui,ServerPerawat[] serverperawat){
         this.servernumber=servernumber;
         this.stat=stat;
         this.gui=gui;
@@ -101,13 +102,12 @@ public class ServerPetugas extends Thread implements Server {
                     this.setTimeServiceBegin(this.getServerclock());
                 }
                 getTemp().setTimeServiceBegin2(this.serverclock);
-                servicetime=stat.generateServiceTimePoli();
+                servicetime=temp.getServicetimepoli();
                 delaytime=(Math.abs(getTemp().getArrivaltimepoli()-(getServerclock())));
                 getTemp().setDelaytimepoli(delaytime);
                 setServerclock(getServerclock() + servicetime);
                 waitingtime=delaytime+servicetime;
                 getTemp().setWaitingtimepoli(waitingtime);
-                getTemp().setServicetimepoli(servicetime);
                 totalservicetime+=servicetime;
                 totalWaitingTime+=waitingtime;
                 totalDelayTime+=delaytime;
@@ -115,7 +115,7 @@ public class ServerPetugas extends Thread implements Server {
                 getTemp().setTimeServiceEnd2(this.getServerclock());
             }
             else if(getServerclock()>=getTemp().getArrivaltimepoli()){
-                servicetime=stat.generateServiceTimePoli();
+                servicetime=temp.getServicetimepoli();
                 if(i==0){
                     this.setTimeServiceBegin(this.getServerclock());
                 }
@@ -124,7 +124,6 @@ public class ServerPetugas extends Thread implements Server {
                 getTemp().setDelaytimepoli(delaytime);
                 setServerclock(getServerclock() + servicetime);
                 waitingtime=delaytime+servicetime;
-                getTemp().setServicetimepoli(servicetime);
                 getTemp().setWaitingtimepoli(waitingtime);
                 totalservicetime+=servicetime;
                 totalWaitingTime+=waitingtime;
@@ -462,6 +461,19 @@ public class ServerPetugas extends Thread implements Server {
      */
     public void setTemp(Customer temp) {
         this.temp = temp;
+    }
+    /**
+     * @return the reader
+     */
+    public ExcelReader getReader() {
+        return reader;
+    }
+
+    /**
+     * @param reader the reader to set
+     */
+    public void setReader(ExcelReader reader) {
+        this.reader = reader;
     }
     
 }

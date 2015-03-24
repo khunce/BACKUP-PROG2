@@ -71,15 +71,25 @@ public class InterfaceAwal extends javax.swing.JFrame {
 
         buttongroup.add(inputtext);
         inputtext.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        inputtext.setText("Input File");
+        inputtext.setText("Pemodelan dan Simulasi Input File Excel");
+        inputtext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputtextActionPerformed(evt);
+            }
+        });
         getContentPane().add(inputtext);
-        inputtext.setBounds(230, 160, 93, 23);
+        inputtext.setBounds(230, 160, 300, 23);
 
         buttongroup.add(acak);
         acak.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        acak.setText("Pemodelan dan Simulasi Acak");
+        acak.setText("Pemodelan dan Simulasi Variabel Acak");
+        acak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                acakActionPerformed(evt);
+            }
+        });
         getContentPane().add(acak);
-        acak.setBounds(230, 190, 220, 23);
+        acak.setBounds(230, 190, 260, 23);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButton1.setText("Next");
@@ -101,22 +111,28 @@ public class InterfaceAwal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if(buttongroup.isSelected(inputtext.getModel())){
-            InterfaceGUI4 gui=new InterfaceGUI4();
+            InterfaceGUI2 gui=new InterfaceGUI2();
             gui.setVisible(true);
             this.setVisible(false);
-//            this.dispose();
         }
         else if(buttongroup.isSelected(acak.getModel())){
             InterfaceGUI1 gui=new InterfaceGUI1();
             gui.setVisible(true);
             this.setVisible(false);
-//            this.dispose();
         }
         else{
             JOptionPane.showMessageDialog(this,"Anda harus memilih metode pemodelan terlebih dahulu","Alert",JOptionPane.ERROR_MESSAGE);
                 
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void inputtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputtextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputtextActionPerformed
+
+    private void acakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acakActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_acakActionPerformed
 
     /**
      * @param args the command line arguments

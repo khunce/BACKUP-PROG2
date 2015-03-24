@@ -7,7 +7,7 @@
 package ExcelInputSimulation;
 
 import GUI.InterfaceGUI1;
-import GUI.InterfaceGUI4;
+import GUI.InterfaceGUI2;
 import SimulasiAntrianPasien.Customer;
 import SimulasiAntrianPasien.Server;
 import SimulasiAntrianPasien.StatisticsGenerator;
@@ -36,7 +36,7 @@ public class ServerAwal extends Thread implements Server{
     private StatisticsGenerator stat;
     private double serverclock;
     private String write;
-    private InterfaceGUI4 gui;
+    private InterfaceGUI2 gui;
     private StatisticsSimulationPoli sim;
     private int i;
     private int slidervalue;
@@ -50,7 +50,7 @@ public class ServerAwal extends Thread implements Server{
     private int counterPasienLama;
     private int counterPasienBaru;
     private int counterPasienEmergency;
-    public ServerAwal(int servernumber, StatisticsGenerator stat,InterfaceGUI4 gui ){
+    public ServerAwal(int servernumber, StatisticsGenerator stat,InterfaceGUI2 gui ){
         super();
         this.stat=stat;
         this.timeServiceBegin=timeServiceBegin;

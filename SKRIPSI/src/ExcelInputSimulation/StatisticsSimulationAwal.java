@@ -6,7 +6,7 @@
 
 package ExcelInputSimulation;
 
-import GUI.InterfaceGUI4;
+import GUI.InterfaceGUI2;
 import SimulasiAntrianPasien.Customer;
 import SimulasiAntrianPasien.CustomerQ;
 import SimulasiAntrianPasien.StatisticsGenerator;
@@ -38,7 +38,7 @@ public class StatisticsSimulationAwal  extends Thread {
      private double counterPasienBaru;
      private double counterPasienEmergency;
      protected Thread animator;
-     private InterfaceGUI4 MainGUI;
+     private InterfaceGUI2 MainGUI;
      private int number;
      private int kapasitasantrian;
      private int counterfindserver;
@@ -52,7 +52,11 @@ public class StatisticsSimulationAwal  extends Thread {
      private ServerPetugas[] serverpetugas;
      private ServerPerawat[] serverperawat;
      private ServerDokter[] serverdokter;
- public StatisticsSimulationAwal(ExcelReader excel,ServerAwal[] server,StatisticsGenerator gen,InterfaceGUI4 MainGUI,int kapasitasantrian){
+     private String cekInput;
+     private int paramxchart;
+     private int paramxchart2;
+     
+ public StatisticsSimulationAwal(ExcelReader excel,ServerAwal[] server,StatisticsGenerator gen,InterfaceGUI2 MainGUI,int kapasitasantrian){
         super();
         this.MainGUI=MainGUI;
         System.out.println("initialized");
@@ -75,6 +79,8 @@ public class StatisticsSimulationAwal  extends Thread {
         this.animator=new Thread(this);
         this.slidervalue=700;
         this.i=0;
+        this.paramxchart=5;
+        this.paramxchart2=5;
     }
  
     public StatisticsSimulationAwal(){
@@ -98,6 +104,7 @@ public class StatisticsSimulationAwal  extends Thread {
         clock=arrivaltime;
         if(temp.getJenis().equals("Emergency")){
             temp.setArrivaltimepoli(temp.getArrivaltime());
+            temp.setNumber(0);
         }
         System.out.println(temp.getNumber()+" "+temp.getJenis()+" "+clock+" "+arrivaltime);
         String realtime=gen.convertSeconds(temp.getArrivaltime());
@@ -300,12 +307,30 @@ public class StatisticsSimulationAwal  extends Thread {
                     }
                     
                 }
-                if(i==getNumOfCustomer()){
-                    MainGUI.enableResetButton();
-                    displayChart1();
-                }
         }
+        int o=0;
+        while(o<30000){
+            o++;
+            System.out.println("do loading");
+            MainGUI.showLoading();
+        }
+        MainGUI.hideLoading();
+        displayChart1();
+        int k=20000;
+        int l=0;
+        while(l<k){
+            l++;
+            System.out.println("do loading");
+            MainGUI.showLoadingPoli();
+        }
+        MainGUI.hideLoadingPoli();
         displayChart2();
+        if(cekInput.equals("acak")){
+            MainGUI.enableResetButton();
+        }
+        else{
+            MainGUI.enableResetButton2();
+        }
         
     }
     
@@ -314,13 +339,21 @@ public class StatisticsSimulationAwal  extends Thread {
                     LinkedList<int[]> listcounter=this.gen.getPasienCounter(this.server);
                     LinkedList<int[]> listdelay=this.gen.getPasienDelayTime(server);
                     LinkedList<double[]> listcounter3=this.gen.getServiceTimeServer(server);
-                    LinkedList<int[]> listcounter4=this.gen.getCounterPasienperServer(this.server);
+                    LinkedList<int[]> listcounter4=this.gen.getCounterPasienperServer(this.server,this.paramxchart);
                     double[][] utility=this.gen.generateUtilityServerforChart(server);
                     int maxtime=this.gen.getMaxPasien(server);
                     int maxpasien=this.gen.getMaxJumlahPasienperServer(listcounter4);
-                    MainGUI.setChart((int)this.counterPasienBaru,(int)this.counterPasienLama,(int)this.counterPasienEmergency2,listcounter,utility,this.server.length,listdelay,listcounter2,listcounter3,listcounter4,maxtime,maxpasien);
+                    MainGUI.setChart(paramxchart,(int)this.counterPasienBaru,(int)this.counterPasienLama,(int)this.counterPasienEmergency2,listcounter,utility,this.server.length,listdelay,listcounter2,listcounter3,listcounter4,maxtime,maxpasien);
                     
     }
+     
+     public void displayChart4(){
+         LinkedList<int[]> listcounter4=this.gen.getCounterPasienperServer(this.server,this.paramxchart);
+         int maxtime=this.gen.getMaxPasien(server);
+         int maxpasien=this.gen.getMaxJumlahPasienperServer(listcounter4);
+         MainGUI.setChartAwal(this.paramxchart,listcounter4,maxtime,maxpasien);
+         
+     }
     
     public void displayChart2(){
         LinkedList<int[]> listdelay=this.gen.getPasienDelayTimePetugas(getServerpetugas());
@@ -339,9 +372,9 @@ public class StatisticsSimulationAwal  extends Thread {
         double[][] utility1=this.gen.generateUtilityServer2forChart(getServerpetugas());
         double[][] utility2=this.gen.generateUtilityServer3forChart(getServerperawat());
         double[][] utility3=this.gen.generateUtilityServer4forChart(getServerdokter());
-        LinkedList<int[]> listcounter4=this.gen.getCounterPasienperServer2(getServerpetugas());
-        LinkedList<int[]> listcounter5=this.gen.getCounterPasienperServer3(getServerperawat());
-        LinkedList<int[]> listcounter6=this.gen.getCounterPasienperServer4(getServerdokter());
+        LinkedList<int[]> listcounter4=this.gen.getCounterPasienperServer2(getServerpetugas(),paramxchart2);
+        LinkedList<int[]> listcounter5=this.gen.getCounterPasienperServer3(getServerperawat(),paramxchart2);
+        LinkedList<int[]> listcounter6=this.gen.getCounterPasienperServer4(getServerdokter(),paramxchart2);
         int maxtime=this.gen.getMaxPasien2(getServerpetugas());
         int maxpasien=this.gen.getMaxJumlahPasienperServer(listcounter4);
         int maxtime2=this.gen.getMaxPasien3(getServerperawat());
@@ -350,9 +383,25 @@ public class StatisticsSimulationAwal  extends Thread {
         int maxpasien3=this.gen.getMaxJumlahPasienperServer(listcounter6);
         MainGUI.setChartPoli2(utility1,utility2,utility3,this.getServerpetugas().length,this.getServerperawat().length,this.getServerdokter().length,listdelay,listdelay2,listdelay3);
         MainGUI.setChartPoli3(waitingtime1,waitingtime2,waitingtime3,service1,service2,service3);
-        MainGUI.setChartPoli4(listcounter4,maxtime,maxpasien);
-        MainGUI.setChartPoli5(listcounter5,maxtime2,maxpasien2);
-        MainGUI.setChartPoli6(listcounter6,maxtime3,maxpasien3);
+        MainGUI.setChartPoli4(paramxchart2,listcounter4,maxtime,maxpasien);
+        MainGUI.setChartPoli5(paramxchart2,listcounter5,maxtime2,maxpasien2);
+        MainGUI.setChartPoli6(paramxchart2,listcounter6,maxtime3,maxpasien3);
+    }
+    
+    public void displayChart3(){
+        LinkedList<int[]> listcounter4=this.gen.getCounterPasienperServer2(serverpetugas,paramxchart2);
+        LinkedList<int[]> listcounter5=this.gen.getCounterPasienperServer3(serverperawat,paramxchart2);
+        LinkedList<int[]> listcounter6=this.gen.getCounterPasienperServer4(serverdokter,paramxchart2);
+        int maxtime=this.gen.getMaxPasien2(serverpetugas);
+        int maxpasien=this.gen.getMaxJumlahPasienperServer(listcounter4);
+        int maxtime2=this.gen.getMaxPasien3(serverperawat);
+        int maxpasien2=this.gen.getMaxJumlahPasienperServer(listcounter5);
+        int maxtime3=this.gen.getMaxPasien4(serverdokter);
+        int maxpasien3=this.gen.getMaxJumlahPasienperServer(listcounter6);
+        MainGUI.setChartPoli42(paramxchart2,listcounter4,maxtime,maxpasien);
+        MainGUI.setChartPoli52(paramxchart2,listcounter5,maxtime2,maxpasien2);
+        MainGUI.setChartPoli62(paramxchart2,listcounter6,maxtime3,maxpasien3);
+        
     }
     
     
@@ -562,5 +611,47 @@ public class StatisticsSimulationAwal  extends Thread {
      */
     public void setServerdokter(ServerDokter[] serverdokter) {
         this.serverdokter = serverdokter;
+    }
+
+    /**
+     * @return the cekInput
+     */
+    public String getCekInput() {
+        return cekInput;
+    }
+
+    /**
+     * @param cekInput the cekInput to set
+     */
+    public void setCekInput(String cekInput) {
+        this.cekInput = cekInput;
+    }
+
+    /**
+     * @return the paramxchart
+     */
+    public int getParamxchart() {
+        return paramxchart;
+    }
+
+    /**
+     * @param paramxchart the paramxchart to set
+     */
+    public void setParamxchart(int paramxchart) {
+        this.paramxchart = paramxchart;
+    }
+
+    /**
+     * @return the paramxchart2
+     */
+    public int getParamxchart2() {
+        return paramxchart2;
+    }
+
+    /**
+     * @param paramxchart2 the paramxchart2 to set
+     */
+    public void setParamxchart2(int paramxchart2) {
+        this.paramxchart2 = paramxchart2;
     }
 }

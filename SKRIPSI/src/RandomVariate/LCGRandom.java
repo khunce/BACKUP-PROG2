@@ -89,7 +89,7 @@ public class LCGRandom
     public LCGRandom (int stream)
     {
         this.stream  = stream;
-	params [0] = new Double (stream);
+		params [0] = new Double (stream);
 
     }; // LCGRandom
 

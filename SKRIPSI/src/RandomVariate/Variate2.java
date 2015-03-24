@@ -105,18 +105,7 @@ public class Variate2
         //return rand.nextDouble ();
 
     }; // gen
-
-
-    /**************************************************************
-     * Print name of class.
-     */
-    public void printName ()
-    {
-        System.out.println ("My name is Variate!");
-
-    }; // printName
-
-
+	
 }; // class
 
 

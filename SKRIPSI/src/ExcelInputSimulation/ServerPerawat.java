@@ -7,7 +7,7 @@
 package ExcelInputSimulation;
 
 import GUI.InterfaceGUI1;
-import GUI.InterfaceGUI4;
+import GUI.InterfaceGUI2;
 import SimulasiAntrianPasien.Customer;
 import SimulasiAntrianPasien.Server;
 import SimulasiAntrianPasien.StatisticsGenerator;
@@ -32,7 +32,7 @@ public class ServerPerawat extends Thread implements Server {
     private StatisticsGenerator stat;
     private double serverclock;
     private String write;
-    private InterfaceGUI4 gui;
+    private InterfaceGUI2 gui;
     private ServerDokter[] serverdokter;
     private int i;
     private int slidervalue;
@@ -41,7 +41,8 @@ public class ServerPerawat extends Thread implements Server {
     private Customer temp;
     private LinkedList<Customer> queuereport2;
     private int counter;
-    public ServerPerawat(int servernumber, StatisticsGenerator stat,InterfaceGUI4 gui,ServerDokter[] serverdokter){
+    private ExcelReader reader;
+    public ServerPerawat(int servernumber, StatisticsGenerator stat,InterfaceGUI2 gui,ServerDokter[] serverdokter){
         this.servernumber=servernumber;
         this.stat=stat;
         this.gui=gui;
@@ -112,13 +113,12 @@ public class ServerPerawat extends Thread implements Server {
                             this.setTimeServiceBegin(this.getServerclock());
                        }
                        getTemp().setTimeServiceBegin3(this.serverclock);
-                       servicetime=stat.generateServiceTimePoli();
+                       servicetime=temp.getServicetimepoli2();
                        delaytime=(Math.abs(getTemp().getArrivaltimepoli2()-(getServerclock())));
                        getTemp().setDelaytimepoli2(delaytime);
                        setServerclock(getServerclock() + servicetime);
                        waitingtime=delaytime+servicetime;
                        getTemp().setWaitingtimepoli2(waitingtime);
-                       getTemp().setServicetimepoli2(servicetime);
                        setTotalservicetime(getTotalservicetime() + servicetime);
                        totalWaitingTime+=waitingtime;
                        totalDelayTime+=delaytime;
@@ -126,7 +126,7 @@ public class ServerPerawat extends Thread implements Server {
                        getTemp().setTimeServiceEnd3(this.getServerclock());
                 }
                 else if(getServerclock()>=getTemp().getArrivaltimepoli2()){
-                       servicetime=stat.generateServiceTimePoli();
+                       servicetime=temp.getServicetimepoli2();
                        if(i==0){
                             this.setTimeServiceBegin(this.getServerclock());
                        }
@@ -136,7 +136,6 @@ public class ServerPerawat extends Thread implements Server {
                        setServerclock(getServerclock() + servicetime);
                        waitingtime=delaytime+servicetime;
                        getTemp().setWaitingtimepoli2(waitingtime);
-                       getTemp().setServicetimepoli2(servicetime);
                        setTotalservicetime(getTotalservicetime() + servicetime);
                        totalWaitingTime+=waitingtime;
                        totalDelayTime+=delaytime;
@@ -483,6 +482,20 @@ public class ServerPerawat extends Thread implements Server {
      */
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    /**
+     * @return the reader
+     */
+    public ExcelReader getReader() {
+        return reader;
+    }
+
+    /**
+     * @param reader the reader to set
+     */
+    public void setReader(ExcelReader reader) {
+        this.reader = reader;
     }
     
 }

@@ -113,14 +113,11 @@ public class ServerAwal extends Thread implements Server{
             
         }
         while(this.serverqueue.size()>0){
-                    System.out.println("yyy");
-                    //this.setStatus(true);
                     Random rand=new Random();
                     Customer temp=(Customer)this.removeCustomerfromQueue();
                     double servicetime=0;
                     double waitingtime=0;
                     double delaytime=0;
-                    System.out.println("i : "+i);
                     if(temp.getJenis().equals("BPJS Lama")){
                         this.counterPasienLama++;
                         if(getServerclock()<temp.getArrivaltime()){

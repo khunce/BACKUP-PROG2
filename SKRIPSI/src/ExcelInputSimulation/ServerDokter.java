@@ -7,7 +7,7 @@
 package ExcelInputSimulation;
 
 import GUI.InterfaceGUI1;
-import GUI.InterfaceGUI4;
+import GUI.InterfaceGUI2;
 import SimulasiAntrianPasien.Customer;
 import SimulasiAntrianPasien.Server;
 import SimulasiAntrianPasien.StatisticsGenerator;
@@ -33,14 +33,15 @@ public class ServerDokter extends Thread implements Server  {
     private StatisticsGenerator stat;
     private double serverclock;
     private String write;
-    private InterfaceGUI4 gui;
+    private InterfaceGUI2 gui;
     private int i;
     private int slidervalue;
     private Queue<Customer> queuereport;
     private LinkedList<Customer> queuereport2;
     private Customer temp;
     private int counter;
-    public ServerDokter(int servernumber, StatisticsGenerator stat,InterfaceGUI4 gui){
+    private ExcelReader reader;
+    public ServerDokter(int servernumber, StatisticsGenerator stat,InterfaceGUI2 gui){
         this.servernumber=servernumber;
         this.stat=stat;
         this.gui=gui;
@@ -87,14 +88,15 @@ public class ServerDokter extends Thread implements Server  {
                             this.setTimeServiceBegin(this.getServerclock());
                        }
                    temp.setTimeServiceBegin4(this.serverclock);
-                   getTemp().setTimeServiceBegin2(this.serverclock);
-                   servicetime=stat.generateServiceTimePoli();
+                   if(temp.getJenis().equals("Emergency")){
+                        getTemp().setTimeServiceBegin2(this.serverclock);
+                   }
+                   servicetime=temp.getServicetimepoli3();
                    delaytime=(Math.abs(temp.getArrivaltimepoli3()-(getServerclock())));
                    temp.setDelaytimepoli3(delaytime);
                    setServerclock(getServerclock() + servicetime);
                    waitingtime=delaytime+servicetime;
                    temp.setWaitingtimepoli3(waitingtime);
-                   temp.setServicetimepoli3(servicetime);
                    totalservicetime+=servicetime;
                    totalWaitingTime+=waitingtime;
                    totalDelayTime+=delaytime;
@@ -105,14 +107,15 @@ public class ServerDokter extends Thread implements Server  {
                             this.setTimeServiceBegin(this.getServerclock());
                    }
                    temp.setTimeServiceBegin4(this.serverclock);
-                   getTemp().setTimeServiceBegin2(this.serverclock);
-                   servicetime=stat.generateServiceTimePoli();
+                   if(temp.getJenis().equals("Emergency")){
+                        getTemp().setTimeServiceBegin2(this.serverclock);
+                   }
+                   servicetime=temp.getServicetimepoli3();
                    delaytime=(Math.abs(temp.getArrivaltimepoli3()-(getServerclock())));
                    temp.setDelaytimepoli3(delaytime);
                    setServerclock(getServerclock() + servicetime);
                    waitingtime=delaytime+servicetime;
                    temp.setWaitingtimepoli3(waitingtime);
-                   temp.setServicetimepoli3(servicetime);
                    totalservicetime+=servicetime;
                    totalWaitingTime+=waitingtime;
                    totalDelayTime+=delaytime;
@@ -392,6 +395,20 @@ public class ServerDokter extends Thread implements Server  {
      */
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+     /**
+     * @return the reader
+     */
+    public ExcelReader getReader() {
+        return reader;
+    }
+
+    /**
+     * @param reader the reader to set
+     */
+    public void setReader(ExcelReader reader) {
+        this.reader = reader;
     }
     
 }

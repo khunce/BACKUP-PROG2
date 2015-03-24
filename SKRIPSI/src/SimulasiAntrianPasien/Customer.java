@@ -9,7 +9,13 @@ package SimulasiAntrianPasien;
 /**
  *
  * @author robby
+ * @version 1.0  
  */
+
+/******************************************************************
+ * Customer class for saving customer attribute needed
+ */
+
 public class Customer implements Comparable {
     private int number;
     private int numberinpoli;
@@ -35,6 +41,14 @@ public class Customer implements Comparable {
     private double timeServiceBegin3;private double timeServiceBegin4;
     private boolean toPoliklinik;
     
+    
+    /**************************************************************
+     * Constructs customer.
+     * @param  jenis  Jenis Pasien
+     * @param  number  Number got by customer in queue
+     * @param  arrivaltime  arrival time of customer
+     * @param priority priority of customer in queue
+     */
     public Customer(String jenis,int number,double arrivaltime,int priority){
         super();
         this.number=number;

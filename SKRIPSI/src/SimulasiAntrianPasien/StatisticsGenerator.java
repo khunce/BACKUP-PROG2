@@ -16,9 +16,12 @@ import RandomVariate.LCGRandom;
 import RandomVariate.Poisson;
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.TreeMap;
 public class StatisticsGenerator  {
 
     private double servicetime;
@@ -43,27 +46,21 @@ public class StatisticsGenerator  {
         
         temp=1/meanservicetime;
         this.meanservicetime=temp;
-        System.out.println("mean service time 1 : "+this.meanservicetime);
         bd = new BigDecimal(this.meanservicetime); 
         bd = bd.setScale(2,BigDecimal.ROUND_UP);  
         this.meanservicetime=bd.doubleValue();
-        System.out.println("mean service time 1-2 : "+this.meanservicetime);
         
         temp=1/meanservicetime2;
         this.meanservicetime2=temp;
-        System.out.println("mean service time 2 : "+this.meanservicetime2);
         bd = new BigDecimal(this.meanservicetime2);
         bd = bd.setScale(2,BigDecimal.ROUND_UP);  
         this.meanservicetime2=bd.doubleValue();
-        System.out.println("mean service time 2-2 : "+this.meanservicetime2);
         
         temp=1/meanservicetimepoli;
         this.meanservicetimepoli=temp;
-        System.out.println("mean service time poli : "+this.meanservicetimepoli);
         bd = new BigDecimal(this.meanservicetimepoli);
         bd = bd.setScale(2,BigDecimal.ROUND_UP);  
         this.meanservicetimepoli=bd.doubleValue();
-        System.out.println("mean service time poli 2 : "+this.meanservicetimepoli);
         
         rand=new Random();
         this.poisson=new Poisson(this.meanarrivaltime,(int)rand.nextDouble());
@@ -76,12 +73,10 @@ public class StatisticsGenerator  {
         rand=new Random();
         double temp=1/meanservicetimepoli;
         this.meanservicetimepoli=temp;
-        System.out.println("mean service time poli : "+this.meanservicetimepoli);
         bd = new BigDecimal(this.meanservicetimepoli);
         bd = bd.setScale(2,BigDecimal.ROUND_UP);  
         this.meanservicetimepoli=bd.doubleValue();
         this.exponential3=new Exponential(this.meanservicetimepoli,1);
-        System.out.println("mean service time poli 2 : "+this.meanservicetimepoli);
     }
     
     public StatisticsGenerator(){
@@ -98,9 +93,313 @@ public class StatisticsGenerator  {
         return bd.doubleValue();
         
     }
+    
+    public LinkedList<Object[]> saveIntoTable(ExcelInputSimulation.ServerAwal[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+        for(int i=0;i<arrayServer.length;i++){
+            LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+            int k=0;
+            while(k<queuetempreport.size()){
+                Customer temp=queuetempreport.get(k);
+                queuereport3.add(temp);
+                k++;
+            }
+         }
+         Customer[] arrayreport1=new Customer[queuereport3.size()];
+         for(int i=0;i<arrayreport1.length;i++){
+                arrayreport1[i]=queuereport3.get(i);
+         }
+         Arrays.sort(arrayreport1);
+         int k=0;
+         LinkedList<Object[]> data = new LinkedList<Object[]>();
+         LinkedList<String> arrtime=this.excel.getArrivaltime();
+         LinkedList<String> sertime=this.excel.getServicetime();
+         while(k<arrayreport1.length){
+             Customer temp=arrayreport1[k];
+             Object[] object=new Object[9];
+             object[0]=temp.getNumber();
+             object[1]=temp.getJenis();
+             object[2]=(arrtime.get(k));
+             object[3]=(sertime.get(k));
+             object[4]=this.convertSeconds(temp.getTimeServiceBegin());
+             object[5]=this.convertSeconds(temp.getDelaytime());
+             object[6]=this.convertSeconds(temp.getTimeServiceEnd());
+             object[7]=this.convertSeconds(temp.getWaitingtime());
+             object[8]=temp.getServerawal();
+             k++;
+             data.add(object);
+          }
+         return data; 
+    }
+    
+     public LinkedList<Object[]> saveIntoTable3(ServerAwal[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+        for(int i=0;i<arrayServer.length;i++){
+            LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+            int k=0;
+            while(k<queuetempreport.size()){
+                Customer temp=queuetempreport.get(k);
+                queuereport3.add(temp);
+                k++;
+            }
+         }
+         Customer[] arrayreport1=new Customer[queuereport3.size()];
+         for(int i=0;i<arrayreport1.length;i++){
+                arrayreport1[i]=queuereport3.get(i);
+         }
+         Arrays.sort(arrayreport1);
+         int k=0;
+         LinkedList<Object[]> data = new LinkedList<Object[]>();
+         while(k<arrayreport1.length){
+             Customer temp=arrayreport1[k];
+             Object[] object=new Object[9];
+             object[0]=temp.getNumber();
+             object[1]=temp.getJenis();
+             object[2]=this.convertSeconds(temp.getArrivaltime());
+             object[3]=this.convertSeconds(temp.getServicetime());
+             object[4]=this.convertSeconds(temp.getTimeServiceBegin());
+             object[5]=this.convertSeconds(temp.getDelaytime());
+             object[6]=this.convertSeconds(temp.getTimeServiceEnd());
+             object[7]=this.convertSeconds(temp.getWaitingtime());
+             object[8]="Loket "+temp.getServerawal();
+             k++;
+             data.add(object);
+          }
+         return data; 
+    }
 
+    public LinkedList<Object[]> saveIntoTable2(ExcelInputSimulation.ServerDokter[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+        for(int i=0;i<arrayServer.length;i++){
+            LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+            int k=0;
+            while(k<queuetempreport.size()){
+                Customer temp=queuetempreport.get(k);
+                queuereport3.add(temp);
+                k++;
+            }
+         }
+         Customer[] arrayreport1=new Customer[queuereport3.size()];
+         for(int i=0;i<arrayreport1.length;i++){
+                arrayreport1[i]=queuereport3.get(i);
+         }
+         Arrays.sort(arrayreport1);
+         int k=0;
+         LinkedList<Object[]> data = new LinkedList<Object[]>();
+         while(k<arrayreport1.length){
+             Customer temp=arrayreport1[k];
+             Object[] object=new Object[12];
+             object[0]=temp.getNumber();
+             object[1]=temp.getNumberinpoli();
+             object[2]=temp.getJenis();
+             object[3]=this.convertSeconds(temp.getArrivaltimepoli());
+             object[4]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
+             object[5]=this.convertSeconds(temp.getTimeServiceBegin2());
+             object[6]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
+             object[7]=this.convertSeconds(temp.getTimeServiceEnd4());
+             object[8]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+             object[9]=temp.getServerpetugas();
+             object[10]=temp.getServerperawat();
+             object[11]=temp.getServerdokter();
+             k++;
+             data.add(object);
+          }
+         return data; 
+    }
+    
+     public LinkedList<Object[]> saveIntoTable4(ServerDokter[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+        for(int i=0;i<arrayServer.length;i++){
+            LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+            int k=0;
+            while(k<queuetempreport.size()){
+                Customer temp=queuetempreport.get(k);
+                queuereport3.add(temp);
+                k++;
+            }
+         }
+         Customer[] arrayreport1=new Customer[queuereport3.size()];
+         for(int i=0;i<arrayreport1.length;i++){
+                arrayreport1[i]=queuereport3.get(i);
+         }
+         Arrays.sort(arrayreport1);
+         int k=0;
+         LinkedList<Object[]> data = new LinkedList<Object[]>();
+         while(k<arrayreport1.length){
+             Customer temp=arrayreport1[k];
+             Object[] object=new Object[12];
+             object[0]=temp.getNumber();
+             object[1]=temp.getNumberinpoli();
+             object[2]=temp.getJenis();
+             object[3]=this.convertSeconds(temp.getArrivaltimepoli());
+             object[4]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
+             object[5]=this.convertSeconds(temp.getTimeServiceBegin2());
+             object[6]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
+             object[7]=this.convertSeconds(temp.getTimeServiceEnd4());
+             object[8]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+             object[9]=temp.getServerpetugas();
+             object[10]=temp.getServerperawat();
+             object[11]=temp.getServerdokter();
+             k++;
+             data.add(object);
+          }
+         return data; 
+    }
+    
+    
+    public Customer[] sortCustomer(ExcelInputSimulation.ServerAwal[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+                for(int i=0;i<arrayServer.length;i++){
+                    LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+                    int k=0;
+                    while(k<queuetempreport.size()){
+                        Customer temp=queuetempreport.get(k);
+                        queuereport3.add(temp);
+                        k++;
+                    }
+                }
+               Customer[] arrayreport1=new Customer[queuereport3.size()];
+               for(int i=0;i<arrayreport1.length;i++){
+                   arrayreport1[i]=queuereport3.get(i);
+               }
+               Arrays.sort(arrayreport1);
+               return arrayreport1;
+    }
+    
+    public Customer[] sortCustomer5(ServerAwal[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+                for(int i=0;i<arrayServer.length;i++){
+                    LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+                    int k=0;
+                    while(k<queuetempreport.size()){
+                        Customer temp=queuetempreport.get(k);
+                        queuereport3.add(temp);
+                        k++;
+                    }
+                }
+               Customer[] arrayreport1=new Customer[queuereport3.size()];
+               for(int i=0;i<arrayreport1.length;i++){
+                   arrayreport1[i]=queuereport3.get(i);
+               }
+               Arrays.sort(arrayreport1);
+               return arrayreport1;
+    }
+    
+     public Customer[] sortCustomer2(ExcelInputSimulation.ServerPetugas[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+                for(int i=0;i<arrayServer.length;i++){
+                    LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+                    int k=0;
+                    while(k<queuetempreport.size()){
+                        Customer temp=queuetempreport.get(k);
+                        queuereport3.add(temp);
+                        k++;
+                    }
+                }
+               Customer[] arrayreport1=new Customer[queuereport3.size()];
+               for(int i=0;i<arrayreport1.length;i++){
+                   arrayreport1[i]=queuereport3.get(i);
+               }
+               Arrays.sort(arrayreport1);
+               return arrayreport1;
+    }
+     
+      public Customer[] sortCustomer6(ServerPetugas[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+                for(int i=0;i<arrayServer.length;i++){
+                    LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+                    int k=0;
+                    while(k<queuetempreport.size()){
+                        Customer temp=queuetempreport.get(k);
+                        queuereport3.add(temp);
+                        k++;
+                    }
+                }
+               Customer[] arrayreport1=new Customer[queuereport3.size()];
+               for(int i=0;i<arrayreport1.length;i++){
+                   arrayreport1[i]=queuereport3.get(i);
+               }
+               Arrays.sort(arrayreport1);
+               return arrayreport1;
+    }
+     
+     public Customer[] sortCustomer3(ExcelInputSimulation.ServerPerawat[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+                for(int i=0;i<arrayServer.length;i++){
+                    LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+                    int k=0;
+                    while(k<queuetempreport.size()){
+                        Customer temp=queuetempreport.get(k);
+                        queuereport3.add(temp);
+                        k++;
+                    }
+                }
+               Customer[] arrayreport1=new Customer[queuereport3.size()];
+               for(int i=0;i<arrayreport1.length;i++){
+                   arrayreport1[i]=queuereport3.get(i);
+               }
+               Arrays.sort(arrayreport1);
+               return arrayreport1;
+    }
+     
+      public Customer[] sortCustomer7(ServerPerawat[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+                for(int i=0;i<arrayServer.length;i++){
+                    LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+                    int k=0;
+                    while(k<queuetempreport.size()){
+                        Customer temp=queuetempreport.get(k);
+                        queuereport3.add(temp);
+                        k++;
+                    }
+                }
+               Customer[] arrayreport1=new Customer[queuereport3.size()];
+               for(int i=0;i<arrayreport1.length;i++){
+                   arrayreport1[i]=queuereport3.get(i);
+               }
+               Arrays.sort(arrayreport1);
+               return arrayreport1;
+    }
+     
+      public Customer[] sortCustomer4(ExcelInputSimulation.ServerDokter[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+                for(int i=0;i<arrayServer.length;i++){
+                    LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+                    int k=0;
+                    while(k<queuetempreport.size()){
+                        Customer temp=queuetempreport.get(k);
+                        queuereport3.add(temp);
+                        k++;
+                    }
+                }
+               Customer[] arrayreport1=new Customer[queuereport3.size()];
+               for(int i=0;i<arrayreport1.length;i++){
+                   arrayreport1[i]=queuereport3.get(i);
+               }
+               Arrays.sort(arrayreport1);
+               return arrayreport1;
+    }
+      
+      public Customer[] sortCustomer8(ServerDokter[] arrayServer){
+        LinkedList<Customer> queuereport3=new LinkedList<Customer>();
+                for(int i=0;i<arrayServer.length;i++){
+                    LinkedList<Customer> queuetempreport=arrayServer[i].getQueueReport2();
+                    int k=0;
+                    while(k<queuetempreport.size()){
+                        Customer temp=queuetempreport.get(k);
+                        queuereport3.add(temp);
+                        k++;
+                    }
+                }
+               Customer[] arrayreport1=new Customer[queuereport3.size()];
+               for(int i=0;i<arrayreport1.length;i++){
+                   arrayreport1[i]=queuereport3.get(i);
+               }
+               Arrays.sort(arrayreport1);
+               return arrayreport1;
+    }
+    
      public double generateServiceTimePoli(){
-        //double servicetime=this.exponential(this.rand,this.meanservicetimepoli);
         double servicetime=this.exponential3.gen();
         bd = new BigDecimal(servicetime); 
         bd = bd.setScale(2,BigDecimal.ROUND_UP);
@@ -114,7 +413,6 @@ public class StatisticsGenerator  {
     }
     
     public double generateServiceTime(){
-        //double servicetime=this.exponential(this.rand,this.meanservicetime);
         double servicetime=exponential.gen();
         bd = new BigDecimal(servicetime); 
         bd = bd.setScale(2,BigDecimal.ROUND_UP);
@@ -122,7 +420,6 @@ public class StatisticsGenerator  {
     }
     
     public double generateServiceTime2(){
-        //double servicetime=this.exponential(this.rand,this.meanservicetime2);
         double servicetime=this.exponential2.gen();
         bd = new BigDecimal(servicetime); 
         bd = bd.setScale(2,BigDecimal.ROUND_UP);
@@ -137,7 +434,6 @@ public class StatisticsGenerator  {
              data[i][0]=temp.getNumber();
              data[i][1]=temp.getJenis();
              data[i][2]=this.convertSeconds(temp.getArrivaltime());
-              System.out.println("cek generate : "+temp.getNumber()+" "+this.convertSeconds(temp.getArrivaltime())+" "+this.convertSeconds(temp.getServicetime()));
              data[i][3]=this.convertSeconds(temp.getServicetime());
              data[i][4]=this.convertSeconds(temp.getTimeServiceBegin());
              data[i][5]=this.convertSeconds(temp.getDelaytime());
@@ -157,7 +453,6 @@ public class StatisticsGenerator  {
              data[i][0]=temp.getNumber();
              data[i][1]=temp.getJenis();
              data[i][2]=this.convertSeconds(temp.getArrivaltime());
-              System.out.println("cek generate : "+temp.getNumber()+" "+this.convertSeconds(temp.getArrivaltime())+" "+this.convertSeconds(temp.getServicetime()));
              data[i][3]=this.convertSeconds(temp.getServicetime());
              data[i][4]=this.convertSeconds(temp.getTimeServiceBegin());
              data[i][5]=this.convertSeconds(temp.getDelaytime());
@@ -177,7 +472,6 @@ public class StatisticsGenerator  {
              data[i][0]=temp.getNumber();
              data[i][1]=temp.getJenis();
              data[i][2]=this.convertSeconds(temp.getArrivaltime());
-              System.out.println("cek generate : "+temp.getNumber()+" "+this.convertSeconds(temp.getArrivaltime())+" "+this.convertSeconds(temp.getServicetime()));
              data[i][3]=this.convertSeconds(temp.getServicetime());
              data[i][4]=this.convertSeconds(temp.getTimeServiceBegin());
              data[i][5]=this.convertSeconds(temp.getDelaytime());
@@ -199,7 +493,6 @@ public class StatisticsGenerator  {
              data[i][0]=temp.getNumber();
              data[i][1]=temp.getJenis();
              data[i][2]=(arrtime.get(i));
-              System.out.println("cek generate : "+temp.getNumber()+" "+this.convertSeconds(temp.getArrivaltime())+" "+this.convertSeconds(temp.getServicetime()));
              data[i][3]=(sertime.get(i));
              data[i][4]=this.convertSeconds(temp.getTimeServiceBegin());
              data[i][5]=this.convertSeconds(temp.getDelaytime());
@@ -219,9 +512,6 @@ public class StatisticsGenerator  {
              data[i][0]=temp.getNumberinpoli();
              data[i][1]=temp.getJenis();
              data[i][2]=this.convertSeconds(temp.getArrivaltimepoli());
-             System.out.println("cek generate 1 :"+" "+this.convertSeconds(temp.getArrivaltimepoli())+" "+this.convertSeconds(temp.getServicetimepoli())+" "+this.convertSeconds(temp.getTimeServiceBegin2())+" "+this.convertSeconds(temp.getDelaytimepoli())+" "+this.convertSeconds(temp.getWaitingtimepoli())+" "+this.convertSeconds(temp.getTimeServiceEnd2()));
-              System.out.println("cek generate 2 :"+" "+this.convertSeconds(temp.getArrivaltimepoli2())+" "+this.convertSeconds(temp.getServicetimepoli2())+" "+this.convertSeconds(temp.getTimeServiceBegin3())+" "+this.convertSeconds(temp.getDelaytimepoli2())+" "+this.convertSeconds(temp.getWaitingtimepoli2())+" "+this.convertSeconds(temp.getTimeServiceEnd3()));
-              System.out.println("cek generate 3 :"+" "+this.convertSeconds(temp.getArrivaltimepoli3())+" "+this.convertSeconds(temp.getServicetimepoli3())+" "+this.convertSeconds(temp.getTimeServiceBegin4())+" "+this.convertSeconds(temp.getDelaytimepoli3())+" "+this.convertSeconds(temp.getWaitingtimepoli3())+" "+this.convertSeconds(temp.getTimeServiceEnd4()));
              data[i][3]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
              data[i][4]=this.convertSeconds(temp.getTimeServiceBegin2());
              data[i][5]=this.convertSeconds(temp.getDelaytime()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
@@ -241,9 +531,6 @@ public class StatisticsGenerator  {
              data[i][0]=temp.getNumberinpoli();
              data[i][1]=temp.getJenis();
              data[i][2]=this.convertSeconds(temp.getArrivaltimepoli());
-             System.out.println("cek generate 1 :"+" "+this.convertSeconds(temp.getArrivaltimepoli())+" "+this.convertSeconds(temp.getServicetimepoli())+" "+this.convertSeconds(temp.getTimeServiceBegin2())+" "+this.convertSeconds(temp.getDelaytimepoli())+" "+this.convertSeconds(temp.getWaitingtimepoli())+" "+this.convertSeconds(temp.getTimeServiceEnd2()));
-              System.out.println("cek generate 2 :"+" "+this.convertSeconds(temp.getArrivaltimepoli2())+" "+this.convertSeconds(temp.getServicetimepoli2())+" "+this.convertSeconds(temp.getTimeServiceBegin3())+" "+this.convertSeconds(temp.getDelaytimepoli2())+" "+this.convertSeconds(temp.getWaitingtimepoli2())+" "+this.convertSeconds(temp.getTimeServiceEnd3()));
-              System.out.println("cek generate 3 :"+" "+this.convertSeconds(temp.getArrivaltimepoli3())+" "+this.convertSeconds(temp.getServicetimepoli3())+" "+this.convertSeconds(temp.getTimeServiceBegin4())+" "+this.convertSeconds(temp.getDelaytimepoli3())+" "+this.convertSeconds(temp.getWaitingtimepoli3())+" "+this.convertSeconds(temp.getTimeServiceEnd4()));
              data[i][3]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
              data[i][4]=this.convertSeconds(temp.getTimeServiceBegin2());
              data[i][5]=this.convertSeconds(temp.getDelaytime()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
@@ -255,37 +542,38 @@ public class StatisticsGenerator  {
     }
      
      public Object[][] generateStatisticsReportPoli3(Customer[] queuecustomer){
-         data=new Object[queuecustomer.length][8];
+         data=new Object[queuecustomer.length][12];
          int i=0;
          while(i<queuecustomer.length){
              Customer temp=queuecustomer[i];
              if(temp.getJenis().equals("BPJS Lama")||temp.getJenis().equals("BPJS Baru")){
-                data[i][0]=temp.getNumberinpoli();
-                data[i][1]=temp.getJenis();
-                data[i][2]=this.convertSeconds(temp.getArrivaltimepoli());
-                System.out.println("cek generate 1 :"+" "+this.convertSeconds(temp.getArrivaltimepoli())+" "+this.convertSeconds(temp.getServicetimepoli())+" "+this.convertSeconds(temp.getTimeServiceBegin2())+" "+this.convertSeconds(temp.getDelaytimepoli())+" "+this.convertSeconds(temp.getWaitingtimepoli())+" "+this.convertSeconds(temp.getTimeServiceEnd2()));
-                 System.out.println("cek generate 2 :"+" "+this.convertSeconds(temp.getArrivaltimepoli2())+" "+this.convertSeconds(temp.getServicetimepoli2())+" "+this.convertSeconds(temp.getTimeServiceBegin3())+" "+this.convertSeconds(temp.getDelaytimepoli2())+" "+this.convertSeconds(temp.getWaitingtimepoli2())+" "+this.convertSeconds(temp.getTimeServiceEnd3()));
-                 System.out.println("cek generate 3 :"+" "+this.convertSeconds(temp.getArrivaltimepoli3())+" "+this.convertSeconds(temp.getServicetimepoli3())+" "+this.convertSeconds(temp.getTimeServiceBegin4())+" "+this.convertSeconds(temp.getDelaytimepoli3())+" "+this.convertSeconds(temp.getWaitingtimepoli3())+" "+this.convertSeconds(temp.getTimeServiceEnd4()));
-                data[i][3]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
-                data[i][4]=this.convertSeconds(temp.getTimeServiceBegin2());
-                data[i][5]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
-                data[i][6]=this.convertSeconds(temp.getTimeServiceEnd4());
-                data[i][7]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+                data[i][0]=temp.getNumber();
+                data[i][1]=temp.getNumberinpoli();
+                data[i][2]=temp.getJenis();
+                data[i][3]=this.convertSeconds(temp.getArrivaltimepoli());
+                data[i][4]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
+                data[i][5]=this.convertSeconds(temp.getTimeServiceBegin2());
+                data[i][6]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
+                data[i][7]=this.convertSeconds(temp.getTimeServiceEnd4());
+                data[i][8]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+                data[i][9]=temp.getServerpetugas();
+                data[i][10]=temp.getServerperawat();
+                data[i][11]=temp.getServerdokter();
                 i++;
              }
              else{
-                System.out.println("kasus emergency :"+temp.getArrivaltime());
-                data[i][0]=temp.getNumberinpoli();
-                data[i][1]=temp.getJenis();
-                data[i][2]=this.convertSeconds(temp.getArrivaltimepoli3());
-                System.out.println("cek generate 1 :"+" "+this.convertSeconds(temp.getArrivaltimepoli())+" "+this.convertSeconds(temp.getServicetimepoli())+" "+this.convertSeconds(temp.getTimeServiceBegin2())+" "+this.convertSeconds(temp.getDelaytimepoli())+" "+this.convertSeconds(temp.getWaitingtimepoli())+" "+this.convertSeconds(temp.getTimeServiceEnd2()));
-                System.out.println("cek generate 2 :"+" "+this.convertSeconds(temp.getArrivaltimepoli2())+" "+this.convertSeconds(temp.getServicetimepoli2())+" "+this.convertSeconds(temp.getTimeServiceBegin3())+" "+this.convertSeconds(temp.getDelaytimepoli2())+" "+this.convertSeconds(temp.getWaitingtimepoli2())+" "+this.convertSeconds(temp.getTimeServiceEnd3()));
-                System.out.println("cek generate 3 :"+" "+this.convertSeconds(temp.getArrivaltimepoli3())+" "+this.convertSeconds(temp.getServicetimepoli3())+" "+this.convertSeconds(temp.getTimeServiceBegin4())+" "+this.convertSeconds(temp.getDelaytimepoli3())+" "+this.convertSeconds(temp.getWaitingtimepoli3())+" "+this.convertSeconds(temp.getTimeServiceEnd4()));
-                data[i][3]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
-                data[i][4]=this.convertSeconds(temp.getTimeServiceBegin2());
-                data[i][5]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
-                data[i][6]=this.convertSeconds(temp.getTimeServiceEnd4());
-                data[i][7]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+                data[i][0]=temp.getNumber();
+                data[i][1]=temp.getNumberinpoli();
+                data[i][2]=temp.getJenis();
+                data[i][3]=this.convertSeconds(temp.getArrivaltimepoli3());
+                data[i][4]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
+                data[i][5]=this.convertSeconds(temp.getTimeServiceBegin2());
+                data[i][6]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
+                data[i][7]=this.convertSeconds(temp.getTimeServiceEnd4());
+                data[i][8]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+                data[i][9]=temp.getServerpetugas();
+                data[i][10]=temp.getServerperawat();
+                data[i][11]=temp.getServerdokter();
                 i++;
              }
           }
@@ -293,37 +581,38 @@ public class StatisticsGenerator  {
     }
      
       public Object[][] generateStatisticsReportPoli4(Customer[] queuecustomer){
-         data=new Object[queuecustomer.length][8];
+         data=new Object[queuecustomer.length][12];
          int i=0;
          while(i<queuecustomer.length){
              Customer temp=queuecustomer[i];
-             if(temp.getJenis().contains("BPJS (Lama)")||temp.getJenis().contains("BPJS (Baru)")){
-                data[i][0]=temp.getNumberinpoli();
-                data[i][1]=temp.getJenis();
-                data[i][2]=this.convertSeconds(temp.getArrivaltimepoli());
-                System.out.println("cek generate 1 :"+" "+this.convertSeconds(temp.getArrivaltimepoli())+" "+this.convertSeconds(temp.getServicetimepoli())+" "+this.convertSeconds(temp.getTimeServiceBegin2())+" "+this.convertSeconds(temp.getDelaytimepoli())+" "+this.convertSeconds(temp.getWaitingtimepoli())+" "+this.convertSeconds(temp.getTimeServiceEnd2()));
-                 System.out.println("cek generate 2 :"+" "+this.convertSeconds(temp.getArrivaltimepoli2())+" "+this.convertSeconds(temp.getServicetimepoli2())+" "+this.convertSeconds(temp.getTimeServiceBegin3())+" "+this.convertSeconds(temp.getDelaytimepoli2())+" "+this.convertSeconds(temp.getWaitingtimepoli2())+" "+this.convertSeconds(temp.getTimeServiceEnd3()));
-                 System.out.println("cek generate 3 :"+" "+this.convertSeconds(temp.getArrivaltimepoli3())+" "+this.convertSeconds(temp.getServicetimepoli3())+" "+this.convertSeconds(temp.getTimeServiceBegin4())+" "+this.convertSeconds(temp.getDelaytimepoli3())+" "+this.convertSeconds(temp.getWaitingtimepoli3())+" "+this.convertSeconds(temp.getTimeServiceEnd4()));
-                data[i][3]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
-                data[i][4]=this.convertSeconds(temp.getTimeServiceBegin2());
-                data[i][5]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
-                data[i][6]=this.convertSeconds(temp.getTimeServiceEnd4());
-                data[i][7]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+             if(temp.getJenis().contains("BPJS Lama")||temp.getJenis().contains("BPJS Baru")){
+                data[i][0]=temp.getNumber();
+                data[i][1]=temp.getNumberinpoli();
+                data[i][2]=temp.getJenis();
+                data[i][3]=this.convertSeconds(temp.getArrivaltimepoli());
+                data[i][4]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
+                data[i][5]=this.convertSeconds(temp.getTimeServiceBegin2());
+                data[i][6]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
+                data[i][7]=this.convertSeconds(temp.getTimeServiceEnd4());
+                data[i][8]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+                data[i][9]=temp.getServerpetugas();
+                data[i][10]=temp.getServerperawat();
+                data[i][11]=temp.getServerdokter();
                 i++;
              }
              else{
-                System.out.println("kasus emergency :"+temp.getArrivaltime());
-                data[i][0]=temp.getNumberinpoli();
-                data[i][1]=temp.getJenis();
-                data[i][2]=this.convertSeconds(temp.getArrivaltimepoli3());
-                System.out.println("cek generate 1 :"+" "+this.convertSeconds(temp.getArrivaltimepoli())+" "+this.convertSeconds(temp.getServicetimepoli())+" "+this.convertSeconds(temp.getTimeServiceBegin2())+" "+this.convertSeconds(temp.getDelaytimepoli())+" "+this.convertSeconds(temp.getWaitingtimepoli())+" "+this.convertSeconds(temp.getTimeServiceEnd2()));
-                System.out.println("cek generate 2 :"+" "+this.convertSeconds(temp.getArrivaltimepoli2())+" "+this.convertSeconds(temp.getServicetimepoli2())+" "+this.convertSeconds(temp.getTimeServiceBegin3())+" "+this.convertSeconds(temp.getDelaytimepoli2())+" "+this.convertSeconds(temp.getWaitingtimepoli2())+" "+this.convertSeconds(temp.getTimeServiceEnd3()));
-                System.out.println("cek generate 3 :"+" "+this.convertSeconds(temp.getArrivaltimepoli3())+" "+this.convertSeconds(temp.getServicetimepoli3())+" "+this.convertSeconds(temp.getTimeServiceBegin4())+" "+this.convertSeconds(temp.getDelaytimepoli3())+" "+this.convertSeconds(temp.getWaitingtimepoli3())+" "+this.convertSeconds(temp.getTimeServiceEnd4()));
-                data[i][3]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
-                data[i][4]=this.convertSeconds(temp.getTimeServiceBegin2());
-                data[i][5]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
-                data[i][6]=this.convertSeconds(temp.getTimeServiceEnd4());
-                data[i][7]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+                data[i][0]=temp.getNumber();
+                data[i][1]=temp.getNumberinpoli();
+                data[i][2]=temp.getJenis();
+                data[i][3]=this.convertSeconds(temp.getArrivaltimepoli3());
+                data[i][4]=this.convertSeconds(temp.getServicetimepoli()+temp.getServicetimepoli2()+temp.getServicetimepoli3());
+                data[i][5]=this.convertSeconds(temp.getTimeServiceBegin2());
+                data[i][6]=this.convertSeconds(temp.getDelaytimepoli()+temp.getDelaytimepoli2()+temp.getDelaytimepoli3());
+                data[i][7]=this.convertSeconds(temp.getTimeServiceEnd4());
+                data[i][8]=this.convertSeconds(temp.getWaitingtimepoli()+temp.getWaitingtimepoli2()+temp.getWaitingtimepoli3());
+                data[i][9]=temp.getServerpetugas();
+                data[i][10]=temp.getServerperawat();
+                data[i][11]=temp.getServerdokter();
                 i++;
              }
           }
@@ -332,10 +621,15 @@ public class StatisticsGenerator  {
      
      public double generateSummaryArrivalTime(Customer[] queuecustomer){
           if(queuecustomer.length>0){
-            double sumArrivalTime=queuecustomer[queuecustomer.length-1].getArrivaltime()/2.0;
-            bd = new BigDecimal(((double)queuecustomer.length*1.0)/sumArrivalTime*1.0); 
-            bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            return bd.doubleValue();
+              if((queuecustomer[queuecustomer.length-1].getArrivaltime()/2.0)>0){
+                double sumArrivalTime=queuecustomer[queuecustomer.length-1].getArrivaltime()/2.0;
+                bd = new BigDecimal(((double)queuecustomer.length*1.0)/sumArrivalTime*1.0); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                return bd.doubleValue();
+              }
+              else{
+                  return 0;
+              }
           }
           else {
               return 0;
@@ -564,14 +858,11 @@ public class StatisticsGenerator  {
      
       public int getMaxArrivalTimePoli2(ServerPetugas[] arrayServer){
             double max=this.getMaxArrivalTimeCustomer2(arrayServer[0].getQueueReport2());
-            System.out.println("max petugas 0 : "+max);
             for(int i=1;i<arrayServer.length;i++){
                 if(max<this.getMaxArrivalTimeCustomer2(arrayServer[i].getQueueReport2())){
                     max=this.getMaxArrivalTimeCustomer2(arrayServer[i].getQueueReport2());
-                    System.out.println("max petugas "+i+" : "+max);
                 }
             }
-            System.out.println("max petugas last : "+max);
             int max2=this.convertSecondsForChart(max);
             return max2;
      }
@@ -596,21 +887,18 @@ public class StatisticsGenerator  {
                     cari=cust.get(i).getArrivaltimepoli2();
                 }
             }
+            
          }
-         System.out.println("cari 2 : "+cari);
          return cari;
      }
        
        public int getMaxArrivalTimePoli3(ServerPerawat[] arrayServer){
             double max=this.getMaxArrivalTimeCustomer3(arrayServer[0].getQueueReport2());
-            System.out.println("max perawat 0 : "+max);
             for(int i=1;i<arrayServer.length;i++){
                 if(max<this.getMaxArrivalTimeCustomer3(arrayServer[i].getQueueReport2())){
                     max=this.getMaxArrivalTimeCustomer3(arrayServer[i].getQueueReport2());
-                    System.out.println("max perawat "+i+" : "+max);
                 }
             }
-            System.out.println("max perawat last : "+max);
             int max2=this.convertSecondsForChart(max);
             return max2;
      }
@@ -636,28 +924,22 @@ public class StatisticsGenerator  {
                 }
             }
          }
-         System.out.println("cari 3 : "+cari);
          return cari;
      }
        
     public int getMaxArrivalTimePoli4(ServerDokter[] arrayServer){
         if(arrayServer.length>1){
             double max=this.getMaxArrivalTimeCustomer4(arrayServer[0].getQueueReport2());
-            System.out.println("max dokter 0 : "+max);
             for(int i=1;i<arrayServer.length;i++){
                 if(max<this.getMaxArrivalTimeCustomer4(arrayServer[i].getQueueReport2())){
                     max=this.getMaxArrivalTimeCustomer4(arrayServer[i].getQueueReport2());
-                    System.out.println("max petugas "+i+" : "+max);
                 }
             }
-            System.out.println("max dokter last : "+max);
             int max2=this.convertSecondsForChart(max);
-            System.out.println("cari 4 : "+max);
             return max2;
         }
         else{
             double max=this.getMaxArrivalTimeCustomer4(arrayServer[0].getQueueReport2());
-            System.out.println("cari 4 : "+max);
             return this.convertSecondsForChart(max);
         }
      }
@@ -679,7 +961,7 @@ public class StatisticsGenerator  {
         }
      }
       
-       public double getMaxArrivalTimeCustomer4(LinkedList<Customer> cust){
+    public double getMaxArrivalTimeCustomer4(LinkedList<Customer> cust){
          double cari=0;
          if(cust.size()>0){
             cari=cust.get(0).getTimeServiceEnd4();
@@ -697,9 +979,7 @@ public class StatisticsGenerator  {
          for(int i=0;i<arrayServer.length;i++){
              double[] waiting=new double[2];
              waiting[0]=this.convertSecondsForChart(arrayServer[i].getTotalWaitingTimeBPJSLama());
-             System.out.println("waiting time lama : "+arrayServer[i].getTotalWaitingTimeBPJSLama());
              waiting[1]=this.convertSecondsForChart(arrayServer[i].getTotalWaitingTimeBPJSBaru());
-             System.out.println("waiting time baru : "+arrayServer[i].getTotalWaitingTimeBPJSBaru());
              customer.add(waiting);
          }
          return customer;
@@ -710,9 +990,7 @@ public class StatisticsGenerator  {
          for(int i=0;i<arrayServer.length;i++){
              double[] waiting=new double[2];
              waiting[0]=this.convertSecondsForChart(arrayServer[i].getTotalWaitingTimeBPJSLama());
-             System.out.println("waiting time lama : "+arrayServer[i].getTotalWaitingTimeBPJSLama());
              waiting[1]=this.convertSecondsForChart(arrayServer[i].getTotalWaitingTimeBPJSBaru());
-             System.out.println("waiting time baru : "+arrayServer[i].getTotalWaitingTimeBPJSBaru());
              customer.add(waiting);
          }
          return customer;
@@ -1006,6 +1284,7 @@ public class StatisticsGenerator  {
    public LinkedList<int[]> getCounterPasienDokter(ServerDokter[] serverdokter){
          LinkedList<int[]> counter=new LinkedList<int[]>();
          for(int i=0;i<serverdokter.length;i++){
+             System.out.println("counter pasien dokter size : "+serverdokter[i].getQueueReport2().size());
              counter.add(this.getPasienCounter(serverdokter[i].getQueueReport2()));
          }
          return counter;
@@ -1019,17 +1298,18 @@ public class StatisticsGenerator  {
          return counter;
      }
      
-     public LinkedList<int[]> getCounterPasienperServer(ServerAwal[] arrayServer){
+     public LinkedList<int[]> getCounterPasienperServer(ServerAwal[] arrayServer,int paramx){
         int max=getMaxArrivalTimePoli(arrayServer);
         System.out.println(" max poli :"+max);
         LinkedList<int[]> realcounter=new LinkedList<int[]>();
         int begin=0;
-        if(max%5!=0){
+        if(max%paramx!=0){
             int temp=max;
-            int mod=max%5;
-            int kurang=5-mod;
+            int mod=max%paramx;
+            int kurang=paramx-mod;
             max=temp+kurang;
         }
+        max+=paramx;
         while(begin<=(max)){
             int i=0;
             int[] counterpasien=new int[3];
@@ -1065,7 +1345,7 @@ public class StatisticsGenerator  {
             }
             System.out.println("First element : "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
             System.out.println("Size counter : "+realcounter.size());
-            begin+=5;
+            begin+=paramx;
         }
         for(int i=0;i<realcounter.size();i++){
             System.out.println("cek realcounter : "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
@@ -1097,17 +1377,18 @@ public class StatisticsGenerator  {
          
      }
      
-     public LinkedList<int[]> getCounterPasienperServer(ExcelInputSimulation.ServerAwal[] arrayServer){
+     public LinkedList<int[]> getCounterPasienperServer(ExcelInputSimulation.ServerAwal[] arrayServer,int paramx){
         int max=getMaxArrivalTimePoli(arrayServer);
         System.out.println(" max poli :"+max);
         LinkedList<int[]> realcounter=new LinkedList<int[]>();
         int begin=0;
-        if(max%5!=0){
+        if(max%paramx!=0){
             int temp=max;
-            int mod=max%5;
-            int kurang=5-mod;
+            int mod=max%paramx;
+            int kurang=paramx-mod;
             max=temp+kurang;
         }
+        max+=paramx;
         while(begin<=(max)){
             int i=0;
             int[] counterpasien=new int[3];
@@ -1143,7 +1424,7 @@ public class StatisticsGenerator  {
             }
             System.out.println("First element : "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
             System.out.println("Size counter : "+realcounter.size());
-            begin+=5;
+            begin+=paramx;
         }
         for(int i=0;i<realcounter.size();i++){
             System.out.println("cek realcounter : "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
@@ -1175,18 +1456,18 @@ public class StatisticsGenerator  {
          
      }
      
-     public LinkedList<int[]> getCounterPasienperServer2(ServerPetugas[] arrayServer){
+     public LinkedList<int[]> getCounterPasienperServer2(ServerPetugas[] arrayServer,int paramx){
         int max=getMaxArrivalTimePoli2(arrayServer);
         System.out.println(" max poli 2 :"+max);
         LinkedList<int[]> realcounter=new LinkedList<int[]>();
         int begin=0;
-        if(max%5!=0){
+        if(max%paramx!=0){
             int temp=max;
-            int mod=max%5;
-            int kurang=5-mod;
+            int mod=max%paramx;
+            int kurang=paramx-mod;
             max=temp+kurang;
         }
-        max+=5;
+        max+=paramx;
         while(begin<=(max)){
             int i=0;
             int[] counterpasien=new int[3];
@@ -1222,7 +1503,7 @@ public class StatisticsGenerator  {
             }
             System.out.println("First element 2: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
             System.out.println("Size counter 2: "+realcounter.size());
-            begin+=5;
+            begin+=paramx;
         }
         for(int i=0;i<realcounter.size();i++){
             System.out.println("cek realcounter 2: "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
@@ -1255,17 +1536,18 @@ public class StatisticsGenerator  {
          
      }
      
-     public LinkedList<int[]> getCounterPasienperServer2(ExcelInputSimulation.ServerPetugas[] arrayServer){
+     public LinkedList<int[]> getCounterPasienperServer2(ExcelInputSimulation.ServerPetugas[] arrayServer,int paramx){
         int max=getMaxArrivalTimePoli2(arrayServer);
         System.out.println(" max poli 2 :"+max);
         LinkedList<int[]> realcounter=new LinkedList<int[]>();
         int begin=0;
-        if(max%5!=0){
+        if(max%paramx!=0){
             int temp=max;
-            int mod=max%5;
-            int kurang=5-mod;
+            int mod=max%paramx;
+            int kurang=paramx-mod;
             max=temp+kurang;
         }
+        max+=paramx;
         while(begin<=(max)){
             int i=0;
             int[] counterpasien=new int[3];
@@ -1301,7 +1583,7 @@ public class StatisticsGenerator  {
             }
             System.out.println("First element 2: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
             System.out.println("Size counter 2: "+realcounter.size());
-            begin+=5;
+            begin+=paramx;
         }
         for(int i=0;i<realcounter.size();i++){
             System.out.println("cek realcounter 2: "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
@@ -1334,18 +1616,18 @@ public class StatisticsGenerator  {
          
      }
      
-      public LinkedList<int[]> getCounterPasienperServer3(ServerPerawat[] arrayServer){
+      public LinkedList<int[]> getCounterPasienperServer3(ServerPerawat[] arrayServer,int paramx){
         int max=getMaxArrivalTimePoli3(arrayServer);
         System.out.println(" max poli 3:"+max);
         LinkedList<int[]> realcounter=new LinkedList<int[]>();
         int begin=0;
-        if(max%5!=0){
+        if(max%paramx!=0){
             int temp=max;
-            int mod=max%5;
-            int kurang=5-mod;
+            int mod=max%paramx;
+            int kurang=paramx-mod;
             max=temp+kurang;
         }
-        while(begin<=(max+5)){
+        while(begin<=(max+paramx)){
             int i=0;
             int[] counterpasien=new int[3];
             while(i<arrayServer.length){
@@ -1380,7 +1662,7 @@ public class StatisticsGenerator  {
             }
             System.out.println("First element 3: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
             System.out.println("Size counter 3: "+realcounter.size());
-            begin+=5;
+            begin+=paramx;
         }
         for(int i=0;i<realcounter.size();i++){
             System.out.println("cek realcounter 3: "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
@@ -1412,18 +1694,18 @@ public class StatisticsGenerator  {
          
      }
       
-      public LinkedList<int[]> getCounterPasienperServer3(ExcelInputSimulation.ServerPerawat[] arrayServer){
+      public LinkedList<int[]> getCounterPasienperServer3(ExcelInputSimulation.ServerPerawat[] arrayServer,int paramx){
         int max=getMaxArrivalTimePoli3(arrayServer);
         System.out.println(" max poli 3:"+max);
         LinkedList<int[]> realcounter=new LinkedList<int[]>();
         int begin=0;
-        if(max%5!=0){
+        if(max%paramx!=0){
             int temp=max;
-            int mod=max%5;
-            int kurang=5-mod;
+            int mod=max%paramx;
+            int kurang=paramx-mod;
             max=temp+kurang;
         }
-        while(begin<=(max)){
+        while(begin<=(max+paramx)){
             int i=0;
             int[] counterpasien=new int[3];
             while(i<arrayServer.length){
@@ -1458,7 +1740,7 @@ public class StatisticsGenerator  {
             }
             System.out.println("First element 3: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]);
             System.out.println("Size counter 3: "+realcounter.size());
-            begin+=5;
+            begin+=paramx;
         }
         for(int i=0;i<realcounter.size();i++){
             System.out.println("cek realcounter 3: "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]);
@@ -1490,18 +1772,18 @@ public class StatisticsGenerator  {
          
      }
      
-      public LinkedList<int[]> getCounterPasienperServer4(ServerDokter[] arrayServer){
+      public LinkedList<int[]> getCounterPasienperServer4(ServerDokter[] arrayServer,int paramx){
         int max=getMaxArrivalTimePoli4(arrayServer);
         System.out.println(" max poli 4:"+max);
         LinkedList<int[]> realcounter=new LinkedList<int[]>();
         int begin=0;
-        if(max%5!=0){
+        if(max%paramx!=0){
             int temp=max;
-            int mod=max%5;
-            int kurang=5-mod;
+            int mod=max%paramx;
+            int kurang=paramx-mod;
             max=temp+kurang;
         }
-        while(begin<=(max+5)){
+        while(begin<=(max+paramx)){
             int i=0;
             int[] counterpasien=new int[3];
             while(i<arrayServer.length){
@@ -1538,7 +1820,7 @@ public class StatisticsGenerator  {
             }
             System.out.println("First element 4: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]+" "+realcounter.getFirst()[2]);
             System.out.println("Size counter 4: "+realcounter.size());
-            begin+=5;
+            begin+=paramx;
         }
         for(int i=0;i<realcounter.size();i++){
             System.out.println("cek realcounter : "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]+" "+realcounter.get(i)[2]);
@@ -1578,18 +1860,18 @@ public class StatisticsGenerator  {
          
      }
       
-     public LinkedList<int[]> getCounterPasienperServer4(ExcelInputSimulation.ServerDokter[] arrayServer){
+     public LinkedList<int[]> getCounterPasienperServer4(ExcelInputSimulation.ServerDokter[] arrayServer,int paramx){
         int max=getMaxArrivalTimePoli4(arrayServer);
         System.out.println(" max poli 4:"+max);
         LinkedList<int[]> realcounter=new LinkedList<int[]>();
         int begin=0;
-        if(max%5!=0){
+        if(max%paramx!=0){
             int temp=max;
-            int mod=max%5;
-            int kurang=5-mod;
+            int mod=max%paramx;
+            int kurang=paramx-mod;
             max=temp+kurang;
         }
-        while(begin<=(max)){
+        while(begin<=(max+paramx)){
             int i=0;
             int[] counterpasien=new int[3];
             while(i<arrayServer.length){
@@ -1626,7 +1908,7 @@ public class StatisticsGenerator  {
             }
             System.out.println("First element 4: "+realcounter.getFirst()[0]+" "+realcounter.getFirst()[1]+" "+realcounter.getFirst()[2]);
             System.out.println("Size counter 4: "+realcounter.size());
-            begin+=5;
+            begin+=paramx;
         }
         for(int i=0;i<realcounter.size();i++){
             System.out.println("cek realcounter : "+realcounter.get(i)[0]+" "+realcounter.get(i)[1]+" "+realcounter.get(i)[2]);
@@ -1844,10 +2126,15 @@ public class StatisticsGenerator  {
                     total++;
                 }
             }
-            double sumArrivalTime=queuecustomer[cari].getArrivaltime()/2.0;
-            bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-            bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            return bd.doubleValue();
+            if(queuecustomer[cari].getArrivaltime()/2.0>0&&total>0){
+                double sumArrivalTime=queuecustomer[cari].getArrivaltime()/2.0;
+                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                return bd.doubleValue();
+            }
+            else{
+                return 0;
+            }
          }
          else{
              return 0;
@@ -1868,10 +2155,15 @@ public class StatisticsGenerator  {
                     total++;
                 }
             }
-            double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli()/2.0;
-            bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-            bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            return bd.doubleValue();
+            if(queuecustomer[cari].getArrivaltime()/2.0>0&&total>0){
+                double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli()/2.0;
+                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                return bd.doubleValue();
+            }
+            else{
+                return 0;
+            }
          }
          else {
              return 0;
@@ -1892,10 +2184,15 @@ public class StatisticsGenerator  {
                     total++;
                 }
             }
-            double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli2()/2.0;
-            bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-            bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            return bd.doubleValue();
+            if(queuecustomer[cari].getArrivaltime()/2.0>0&&total>0){
+                double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli2()/2.0;
+                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                return bd.doubleValue();
+            }
+            else{
+                return 0;
+            }
          }
          else {
              return 0;
@@ -1916,7 +2213,7 @@ public class StatisticsGenerator  {
                     total++;
                 }
             }
-            if(queuecustomer[cari].getArrivaltimepoli3()>0){
+            if(queuecustomer[cari].getArrivaltimepoli3()>0&&total>0){
                 double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli3()/2.0;
                 bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
@@ -2064,10 +2361,15 @@ public class StatisticsGenerator  {
                         total++;
                     }
                 }
-                double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli()/2.0;
-                bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
-                bd = bd.setScale(2,BigDecimal.ROUND_UP);
-                return bd.doubleValue();
+                if(queuecustomer[cari].getArrivaltimepoli()/2.0>0&&total>0){
+                    double sumArrivalTime=queuecustomer[cari].getArrivaltimepoli()/2.0;
+                    bd = new BigDecimal(((double)total*1.0)/sumArrivalTime*1.0); 
+                    bd = bd.setScale(2,BigDecimal.ROUND_UP);
+                    return bd.doubleValue();
+                }
+                else{
+                    return 0;
+                }
          }
          else{
              return 0;
@@ -2250,19 +2552,18 @@ public class StatisticsGenerator  {
             double kurang=value-up;
             bd = new BigDecimal(kurang); 
             bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            //kurang=bd.doubleValue();
             double seconds=kurang*60;
-            if(up<10&&seconds<10){
+            if(up<10&&Math.round(seconds)<10){
                 ret="00:0"+up+":0"+Math.round(seconds);
             }
-            else if(up>=10&&seconds<10){
-                ret="00:"+up+":0"+Math.round(seconds);;
+            else if(up>=10&&Math.round(seconds)<10){
+                ret="00:"+up+":0"+Math.round(seconds);
             }
-            else if(up<10&&seconds>=10){
-                ret="00:0"+up+":"+Math.round(seconds);;
+            else if(up<10&&Math.round(seconds)>=10){
+                ret="00:0"+up+":"+Math.round(seconds);
             }
             else{
-                ret="00:"+up+":"+Math.round(seconds);;
+                ret="00:"+up+":"+Math.round(seconds);
             }
         }
         else if(value>=60){
@@ -2270,7 +2571,6 @@ public class StatisticsGenerator  {
             double kurang=value-up;
             bd = new BigDecimal(kurang); 
             bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            //kurang=bd.doubleValue();
             double seconds=kurang*60;
             int hours=up/60;
             int minutes=up%60;
@@ -2308,6 +2608,9 @@ public class StatisticsGenerator  {
             double kurang=value-up;
             bd = new BigDecimal(kurang); 
             bd = bd.setScale(2,BigDecimal.ROUND_UP);
+            if(up%5==0){
+                up=up+1;
+            }
             ret=up;
         }
         else if(value>=60){
@@ -2315,15 +2618,20 @@ public class StatisticsGenerator  {
             double kurang=value-up;
             bd = new BigDecimal(kurang); 
             bd = bd.setScale(2,BigDecimal.ROUND_UP);
-            //kurang=bd.doubleValue();
             double seconds=kurang*60;
             int hours=up/60;
             int minutes=up%60;
             String hours2="";
             String minutes2="";
             String seconds2="";
+            if(up%5==0){
+                up=up+1;
+            }
             ret=up;
             
+        }
+        else if(value<1){
+            ret = 1;
         }
         return ret;
     }
@@ -2348,12 +2656,10 @@ public class StatisticsGenerator  {
             }
         }
         if(max>max2&&max>max3){
-            System.out.println("Max pasien per server : "+max);
             return max;
             
         }
         else if(max2>max3&&max2>max){
-            System.out.println("Max pasien per server : "+max2);
             return max2;
             
         }
@@ -2368,13 +2674,11 @@ public class StatisticsGenerator  {
     public Object[][] generateUtilityServer(ServerAwal[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-           System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
            if(arrayServer[i].getTotalservicetime()>0&&arrayServer[i].getCounter()>0){
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                     temp=100;
                 }
@@ -2391,13 +2695,11 @@ public class StatisticsGenerator  {
     public double[][] generateUtilityServerforChart(ServerAwal[] arrayServer){
         double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-           System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
            if(arrayServer[i].getTotalservicetime()>0&&arrayServer[i].getCounter()>0){
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                     temp=100;
                 }
@@ -2414,13 +2716,11 @@ public class StatisticsGenerator  {
     public double[][] generateUtilityServerforChart(ExcelInputSimulation.ServerAwal[] arrayServer){
         double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-           System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
            if(arrayServer[i].getTotalservicetime()>0&&arrayServer[i].getCounter()>0){
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                     temp=100;
                 }
@@ -2437,17 +2737,14 @@ public class StatisticsGenerator  {
     public Object[][] generateUtilityServer2(ServerPetugas[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]="0 %";
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2462,17 +2759,14 @@ public class StatisticsGenerator  {
      public double[][] generateUtilityServer2forChart(ServerPetugas[] arrayServer){
         double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]=0.0;
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2487,17 +2781,14 @@ public class StatisticsGenerator  {
       public double[][] generateUtilityServer2forChart(ExcelInputSimulation.ServerPetugas[] arrayServer){
         double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]=0.0;
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2512,17 +2803,14 @@ public class StatisticsGenerator  {
      public Object[][] generateUtilityServer3(ServerPerawat[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]="0 %";
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2537,17 +2825,14 @@ public class StatisticsGenerator  {
      public double[][] generateUtilityServer3forChart(ServerPerawat[] arrayServer){
         double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]=0.0;
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2562,17 +2847,14 @@ public class StatisticsGenerator  {
      public double[][] generateUtilityServer3forChart(ExcelInputSimulation.ServerPerawat[] arrayServer){
         double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]=0.0;
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2587,17 +2869,14 @@ public class StatisticsGenerator  {
      public Object[][] generateUtilityServer3(ExcelInputSimulation.ServerPerawat[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]="0 %";
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2613,17 +2892,14 @@ public class StatisticsGenerator  {
       public Object[][] generateUtilityServer4(ServerDokter[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]="0 %";
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2638,17 +2914,14 @@ public class StatisticsGenerator  {
       public double[][] generateUtilityServer4forChart(ServerDokter[] arrayServer){
         double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]=0;
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2663,17 +2936,14 @@ public class StatisticsGenerator  {
     public double[][] generateUtilityServer4forChart(ExcelInputSimulation.ServerDokter[] arrayServer){
         double[][] utility=new double[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]=0;
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2689,17 +2959,14 @@ public class StatisticsGenerator  {
        public Object[][] generateUtilityServer4(ExcelInputSimulation.ServerDokter[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]="0 %";
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2714,13 +2981,11 @@ public class StatisticsGenerator  {
        public Object[][] generateUtilityServer5(ExcelInputSimulation.ServerAwal[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-           System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
            if(arrayServer[i].getTotalservicetime()>0&&arrayServer[i].getCounter()>0){
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                     temp=100;
                 }
@@ -2737,17 +3002,14 @@ public class StatisticsGenerator  {
     public Object[][] generateUtilityServer6(ExcelInputSimulation.ServerPetugas[] arrayServer){
         Object[][] utility=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("Service time : "+arrayServer[i].getTotalservicetime()+" Countercustomer :"+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalservicetime()==0||arrayServer[i].getCounter()==0){
                 utility[0][i]="0 %";
             }
             else{
                 double temp=(1/(arrayServer[i].getTotalservicetime()/arrayServer[i].getCounter()))*100;
-                System.out.println("temp ? :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 temp=bd.doubleValue();
-                System.out.println("temp : "+temp);
                 if(temp>100){
                         temp=100;
                 }
@@ -2778,7 +3040,6 @@ public class StatisticsGenerator  {
     public Object[][] generateAverageServiceTime2(ServerPetugas[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("total service time : "+arrayPetugas[i].getTotalservicetime()+" Counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalservicetime()>0&&arrayPetugas[i].getCounter()>0){
                 double temp=arrayPetugas[i].getTotalservicetime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
                 bd = new BigDecimal(temp); 
@@ -2795,7 +3056,6 @@ public class StatisticsGenerator  {
     public Object[][] generateAverageServiceTime3(ServerPerawat[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("total service time : "+arrayPetugas[i].getTotalservicetime()+" Counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalservicetime()>0&&arrayPetugas[i].getCounter()>0){
                 double temp=arrayPetugas[i].getTotalservicetime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
                 bd = new BigDecimal(temp); 
@@ -2812,7 +3072,6 @@ public class StatisticsGenerator  {
     public Object[][] generateAverageServiceTime3(ExcelInputSimulation.ServerPerawat[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("total service time : "+arrayPetugas[i].getTotalservicetime()+" Counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalservicetime()>0&&arrayPetugas[i].getCounter()>0){
                 double temp=arrayPetugas[i].getTotalservicetime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
                 bd = new BigDecimal(temp); 
@@ -2830,7 +3089,6 @@ public class StatisticsGenerator  {
     public Object[][] generateAverageServiceTime4(ServerDokter[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("total service time : "+arrayPetugas[i].getTotalservicetime()+" Counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalservicetime()>0&&arrayPetugas[i].getCounter()>0){
                 double temp=arrayPetugas[i].getTotalservicetime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
                 bd = new BigDecimal(temp); 
@@ -2847,7 +3105,6 @@ public class StatisticsGenerator  {
     public Object[][] generateAverageServiceTime4(ExcelInputSimulation.ServerDokter[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("total service time : "+arrayPetugas[i].getTotalservicetime()+" Counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalservicetime()>0&&arrayPetugas[i].getCounter()>0){
                 double temp=arrayPetugas[i].getTotalservicetime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
                 bd = new BigDecimal(temp); 
@@ -2880,7 +3137,6 @@ public class StatisticsGenerator  {
       public Object[][] generateAverageServiceTime6(ExcelInputSimulation.ServerPetugas[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("total service time : "+arrayPetugas[i].getTotalservicetime()+" Counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalservicetime()>0&&arrayPetugas[i].getCounter()>0){
                 double temp=arrayPetugas[i].getTotalservicetime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
                 bd = new BigDecimal(temp); 
@@ -2913,11 +3169,8 @@ public class StatisticsGenerator  {
      public Object[][] generateAverageWaitingTime2(ServerPetugas[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalWaitingTime()>0&&arrayPetugas[i].getCounter()>0){
-                System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
                 double temp=arrayPetugas[i].getTotalWaitingTime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
-                System.out.println("temp petugas waiting time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -2932,11 +3185,8 @@ public class StatisticsGenerator  {
      public Object[][] generateAverageWaitingTime3(ServerPerawat[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalWaitingTime()>0&&arrayPetugas[i].getCounter()>0){
-                System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
                 double temp=arrayPetugas[i].getTotalWaitingTime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
-                System.out.println("temp petugas waiting time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -2951,11 +3201,8 @@ public class StatisticsGenerator  {
       public Object[][] generateAverageWaitingTime3(ExcelInputSimulation.ServerPerawat[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalWaitingTime()>0&&arrayPetugas[i].getCounter()>0){
-                System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
                 double temp=arrayPetugas[i].getTotalWaitingTime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
-                System.out.println("temp petugas waiting time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -2970,11 +3217,8 @@ public class StatisticsGenerator  {
      public Object[][] generateAverageWaitingTime4(ServerDokter[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalWaitingTime()>0&&arrayPetugas[i].getCounter()>0){
-                System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
                 double temp=arrayPetugas[i].getTotalWaitingTime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
-                System.out.println("temp petugas waiting time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -2989,11 +3233,8 @@ public class StatisticsGenerator  {
       public Object[][] generateAverageWaitingTime4(ExcelInputSimulation.ServerDokter[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalWaitingTime()>0&&arrayPetugas[i].getCounter()>0){
-                System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
                 double temp=arrayPetugas[i].getTotalWaitingTime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
-                System.out.println("temp petugas waiting time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -3024,11 +3265,8 @@ public class StatisticsGenerator  {
       public Object[][] generateAverageWaitingTime6(ExcelInputSimulation.ServerPetugas[] arrayPetugas){
         Object[][] res=new Object[1][arrayPetugas.length];
         for(int i=0;i<arrayPetugas.length;i++){
-            System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
             if(arrayPetugas[i].getTotalWaitingTime()>0&&arrayPetugas[i].getCounter()>0){
-                System.out.println("waiting time : petugas "+arrayPetugas[i].getTotalWaitingTime()+" counter : "+arrayPetugas[i].getCounter());
                 double temp=arrayPetugas[i].getTotalWaitingTime()*1.0/((double)arrayPetugas[i].getCounter()*1.0);
-                System.out.println("temp petugas waiting time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -3061,11 +3299,8 @@ public class StatisticsGenerator  {
     public Object[][] generateAverageDelayTime2(ServerPetugas[] arrayServer){
         Object[][] res=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalDelayTime()>0&&arrayServer[i].getCounter()>0){
-                System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
                 double temp=arrayServer[i].getTotalDelayTime()*1.0/((double)arrayServer[i].getCounter()*1.0);
-                System.out.println("temp petugas delay time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -3080,11 +3315,8 @@ public class StatisticsGenerator  {
      public Object[][] generateAverageDelayTime3(ServerPerawat[] arrayServer){
         Object[][] res=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalDelayTime()>0&&arrayServer[i].getCounter()>0){
-                System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
                 double temp=arrayServer[i].getTotalDelayTime()*1.0/((double)arrayServer[i].getCounter()*1.0);
-                System.out.println("temp petugas delay time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -3099,11 +3331,8 @@ public class StatisticsGenerator  {
      public Object[][] generateAverageDelayTime3(ExcelInputSimulation.ServerPerawat[] arrayServer){
         Object[][] res=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalDelayTime()>0&&arrayServer[i].getCounter()>0){
-                System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
                 double temp=arrayServer[i].getTotalDelayTime()*1.0/((double)arrayServer[i].getCounter()*1.0);
-                System.out.println("temp petugas delay time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -3118,11 +3347,8 @@ public class StatisticsGenerator  {
       public Object[][] generateAverageDelayTime4(ServerDokter[] arrayServer){
         Object[][] res=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalDelayTime()>0&&arrayServer[i].getCounter()>0){
-                System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
                 double temp=arrayServer[i].getTotalDelayTime()*1.0/((double)arrayServer[i].getCounter()*1.0);
-                System.out.println("temp petugas delay time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -3137,11 +3363,8 @@ public class StatisticsGenerator  {
        public Object[][] generateAverageDelayTime4(ExcelInputSimulation.ServerDokter[] arrayServer){
         Object[][] res=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalDelayTime()>0&&arrayServer[i].getCounter()>0){
-                System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
                 double temp=arrayServer[i].getTotalDelayTime()*1.0/((double)arrayServer[i].getCounter()*1.0);
-                System.out.println("temp petugas delay time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -3172,11 +3395,8 @@ public class StatisticsGenerator  {
       public Object[][] generateAverageDelayTime6(ExcelInputSimulation.ServerPetugas[] arrayServer){
         Object[][] res=new Object[1][arrayServer.length];
         for(int i=0;i<arrayServer.length;i++){
-            System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
             if(arrayServer[i].getTotalDelayTime()>0&&arrayServer[i].getCounter()>0){
-                System.out.println("delay time : petugas "+arrayServer[i].getTotalDelayTime()+" counter : "+arrayServer[i].getCounter());
                 double temp=arrayServer[i].getTotalDelayTime()*1.0/((double)arrayServer[i].getCounter()*1.0);
-                System.out.println("temp petugas delay time :"+temp);
                 bd = new BigDecimal(temp); 
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 res[0][i]=this.convertSeconds(bd.doubleValue());
@@ -3208,23 +3428,7 @@ public class StatisticsGenerator  {
          
          String delaytime=this.convertSeconds(this.generateAverageDelayTimeTotal(arrayServer));
          first+="Rata-rata waktu delay: "+delaytime+" \n \n";
-         
-//         double jumlahpasien=(this.getTotalPasien(arrayServer))/((this.getMaxDepartureTimeServer(arrayServer)*24*60)*(24*60*this.generateAverageWaitingTimeTotal(arrayServer)));
-//         bd = new BigDecimal(jumlahpasien);
-//         bd = bd.setScale(2,BigDecimal.ROUND_UP);
-//         first+="JUMLAH PASIEN PADA SERVICE NODE DI WAKTU KE t : "+(int)jumlahpasien+" \n \n";
-//         
-//         double jumlahpasien2=(this.getTotalPasien(arrayServer))/((this.getMaxDepartureTimeServer(arrayServer)*24*60)*(this.generateAverageDelayTimeTotal(arrayServer)*24*60));
-//         bd = new BigDecimal(jumlahpasien2);
-//         bd = bd.setScale(2,BigDecimal.ROUND_UP); 
-//         first+="JUMLAH PASIEN PADA ANTRIAN DI WAKTU KE t : "+(int)jumlahpasien2+" \n \n";
-//         
-//         
-//         double jumlahpasien3=(this.getTotalPasien(arrayServer))/((this.getMaxDepartureTimeServer(arrayServer)*24*60)*(this.generateAverageServiceTimeTotal(arrayServer)*24*60));
-//         bd = new BigDecimal(jumlahpasien3);
-//         bd = bd.setScale(2,BigDecimal.ROUND_UP);
-//         first+="JUMLAH PASIEN PADA PELAYANAN DI WAKTU KE t  : "+(int)jumlahpasien3+" \n \n";
-             return first;
+         return first;
      }
      
      
@@ -4949,9 +5153,7 @@ public class StatisticsGenerator  {
              int cust=arrayServer[i].getQueueReport2().size();
              if(cust>0){
                 double max=arrayServer[i].getQueueReport2().get(cust-1).getTimeServiceEnd();
-                System.out.println("max : "+this.convertSeconds(arrayServer[i].getQueueReport2().get(cust-1).getTimeServiceEnd()));
                 double min=arrayServer[i].getQueueReport2().get(0).getArrivaltime();
-                System.out.println("min : "+this.convertSeconds(arrayServer[i].getQueueReport2().get(0).getArrivaltime()));
                 bd = new BigDecimal(max-min);
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 totalspenttime[0][i]=this.convertSeconds(bd.doubleValue());
@@ -4967,12 +5169,9 @@ public class StatisticsGenerator  {
          Object[][] totalspenttime=new Object[1][arrayPetugas.length];
          for(int i=0;i<arrayPetugas.length;i++){
              int cust=arrayPetugas[i].getQueueReport2().size();
-             System.out.println("cust : "+cust);
              if(cust>0){
                 double max=arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd2();
-                System.out.println("max cust petugas : "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd2()));
                 double min=arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli();
-                System.out.println("min cust petugas: "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli()));
                 bd = new BigDecimal(max-min);
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 totalspenttime[0][i]=this.convertSeconds(bd.doubleValue());
@@ -4988,12 +5187,9 @@ public class StatisticsGenerator  {
          Object[][] totalspenttime=new Object[1][arrayPetugas.length];
          for(int i=0;i<arrayPetugas.length;i++){
              int cust=arrayPetugas[i].getQueueReport2().size();
-             System.out.println("cust : "+cust);
              if(cust>0){
                 double max=arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd3();
-                System.out.println("max cust petugas : "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd2()));
                 double min=arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli2();
-                System.out.println("min cust petugas: "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli()));
                 bd = new BigDecimal(max-min);
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 totalspenttime[0][i]=this.convertSeconds(bd.doubleValue());
@@ -5009,12 +5205,9 @@ public class StatisticsGenerator  {
          Object[][] totalspenttime=new Object[1][arrayPetugas.length];
          for(int i=0;i<arrayPetugas.length;i++){
              int cust=arrayPetugas[i].getQueueReport2().size();
-             System.out.println("cust : "+cust);
              if(cust>0){
                 double max=arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd3();
-                System.out.println("max cust petugas : "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd2()));
                 double min=arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli2();
-                System.out.println("min cust petugas: "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli()));
                 bd = new BigDecimal(max-min);
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 totalspenttime[0][i]=this.convertSeconds(bd.doubleValue());
@@ -5030,12 +5223,9 @@ public class StatisticsGenerator  {
          Object[][] totalspenttime=new Object[1][arrayPetugas.length];
          for(int i=0;i<arrayPetugas.length;i++){
              int cust=arrayPetugas[i].getQueueReport2().size();
-             System.out.println("cust : "+cust);
              if(cust>0){
                 double max=arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd4();
-                System.out.println("max cust petugas : "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd2()));
                 double min=arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli3();
-                System.out.println("min cust petugas: "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli()));
                 bd = new BigDecimal(max-min);
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 totalspenttime[0][i]=this.convertSeconds(bd.doubleValue());
@@ -5051,12 +5241,9 @@ public class StatisticsGenerator  {
          Object[][] totalspenttime=new Object[1][arrayPetugas.length];
          for(int i=0;i<arrayPetugas.length;i++){
              int cust=arrayPetugas[i].getQueueReport2().size();
-             System.out.println("cust : "+cust);
              if(cust>0){
                 double max=arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd4();
-                System.out.println("max cust petugas : "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd2()));
                 double min=arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli3();
-                System.out.println("min cust petugas: "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli()));
                 bd = new BigDecimal(max-min);
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 totalspenttime[0][i]=this.convertSeconds(bd.doubleValue());
@@ -5074,9 +5261,7 @@ public class StatisticsGenerator  {
              int cust=arrayServer[i].getQueueReport2().size();
              if(cust>0){
                 double max=arrayServer[i].getQueueReport2().get(cust-1).getTimeServiceEnd();
-                System.out.println("max : "+this.convertSeconds(arrayServer[i].getQueueReport2().get(cust-1).getTimeServiceEnd()));
                 double min=arrayServer[i].getQueueReport2().get(0).getArrivaltime();
-                System.out.println("min : "+this.convertSeconds(arrayServer[i].getQueueReport2().get(0).getArrivaltime()));
                 bd = new BigDecimal(max-min);
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 totalspenttime[0][i]=this.convertSeconds(bd.doubleValue());
@@ -5092,12 +5277,9 @@ public class StatisticsGenerator  {
          Object[][] totalspenttime=new Object[1][arrayPetugas.length];
          for(int i=0;i<arrayPetugas.length;i++){
              int cust=arrayPetugas[i].getQueueReport2().size();
-             System.out.println("cust : "+cust);
              if(cust>0){
                 double max=arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd2();
-                System.out.println("max cust petugas : "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(cust-1).getTimeServiceEnd2()));
                 double min=arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli();
-                System.out.println("min cust petugas: "+this.convertSeconds(arrayPetugas[i].getQueueReport2().get(0).getArrivaltimepoli()));
                 bd = new BigDecimal(max-min);
                 bd = bd.setScale(2,BigDecimal.ROUND_UP);
                 totalspenttime[0][i]=this.convertSeconds(bd.doubleValue());
@@ -5263,11 +5445,7 @@ public class StatisticsGenerator  {
         }
         return columns;
     }
-    
-    
-   
-   
-     
+
     /**
      * @return the meanservicetime
      */
@@ -5337,6 +5515,4 @@ public class StatisticsGenerator  {
     public void setExcel(ExcelReader excel) {
         this.excel = excel;
     }
-    
-    
 }

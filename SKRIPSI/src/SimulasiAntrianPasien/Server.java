@@ -9,9 +9,16 @@ package SimulasiAntrianPasien;
 /**
  *
  * @author robby
+ * @version 1.0
+ * 
  */
 public interface Server {
     
+   /**
+   * This method is to be implemented for another Server realization
+   * @param Nothing.
+   * @return Nothing.
+   */
     public void doServeCustomer();
     
 }

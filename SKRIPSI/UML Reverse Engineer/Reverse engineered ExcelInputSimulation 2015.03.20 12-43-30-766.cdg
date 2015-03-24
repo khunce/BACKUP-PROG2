@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Reverse engineered ExcelInputSimulation 2015.03.20 12-43-30-766">
+  <ClassDiagramComponents>
+    <Class xPosition="20.0" yPosition="20.0" package="ExcelInputSimulation" name="ExcelReader" visibility="public">
+      <Constructors>
+        <Constructor name="ExcelReader" visibility="public">
+          <Argument type="String" name="filepath"/>
+          <Argument type="String" name="filename"/>
+        </Constructor>
+        <Constructor name="ExcelReader" visibility="public"/>
+      </Constructors>
+      <Fields>
+        <Field name="file" visibility="private" type="FileInputStream"/>
+        <Field name="workbook" visibility="private" type="XSSFWorkbook"/>
+        <Field name="sheet" visibility="private" type="XSSFSheet"/>
+        <Field name="rowIterator" visibility="private" type="Iterator&lt;Row&gt;"/>
+        <Field name="filepath" visibility="private" type="String"/>
+        <Field name="filename" visibility="private" type="String"/>
+        <Field name="queuecustomer" visibility="private" type="LinkedList&lt;Customer&gt;"/>
+        <Field name="totalbaru" visibility="private" type="int"/>
+        <Field name="totallama" visibility="private" type="int"/>
+        <Field name="emergency" visibility="private" type="int"/>
+        <Field name="totalpasienpoli" visibility="private" type="int"/>
+        <Field name="arrivaltime" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="servicetime" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="servicepetugas" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="serviceperawat" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="servicedokter" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="serverawal" visibility="private" type="int"/>
+        <Field name="serverpetugas" visibility="private" type="int"/>
+        <Field name="serverperawat" visibility="private" type="int"/>
+        <Field name="serverdokter" visibility="private" type="int"/>
+        <Field name="kapasitasantrian" visibility="private" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="createFile" visibility="public" returnType="boolean"/>
+        <Method name="readExcelLimited" visibility="public" returnType="boolean"/>
+        <Method name="readExcel" visibility="public" returnType="boolean"/>
+        <Method name="getQueueOfCustomer" visibility="public" returnType="LinkedList&lt;Customer&gt;"/>
+        <Method name="getFilepath" visibility="public" returnType="String"/>
+        <Method name="setFilepath" visibility="public" returnType="void">
+          <Argument type="String" name="filepath"/>
+        </Method>
+        <Method name="getFilename" visibility="public" returnType="String"/>
+        <Method name="setFilename" visibility="public" returnType="void">
+          <Argument type="String" name="filename"/>
+        </Method>
+        <Method name="getTotalbaru" visibility="public" returnType="int"/>
+        <Method name="setTotalbaru" visibility="public" returnType="void">
+          <Argument type="int" name="totalbaru"/>
+        </Method>
+        <Method name="getTotallama" visibility="public" returnType="int"/>
+        <Method name="setTotallama" visibility="public" returnType="void">
+          <Argument type="int" name="totallama"/>
+        </Method>
+        <Method name="getEmergency" visibility="public" returnType="int"/>
+        <Method name="setEmergency" visibility="public" returnType="void">
+          <Argument type="int" name="emergency"/>
+        </Method>
+        <Method name="getTotalpasienpoli" visibility="public" returnType="int"/>
+        <Method name="setTotalpasienpoli" visibility="public" returnType="void">
+          <Argument type="int" name="totalpasienpoli"/>
+        </Method>
+        <Method name="getArrivaltime" visibility="public" returnType="LinkedList&lt;String&gt;"/>
+        <Method name="setArrivaltime" visibility="public" returnType="void">
+          <Argument type="LinkedList&lt;String&gt;" name="arrivaltime"/>
+        </Method>
+        <Method name="getServicetime" visibility="public" returnType="LinkedList&lt;String&gt;"/>
+        <Method name="setServicetime" visibility="public" returnType="void">
+          <Argument type="LinkedList&lt;String&gt;" name="servicetime"/>
+        </Method>
+        <Method name="getQueuecustomer" visibility="public" returnType="LinkedList&lt;Customer&gt;"/>
+        <Method name="setQueuecustomer" visibility="public" returnType="void">
+          <Argument type="LinkedList&lt;Customer&gt;" name="queuecustomer"/>
+        </Method>
+        <Method name="getServerawal" visibility="public" returnType="int"/>
+        <Method name="setServerawal" visibility="public" returnType="void">
+          <Argument type="int" name="serverawal"/>
+        </Method>
+        <Method name="getServerpetugas" visibility="public" returnType="int"/>
+        <Method name="setServerpetugas" visibility="public" returnType="void">
+          <Argument type="int" name="serverpetugas"/>
+        </Method>
+        <Method name="getServerperawat" visibility="public" returnType="int"/>
+        <Method name="setServerperawat" visibility="public" returnType="void">
+          <Argument type="int" name="serverperawat"/>
+        </Method>
+        <Method name="getServerdokter" visibility="public" returnType="int"/>
+        <Method name="setServerdokter" visibility="public" returnType="void">
+          <Argument type="int" name="serverdokter"/>
+        </Method>
+        <Method name="getKapasitasantrian" visibility="public" returnType="int"/>
+        <Method name="setKapasitasantrian" visibility="public" returnType="void">
+          <Argument type="int" name="kapasitasantrian"/>
+        </Method>
+        <Method name="getServicepetugas" visibility="public" returnType="LinkedList&lt;String&gt;"/>
+        <Method name="setServicepetugas" visibility="public" returnType="void">
+          <Argument type="LinkedList&lt;String&gt;" name="servicepetugas"/>
+        </Method>
+        <Method name="getServiceperawat" visibility="public" returnType="LinkedList&lt;String&gt;"/>
+        <Method name="setServiceperawat" visibility="public" returnType="void">
+          <Argument type="LinkedList&lt;String&gt;" name="serviceperawat"/>
+        </Method>
+        <Method name="getServicedokter" visibility="public" returnType="LinkedList&lt;String&gt;"/>
+        <Method name="setServicedokter" visibility="public" returnType="void">
+          <Argument type="LinkedList&lt;String&gt;" name="servicedokter"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="20.0" package="ExcelInputSimulation" name="ExcelWriter" visibility="public">
+      <Constructors>
+        <Constructor name="ExcelWriter" visibility="public">
+          <Argument type="String" name="filepath"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="file" visibility="private" type="FileOutputStream"/>
+        <Field name="workbook" visibility="private" type="XSSFWorkbook"/>
+        <Field name="sheet" visibility="private" type="XSSFSheet"/>
+        <Field name="rowIterator" visibility="private" type="Iterator&lt;Row&gt;"/>
+        <Field name="filepath" visibility="private" type="String"/>
+        <Field name="filename" visibility="private" type="String"/>
+        <Field name="queuecustomer" visibility="private" type="LinkedList&lt;Customer&gt;"/>
+        <Field name="totalbaru" visibility="private" type="int"/>
+        <Field name="totallama" visibility="private" type="int"/>
+        <Field name="emergency" visibility="private" type="int"/>
+        <Field name="totalpasienpoli" visibility="private" type="int"/>
+        <Field name="arrivaltime" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="servicetime" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="servicepetugas" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="serviceperawat" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="servicedokter" visibility="private" type="LinkedList&lt;String&gt;"/>
+        <Field name="serverawal" visibility="private" type="int"/>
+        <Field name="serverpetugas" visibility="private" type="int"/>
+        <Field name="serverperawat" visibility="private" type="int"/>
+        <Field name="serverdokter" visibility="private" type="int"/>
+        <Field name="kapasitasantrian" visibility="private" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="writeExcelFileReportAwal" visibility="public" returnType="boolean">
+          <Argument type="String[]" name="columnNames"/>
+          <Argument type="Object[][]" name="data2"/>
+          <Argument type="Object[]" name="arrivaltime"/>
+          <Argument type="Object[]" name="inter"/>
+          <Argument type="Object[]" name="service"/>
+          <Argument type="Object[][]" name="averageservicetime"/>
+          <Argument type="Object[][]" name="averagewaitingtime"/>
+          <Argument type="Object[][]" name="averagedelaytime"/>
+          <Argument type="Object[][]" name="totalspenttime"/>
+          <Argument type="String" name="s"/>
+        </Method>
+        <Method name="writeExcelFileReportPerawat" visibility="public" returnType="boolean">
+          <Argument type="String[]" name="columnNames"/>
+          <Argument type="Object[][]" name="data2"/>
+          <Argument type="Object[]" name="arrivaltime"/>
+          <Argument type="Object[]" name="inter"/>
+          <Argument type="Object[]" name="service"/>
+          <Argument type="Object[][]" name="averageservicetime"/>
+          <Argument type="Object[][]" name="averagewaitingtime"/>
+          <Argument type="Object[][]" name="averagedelaytime"/>
+          <Argument type="Object[][]" name="totalspenttime"/>
+          <Argument type="String" name="s"/>
+        </Method>
+        <Method name="writeExcelFileReportDokter" visibility="public" returnType="boolean">
+          <Argument type="String[]" name="columnNames"/>
+          <Argument type="Object[][]" name="data2"/>
+          <Argument type="Object[]" name="arrivaltime"/>
+          <Argument type="Object[]" name="inter"/>
+          <Argument type="Object[]" name="service"/>
+          <Argument type="Object[][]" name="averageservicetime"/>
+          <Argument type="Object[][]" name="averagewaitingtime"/>
+          <Argument type="Object[][]" name="averagedelaytime"/>
+          <Argument type="Object[][]" name="totalspenttime"/>
+          <Argument type="String" name="s"/>
+        </Method>
+        <Method name="writeExcelFileReportPetugas" visibility="public" returnType="boolean">
+          <Argument type="String[]" name="columnNames"/>
+          <Argument type="Object[][]" name="data2"/>
+          <Argument type="Object[]" name="arrivaltime"/>
+          <Argument type="Object[]" name="inter"/>
+          <Argument type="Object[]" name="service"/>
+          <Argument type="Object[][]" name="averageservicetime"/>
+          <Argument type="Object[][]" name="averagewaitingtime"/>
+          <Argument type="Object[][]" name="averagedelaytime"/>
+          <Argument type="Object[][]" name="totalspenttime"/>
+          <Argument type="String" name="s"/>
+        </Method>
+        <Method name="writeExcelFile" visibility="public" returnType="boolean">
+          <Argument type="LinkedList&lt;Object[]&gt;" name="rawdata"/>
+        </Method>
+        <Method name="writeExcelFilePoli" visibility="public" returnType="boolean">
+          <Argument type="LinkedList&lt;Object[]&gt;" name="rawdata"/>
+        </Method>
+        <Method name="getFilepath" visibility="public" returnType="String"/>
+        <Method name="setFilepath" visibility="public" returnType="void">
+          <Argument type="String" name="filepath"/>
+        </Method>
+        <Method name="getFilename" visibility="public" returnType="String"/>
+        <Method name="setFilename" visibility="public" returnType="void">
+          <Argument type="String" name="filename"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="20.0" package="ExcelInputSimulation" name="ServerAwal" visibility="public">
+      <Constructors>
+        <Constructor name="ServerAwal" visibility="public">
+          <Argument type="int" name="servernumber"/>
+          <Argument type="StatisticsGenerator" name="stat"/>
+          <Argument type="InterfaceGUI2" name="gui"/>
+        </Constructor>
+        <Constructor name="ServerAwal" visibility="package"/>
+      </Constructors>
+      <Fields>
+        <Field name="servernumber" visibility="private" type="int"/>
+        <Field name="status" visibility="private" type="boolean"/>
+        <Field name="timeServiceBegin" visibility="private" type="double"/>
+        <Field name="timeServiceEnd" visibility="private" type="double"/>
+        <Field name="totalservicetime" visibility="private" type="double"/>
+        <Field name="totalWaitingTime" visibility="private" type="double"/>
+        <Field name="totalDelayTime" visibility="private" type="double"/>
+        <Field name="counterCustomer" visibility="private" type="int"/>
+        <Field name="serverqueue" visibility="private" type="Queue&lt;Customer&gt;"/>
+        <Field name="nama" visibility="private" type="String"/>
+        <Field name="stat" visibility="private" type="StatisticsGenerator"/>
+        <Field name="serverclock" visibility="private" type="double"/>
+        <Field name="write" visibility="private" type="String"/>
+        <Field name="gui" visibility="private" type="InterfaceGUI2"/>
+        <Field name="sim" visibility="private" type="StatisticsSimulationPoli"/>
+        <Field name="i" visibility="private" type="int"/>
+        <Field name="slidervalue" visibility="private" type="int"/>
+        <Field name="queuereport" visibility="private" type="Queue&lt;Customer&gt;"/>
+        <Field name="queuereport2" visibility="private" type="LinkedList&lt;Customer&gt;"/>
+        <Field name="counter" visibility="private" type="int"/>
+        <Field name="totalWaitingTimeBPJSLama" visibility="private" type="double"/>
+        <Field name="totalWaitingTimeBPJSBaru" visibility="private" type="double"/>
+        <Field name="totalServiceTimeBPJSLama" visibility="private" type="double"/>
+        <Field name="totalServiceTimeBPJSBaru" visibility="private" type="double"/>
+        <Field name="counterPasienLama" visibility="private" type="int"/>
+        <Field name="counterPasienBaru" visibility="private" type="int"/>
+        <Field name="counterPasienEmergency" visibility="private" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="run" visibility="public" returnType="void"/>
+        <Method name="getQueueSize" visibility="public" returnType="int"/>
+        <Method name="doServeCustomer" visibility="public" returnType="void" isSynchronized="true"/>
+        <Method name="addToReportQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="addToPoliQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="getQueueReport2" visibility="public" returnType="LinkedList&lt;Customer&gt;"/>
+        <Method name="getQueueReport" visibility="public" returnType="Queue&lt;Customer&gt;"/>
+        <Method name="setStatistics" visibility="public" returnType="void">
+          <Argument type="String" name="write"/>
+        </Method>
+        <Method name="getStatistics" visibility="public" returnType="String"/>
+        <Method name="addCustomertoQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="cust"/>
+        </Method>
+        <Method name="removeCustomerfromQueue" visibility="public" returnType="Customer" isSynchronized="true"/>
+        <Method name="isStatus" visibility="public" returnType="boolean"/>
+        <Method name="setStatus" visibility="public" returnType="void">
+          <Argument type="boolean" name="status"/>
+        </Method>
+        <Method name="getTimeServiceBegin" visibility="public" returnType="double"/>
+        <Method name="setTimeServiceBegin" visibility="public" returnType="void">
+          <Argument type="double" name="timeServiceBegin"/>
+        </Method>
+        <Method name="getTimeServiceEnd" visibility="public" returnType="double"/>
+        <Method name="setTimeServiceEnd" visibility="public" returnType="void">
+          <Argument type="double" name="timeServiceEnd"/>
+        </Method>
+        <Method name="getServernumber" visibility="public" returnType="int"/>
+        <Method name="setServernumber" visibility="public" returnType="void">
+          <Argument type="int" name="servernumber"/>
+        </Method>
+        <Method name="getCounter" visibility="public" returnType="int"/>
+        <Method name="getTotalservicetime" visibility="public" returnType="double"/>
+        <Method name="setTotalservicetime" visibility="public" returnType="void">
+          <Argument type="double" name="totalservicetime"/>
+        </Method>
+        <Method name="getTotalWaitingTime" visibility="public" returnType="double"/>
+        <Method name="setTotalWaitingTime" visibility="public" returnType="void">
+          <Argument type="double" name="totalWaitingTime"/>
+        </Method>
+        <Method name="getTotalDelayTime" visibility="public" returnType="double"/>
+        <Method name="setTotalDelayTime" visibility="public" returnType="void">
+          <Argument type="double" name="totalDelayTime"/>
+        </Method>
+        <Method name="getNama" visibility="public" returnType="String"/>
+        <Method name="setNama" visibility="public" returnType="void">
+          <Argument type="String" name="nama"/>
+        </Method>
+        <Method name="getServerclock" visibility="public" returnType="double"/>
+        <Method name="setServerclock" visibility="public" returnType="void">
+          <Argument type="double" name="serverclock"/>
+        </Method>
+        <Method name="getSim" visibility="public" returnType="StatisticsSimulationPoli"/>
+        <Method name="setSim" visibility="public" returnType="void">
+          <Argument type="StatisticsSimulationPoli" name="sim"/>
+        </Method>
+        <Method name="getSlidervalue" visibility="public" returnType="int"/>
+        <Method name="setSlidervalue" visibility="public" returnType="void">
+          <Argument type="int" name="slidervalue"/>
+        </Method>
+        <Method name="getCounterCustomer" visibility="public" returnType="int"/>
+        <Method name="setCounterCustomer" visibility="public" returnType="void">
+          <Argument type="int" name="counterCustomer"/>
+        </Method>
+        <Method name="setCounter" visibility="public" returnType="void">
+          <Argument type="int" name="counter"/>
+        </Method>
+        <Method name="getTotalWaitingTimeBPJSLama" visibility="public" returnType="double"/>
+        <Method name="getTotalWaitingTimeBPJSBaru" visibility="public" returnType="double"/>
+        <Method name="getTotalServiceTimeBPJSLama" visibility="public" returnType="double"/>
+        <Method name="getTotalServiceTimeBPJSBaru" visibility="public" returnType="double"/>
+        <Method name="getCounterPasienLama" visibility="public" returnType="int"/>
+        <Method name="getCounterPasienBaru" visibility="public" returnType="int"/>
+        <Method name="getCounterPasienEmergency" visibility="public" returnType="int"/>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="20.0" package="ExcelInputSimulation" name="ServerDokter" visibility="public">
+      <Constructors>
+        <Constructor name="ServerDokter" visibility="public">
+          <Argument type="int" name="servernumber"/>
+          <Argument type="StatisticsGenerator" name="stat"/>
+          <Argument type="InterfaceGUI2" name="gui"/>
+        </Constructor>
+        <Constructor name="ServerDokter" visibility="package"/>
+      </Constructors>
+      <Fields>
+        <Field name="status" visibility="private" type="boolean"/>
+        <Field name="servernumber" visibility="private" type="int"/>
+        <Field name="timeServiceBegin" visibility="private" type="double"/>
+        <Field name="timeServiceEnd" visibility="private" type="double"/>
+        <Field name="totalservicetime" visibility="private" type="double"/>
+        <Field name="totalWaitingTime" visibility="private" type="double"/>
+        <Field name="totalDelayTime" visibility="private" type="double"/>
+        <Field name="counterCustomer" visibility="private" type="int"/>
+        <Field name="serverqueue" visibility="private" type="java.util.Queue&lt;Customer&gt;"/>
+        <Field name="nama" visibility="private" type="String"/>
+        <Field name="stat" visibility="private" type="StatisticsGenerator"/>
+        <Field name="serverclock" visibility="private" type="double"/>
+        <Field name="write" visibility="private" type="String"/>
+        <Field name="gui" visibility="private" type="InterfaceGUI2"/>
+        <Field name="i" visibility="private" type="int"/>
+        <Field name="slidervalue" visibility="private" type="int"/>
+        <Field name="queuereport" visibility="private" type="Queue&lt;Customer&gt;"/>
+        <Field name="queuereport2" visibility="private" type="LinkedList&lt;Customer&gt;"/>
+        <Field name="temp" visibility="private" type="Customer"/>
+        <Field name="counter" visibility="private" type="int"/>
+        <Field name="reader" visibility="private" type="ExcelReader"/>
+      </Fields>
+      <Methods>
+        <Method name="doServeCustomer" visibility="public" returnType="void" isSynchronized="true"/>
+        <Method name="addToReportQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="getQueueReport" visibility="public" returnType="Queue&lt;Customer&gt;"/>
+        <Method name="getQueueReport2" visibility="public" returnType="LinkedList&lt;Customer&gt;"/>
+        <Method name="getQueueSize" visibility="public" returnType="int"/>
+        <Method name="run" visibility="public" returnType="void"/>
+        <Method name="addCustomertoQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="cust"/>
+        </Method>
+        <Method name="removeCustomerfromQueue" visibility="public" returnType="Customer" isSynchronized="true"/>
+        <Method name="isStatus" visibility="public" returnType="boolean"/>
+        <Method name="setStatus" visibility="public" returnType="void">
+          <Argument type="boolean" name="status"/>
+        </Method>
+        <Method name="getServernumber" visibility="public" returnType="int"/>
+        <Method name="setServernumber" visibility="public" returnType="void">
+          <Argument type="int" name="servernumber"/>
+        </Method>
+        <Method name="getTotalservicetime" visibility="public" returnType="double"/>
+        <Method name="setTotalservicetime" visibility="public" returnType="void">
+          <Argument type="double" name="totalservicetime"/>
+        </Method>
+        <Method name="getTotalWaitingTime" visibility="public" returnType="double"/>
+        <Method name="setTotalWaitingTime" visibility="public" returnType="void">
+          <Argument type="double" name="totalWaitingTime"/>
+        </Method>
+        <Method name="getTotalDelayTime" visibility="public" returnType="double"/>
+        <Method name="setTotalDelayTime" visibility="public" returnType="void">
+          <Argument type="double" name="totalDelayTime"/>
+        </Method>
+        <Method name="getCounterCustomer" visibility="public" returnType="int"/>
+        <Method name="setCounterCustomer" visibility="public" returnType="void">
+          <Argument type="int" name="counterCustomer"/>
+        </Method>
+        <Method name="getServerqueue" visibility="public" returnType="java.util.Queue&lt;Customer&gt;"/>
+        <Method name="setServerqueue" visibility="public" returnType="void">
+          <Argument type="java.util.Queue&lt;Customer&gt;" name="serverqueue"/>
+        </Method>
+        <Method name="getNama" visibility="public" returnType="String"/>
+        <Method name="setNama" visibility="public" returnType="void">
+          <Argument type="String" name="nama"/>
+        </Method>
+        <Method name="getServerclock" visibility="public" returnType="double"/>
+        <Method name="setServerclock" visibility="public" returnType="void">
+          <Argument type="double" name="serverclock"/>
+        </Method>
+        <Method name="getTimeServiceBegin" visibility="public" returnType="double"/>
+        <Method name="setTimeServiceBegin" visibility="public" returnType="void">
+          <Argument type="double" name="timeServiceBegin"/>
+        </Method>
+        <Method name="getTimeServiceEnd" visibility="public" returnType="double"/>
+        <Method name="setTimeServiceEnd" visibility="public" returnType="void">
+          <Argument type="double" name="timeServiceEnd"/>
+        </Method>
+        <Method name="getSlidervalue" visibility="public" returnType="int"/>
+        <Method name="setSlidervalue" visibility="public" returnType="void">
+          <Argument type="int" name="slidervalue"/>
+        </Method>
+        <Method name="getTemp" visibility="public" returnType="Customer"/>
+        <Method name="setTemp" visibility="public" returnType="void">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="getCounter" visibility="public" returnType="int"/>
+        <Method name="setCounter" visibility="public" returnType="void">
+          <Argument type="int" name="counter"/>
+        </Method>
+        <Method name="getReader" visibility="public" returnType="ExcelReader"/>
+        <Method name="setReader" visibility="public" returnType="void">
+          <Argument type="ExcelReader" name="reader"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="420.0" package="ExcelInputSimulation" name="ServerPerawat" visibility="public">
+      <Constructors>
+        <Constructor name="ServerPerawat" visibility="public">
+          <Argument type="int" name="servernumber"/>
+          <Argument type="StatisticsGenerator" name="stat"/>
+          <Argument type="InterfaceGUI2" name="gui"/>
+          <Argument type="ServerDokter[]" name="serverdokter"/>
+        </Constructor>
+        <Constructor name="ServerPerawat" visibility="package"/>
+      </Constructors>
+      <Fields>
+        <Field name="status" visibility="private" type="boolean"/>
+        <Field name="servernumber" visibility="private" type="int"/>
+        <Field name="timeServiceBegin" visibility="private" type="double"/>
+        <Field name="timeServiceEnd" visibility="private" type="double"/>
+        <Field name="totalservicetime" visibility="private" type="double"/>
+        <Field name="totalWaitingTime" visibility="private" type="double"/>
+        <Field name="totalDelayTime" visibility="private" type="double"/>
+        <Field name="counterCustomer" visibility="private" type="int"/>
+        <Field name="serverqueue" visibility="private" type="java.util.Queue&lt;Customer&gt;"/>
+        <Field name="nama" visibility="private" type="String"/>
+        <Field name="stat" visibility="private" type="StatisticsGenerator"/>
+        <Field name="serverclock" visibility="private" type="double"/>
+        <Field name="write" visibility="private" type="String"/>
+        <Field name="gui" visibility="private" type="InterfaceGUI2"/>
+        <Field name="serverdokter" visibility="private" type="ServerDokter[]"/>
+        <Field name="i" visibility="private" type="int"/>
+        <Field name="slidervalue" visibility="private" type="int"/>
+        <Field name="batasserver" visibility="private" type="int"/>
+        <Field name="counterfindserver" visibility="private" type="int"/>
+        <Field name="temp" visibility="private" type="Customer"/>
+        <Field name="queuereport2" visibility="private" type="LinkedList&lt;Customer&gt;"/>
+        <Field name="counter" visibility="private" type="int"/>
+        <Field name="reader" visibility="private" type="ExcelReader"/>
+      </Fields>
+      <Methods>
+        <Method name="run" visibility="public" returnType="void"/>
+        <Method name="getQueueSize" visibility="public" returnType="int"/>
+        <Method name="doServeCustomer" visibility="public" returnType="void" isSynchronized="true"/>
+        <Method name="addToReportQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="getQueueReport2" visibility="public" returnType="LinkedList&lt;Customer&gt;"/>
+        <Method name="addCustomertoQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="cust"/>
+        </Method>
+        <Method name="removeCustomerfromQueue" visibility="public" returnType="Customer" isSynchronized="true"/>
+        <Method name="findServer" visibility="public" returnType="int"/>
+        <Method name="getSmallestServerClock" visibility="public" returnType="int">
+          <Argument type="ServerDokter[]" name="server"/>
+        </Method>
+        <Method name="isStatus" visibility="public" returnType="boolean"/>
+        <Method name="setStatus" visibility="public" returnType="void">
+          <Argument type="boolean" name="status"/>
+        </Method>
+        <Method name="getServernumber" visibility="public" returnType="int"/>
+        <Method name="setServernumber" visibility="public" returnType="void">
+          <Argument type="int" name="servernumber"/>
+        </Method>
+        <Method name="getTotalWaitingTime" visibility="public" returnType="double"/>
+        <Method name="setTotalWaitingTime" visibility="public" returnType="void">
+          <Argument type="double" name="totalWaitingTime"/>
+        </Method>
+        <Method name="getTotalDelayTime" visibility="public" returnType="double"/>
+        <Method name="setTotalDelayTime" visibility="public" returnType="void">
+          <Argument type="double" name="totalDelayTime"/>
+        </Method>
+        <Method name="getCounterCustomer" visibility="public" returnType="int"/>
+        <Method name="setCounterCustomer" visibility="public" returnType="void">
+          <Argument type="int" name="counterCustomer"/>
+        </Method>
+        <Method name="getServerqueue" visibility="public" returnType="java.util.Queue&lt;Customer&gt;"/>
+        <Method name="setServerqueue" visibility="public" returnType="void">
+          <Argument type="java.util.Queue&lt;Customer&gt;" name="serverqueue"/>
+        </Method>
+        <Method name="getServerclock" visibility="public" returnType="double"/>
+        <Method name="setServerclock" visibility="public" returnType="void">
+          <Argument type="double" name="serverclock"/>
+        </Method>
+        <Method name="getTimeServiceBegin" visibility="public" returnType="double"/>
+        <Method name="setTimeServiceBegin" visibility="public" returnType="void">
+          <Argument type="double" name="timeServiceBegin"/>
+        </Method>
+        <Method name="getTimeServiceEnd" visibility="public" returnType="double"/>
+        <Method name="setTimeServiceEnd" visibility="public" returnType="void">
+          <Argument type="double" name="timeServiceEnd"/>
+        </Method>
+        <Method name="getSlidervalue" visibility="public" returnType="int"/>
+        <Method name="setSlidervalue" visibility="public" returnType="void">
+          <Argument type="int" name="slidervalue"/>
+        </Method>
+        <Method name="getBatasserver" visibility="public" returnType="int"/>
+        <Method name="setBatasserver" visibility="public" returnType="void">
+          <Argument type="int" name="batasserver"/>
+        </Method>
+        <Method name="getCounterfindserver" visibility="public" returnType="int"/>
+        <Method name="setCounterfindserver" visibility="public" returnType="void">
+          <Argument type="int" name="counterfindserver"/>
+        </Method>
+        <Method name="getTemp" visibility="public" returnType="Customer"/>
+        <Method name="setTemp" visibility="public" returnType="void">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="getTotalservicetime" visibility="public" returnType="double"/>
+        <Method name="setTotalservicetime" visibility="public" returnType="void">
+          <Argument type="double" name="totalservicetime"/>
+        </Method>
+        <Method name="getCounter" visibility="public" returnType="int"/>
+        <Method name="setCounter" visibility="public" returnType="void">
+          <Argument type="int" name="counter"/>
+        </Method>
+        <Method name="getReader" visibility="public" returnType="ExcelReader"/>
+        <Method name="setReader" visibility="public" returnType="void">
+          <Argument type="ExcelReader" name="reader"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="420.0" package="ExcelInputSimulation" name="ServerPetugas" visibility="public">
+      <Constructors>
+        <Constructor name="ServerPetugas" visibility="public">
+          <Argument type="int" name="servernumber"/>
+          <Argument type="StatisticsGenerator" name="stat"/>
+          <Argument type="InterfaceGUI2" name="gui"/>
+          <Argument type="ServerPerawat[]" name="serverperawat"/>
+        </Constructor>
+        <Constructor name="ServerPetugas" visibility="package"/>
+      </Constructors>
+      <Fields>
+        <Field name="status" visibility="private" type="boolean"/>
+        <Field name="servernumber" visibility="private" type="int"/>
+        <Field name="timeServiceBegin" visibility="private" type="double"/>
+        <Field name="timeServiceEnd" visibility="private" type="double"/>
+        <Field name="totalservicetime" visibility="private" type="double"/>
+        <Field name="totalWaitingTime" visibility="private" type="double"/>
+        <Field name="totalDelayTime" visibility="private" type="double"/>
+        <Field name="counterCustomer" visibility="private" type="int"/>
+        <Field name="serverqueue" visibility="private" type="java.util.Queue&lt;Customer&gt;"/>
+        <Field name="nama" visibility="private" type="String"/>
+        <Field name="stat" visibility="private" type="StatisticsGenerator"/>
+        <Field name="serverclock" visibility="private" type="double"/>
+        <Field name="write" visibility="private" type="String"/>
+        <Field name="gui" visibility="private" type="InterfaceGUI2"/>
+        <Field name="serverperawat" visibility="private" type="ServerPerawat[]"/>
+        <Field name="i" visibility="private" type="int"/>
+        <Field name="slidervalue" visibility="private" type="int"/>
+        <Field name="queuereport2" visibility="private" type="LinkedList&lt;Customer&gt;"/>
+        <Field name="counter" visibility="private" type="int"/>
+        <Field name="counterfindserver" visibility="private" type="int"/>
+        <Field name="batasserver" visibility="private" type="int"/>
+        <Field name="temp" visibility="private" type="Customer"/>
+        <Field name="reader" visibility="private" type="ExcelReader"/>
+      </Fields>
+      <Methods>
+        <Method name="run" visibility="public" returnType="void"/>
+        <Method name="doServeCustomer" visibility="public" returnType="void" isSynchronized="true"/>
+        <Method name="addToReportQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="getQueueReport2" visibility="public" returnType="LinkedList&lt;Customer&gt;"/>
+        <Method name="findServer" visibility="public" returnType="int"/>
+        <Method name="getSmallestServerClock" visibility="public" returnType="int">
+          <Argument type="ServerPerawat[]" name="server"/>
+        </Method>
+        <Method name="isStatus" visibility="public" returnType="boolean"/>
+        <Method name="addCustomertoQueue" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="cust"/>
+        </Method>
+        <Method name="removeCustomerfromQueue" visibility="public" returnType="Customer" isSynchronized="true"/>
+        <Method name="setStatus" visibility="public" returnType="void">
+          <Argument type="boolean" name="status"/>
+        </Method>
+        <Method name="getQueueSize" visibility="public" returnType="int"/>
+        <Method name="getServerclock" visibility="public" returnType="double"/>
+        <Method name="setServerclock" visibility="public" returnType="void">
+          <Argument type="double" name="serverclock"/>
+        </Method>
+        <Method name="getServernumber" visibility="public" returnType="int"/>
+        <Method name="setServernumber" visibility="public" returnType="void">
+          <Argument type="int" name="servernumber"/>
+        </Method>
+        <Method name="getTotalservicetime" visibility="public" returnType="double"/>
+        <Method name="setTotalservicetime" visibility="public" returnType="void">
+          <Argument type="double" name="totalservicetime"/>
+        </Method>
+        <Method name="getTotalWaitingTime" visibility="public" returnType="double"/>
+        <Method name="setTotalWaitingTime" visibility="public" returnType="void">
+          <Argument type="double" name="totalWaitingTime"/>
+        </Method>
+        <Method name="getTotalDelayTime" visibility="public" returnType="double"/>
+        <Method name="setTotalDelayTime" visibility="public" returnType="void">
+          <Argument type="double" name="totalDelayTime"/>
+        </Method>
+        <Method name="getCounterCustomer" visibility="public" returnType="int"/>
+        <Method name="setCounterCustomer" visibility="public" returnType="void">
+          <Argument type="int" name="counterCustomer"/>
+        </Method>
+        <Method name="getServerqueue" visibility="public" returnType="java.util.Queue&lt;Customer&gt;"/>
+        <Method name="setServerqueue" visibility="public" returnType="void">
+          <Argument type="java.util.Queue&lt;Customer&gt;" name="serverqueue"/>
+        </Method>
+        <Method name="getNama" visibility="public" returnType="String"/>
+        <Method name="setNama" visibility="public" returnType="void">
+          <Argument type="String" name="nama"/>
+        </Method>
+        <Method name="getTimeServiceBegin" visibility="public" returnType="double"/>
+        <Method name="setTimeServiceBegin" visibility="public" returnType="void">
+          <Argument type="double" name="timeServiceBegin"/>
+        </Method>
+        <Method name="getTimeServiceEnd" visibility="public" returnType="double"/>
+        <Method name="setTimeServiceEnd" visibility="public" returnType="void">
+          <Argument type="double" name="timeServiceEnd"/>
+        </Method>
+        <Method name="getSlidervalue" visibility="public" returnType="int"/>
+        <Method name="setSlidervalue" visibility="public" returnType="void">
+          <Argument type="int" name="slidervalue"/>
+        </Method>
+        <Method name="getCounter" visibility="public" returnType="int"/>
+        <Method name="setCounter" visibility="public" returnType="void">
+          <Argument type="int" name="counter"/>
+        </Method>
+        <Method name="getTemp" visibility="public" returnType="Customer"/>
+        <Method name="setTemp" visibility="public" returnType="void">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="getReader" visibility="public" returnType="ExcelReader"/>
+        <Method name="setReader" visibility="public" returnType="void">
+          <Argument type="ExcelReader" name="reader"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="420.0" package="ExcelInputSimulation" name="StatisticsSimulationAwal" visibility="public">
+      <Constructors>
+        <Constructor name="StatisticsSimulationAwal" visibility="public">
+          <Argument type="ExcelReader" name="excel"/>
+          <Argument type="ServerAwal[]" name="server"/>
+          <Argument type="StatisticsGenerator" name="gen"/>
+          <Argument type="InterfaceGUI2" name="MainGUI"/>
+          <Argument type="int" name="kapasitasantrian"/>
+        </Constructor>
+        <Constructor name="StatisticsSimulationAwal" visibility="public"/>
+      </Constructors>
+      <Fields>
+        <Field name="clock" visibility="public" type="double"/>
+        <Field name="gen" visibility="private" type="StatisticsGenerator"/>
+        <Field name="numOfServer" visibility="private" type="int"/>
+        <Field name="numOfCustomer" visibility="private" type="int"/>
+        <Field name="slidervalue" visibility="private" type="int"/>
+        <Field name="server" visibility="private" type="ServerAwal[]"/>
+        <Field name="customerqueue" visibility="public" type="LinkedList&lt;Customer&gt;"/>
+        <Field name="counterPasienLama" visibility="private" type="double"/>
+        <Field name="counterPasienBaru" visibility="private" type="double"/>
+        <Field name="counterPasienEmergency" visibility="private" type="double"/>
+        <Field name="animator" visibility="protected" type="Thread"/>
+        <Field name="MainGUI" visibility="private" type="InterfaceGUI2"/>
+        <Field name="number" visibility="private" type="int"/>
+        <Field name="kapasitasantrian" visibility="private" type="int"/>
+        <Field name="counterfindserver" visibility="private" type="int"/>
+        <Field name="rand" visibility="private" type="Random"/>
+        <Field name="poli" visibility="private" type="StatisticsSimulationPoli"/>
+        <Field name="counterPasienBPJSLama" visibility="private" type="double"/>
+        <Field name="counterPasienBPJSBaru" visibility="private" type="double"/>
+        <Field name="counterPasienEmergency2" visibility="private" type="double"/>
+        <Field name="excel" visibility="private" type="ExcelReader"/>
+        <Field name="i" visibility="private" type="int"/>
+        <Field name="serverpetugas" visibility="private" type="ServerPetugas[]"/>
+        <Field name="serverperawat" visibility="private" type="ServerPerawat[]"/>
+        <Field name="serverdokter" visibility="private" type="ServerDokter[]"/>
+        <Field name="cekInput" visibility="private" type="String"/>
+        <Field name="paramxchart" visibility="private" type="int"/>
+        <Field name="paramxchart2" visibility="private" type="int"/>
+      </Fields>
+      <Methods>
+        <Method name="processArrival" visibility="public" returnType="Customer">
+          <Argument type="int" name="counter"/>
+        </Method>
+        <Method name="findServer" visibility="public" returnType="int">
+          <Argument type="int" name="batascounterserver"/>
+        </Method>
+        <Method name="getSmallestServerClock" visibility="public" returnType="int">
+          <Argument type="ServerAwal[]" name="server"/>
+        </Method>
+        <Method name="runSimulation" visibility="public" returnType="void"/>
+        <Method name="displayChart1" visibility="public" returnType="void"/>
+        <Method name="displayChart4" visibility="public" returnType="void"/>
+        <Method name="displayChart2" visibility="public" returnType="void"/>
+        <Method name="displayChart3" visibility="public" returnType="void"/>
+        <Method name="setPoli" visibility="public" returnType="void">
+          <Argument type="StatisticsSimulationPoli" name="poli"/>
+        </Method>
+        <Method name="addToPoliQueue" visibility="private" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="temp"/>
+        </Method>
+        <Method name="run" visibility="public" returnType="void"/>
+        <Method name="getCounterPasienLama" visibility="public" returnType="double"/>
+        <Method name="setCounterPasienLama" visibility="public" returnType="void">
+          <Argument type="double" name="counterPasienLama"/>
+        </Method>
+        <Method name="getCounterPasienBaru" visibility="public" returnType="double"/>
+        <Method name="setCounterPasienBaru" visibility="public" returnType="void">
+          <Argument type="double" name="counterPasienBaru"/>
+        </Method>
+        <Method name="getCounterPasienEmergency" visibility="public" returnType="double"/>
+        <Method name="setCounterPasienEmergency" visibility="public" returnType="void">
+          <Argument type="double" name="counterPasienEmergency"/>
+        </Method>
+        <Method name="getNumber" visibility="public" returnType="int"/>
+        <Method name="setNumber" visibility="public" returnType="void">
+          <Argument type="int" name="number"/>
+        </Method>
+        <Method name="getSlidervalue" visibility="public" returnType="int"/>
+        <Method name="setSlidervalue" visibility="public" returnType="void">
+          <Argument type="int" name="slidervalue"/>
+        </Method>
+        <Method name="getCounterPasienBPJSLama" visibility="public" returnType="double"/>
+        <Method name="setCounterPasienBPJSLama" visibility="public" returnType="void">
+          <Argument type="double" name="counterPasienBPJSLama"/>
+        </Method>
+        <Method name="getCounterPasienBPJSBaru" visibility="public" returnType="double"/>
+        <Method name="setCounterPasienBPJSBaru" visibility="public" returnType="void">
+          <Argument type="double" name="counterPasienBPJSBaru"/>
+        </Method>
+        <Method name="getCounterPasienEmergency2" visibility="public" returnType="double"/>
+        <Method name="setCounterPasienEmergency2" visibility="public" returnType="void">
+          <Argument type="double" name="counterPasienEmergency2"/>
+        </Method>
+        <Method name="getNumOfCustomer" visibility="public" returnType="int"/>
+        <Method name="setNumOfCustomer" visibility="public" returnType="void">
+          <Argument type="int" name="numOfCustomer"/>
+        </Method>
+        <Method name="getExcel" visibility="public" returnType="ExcelReader"/>
+        <Method name="setExcel" visibility="public" returnType="void">
+          <Argument type="ExcelReader" name="excel"/>
+        </Method>
+        <Method name="getPoli" visibility="public" returnType="StatisticsSimulationPoli"/>
+        <Method name="getServerpetugas" visibility="public" returnType="ServerPetugas[]"/>
+        <Method name="setServerpetugas" visibility="public" returnType="void">
+          <Argument type="ServerPetugas[]" name="serverpetugas"/>
+        </Method>
+        <Method name="getServerperawat" visibility="public" returnType="ServerPerawat[]"/>
+        <Method name="setServerperawat" visibility="public" returnType="void">
+          <Argument type="ServerPerawat[]" name="serverperawat"/>
+        </Method>
+        <Method name="getServerdokter" visibility="public" returnType="ServerDokter[]"/>
+        <Method name="setServerdokter" visibility="public" returnType="void">
+          <Argument type="ServerDokter[]" name="serverdokter"/>
+        </Method>
+        <Method name="getCekInput" visibility="public" returnType="String"/>
+        <Method name="setCekInput" visibility="public" returnType="void">
+          <Argument type="String" name="cekInput"/>
+        </Method>
+        <Method name="getParamxchart" visibility="public" returnType="int"/>
+        <Method name="setParamxchart" visibility="public" returnType="void">
+          <Argument type="int" name="paramxchart"/>
+        </Method>
+        <Method name="getParamxchart2" visibility="public" returnType="int"/>
+        <Method name="setParamxchart2" visibility="public" returnType="void">
+          <Argument type="int" name="paramxchart2"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="420.0" package="ExcelInputSimulation" name="StatisticsSimulationPoli" visibility="public">
+      <Constructors>
+        <Constructor name="StatisticsSimulationPoli" visibility="public">
+          <Argument type="ServerPetugas[]" name="ServerPetugas"/>
+          <Argument type="StatisticsGenerator" name="gen"/>
+          <Argument type="InterfaceGUI2" name="MainGUI"/>
+          <Argument type="ExcelReader" name="excel"/>
+        </Constructor>
+        <Constructor name="StatisticsSimulationPoli" visibility="package"/>
+      </Constructors>
+      <Fields>
+        <Field name="customerqueue" visibility="private" type="CustomerQ"/>
+        <Field name="number" visibility="private" type="int"/>
+        <Field name="counterPasien" visibility="private" type="double"/>
+        <Field name="gen" visibility="private" type="StatisticsGenerator"/>
+        <Field name="numOfCustomer" visibility="private" type="int"/>
+        <Field name="serverpetugasqueue" visibility="private" type="ServerPetugas[]"/>
+        <Field name="MainGUI" visibility="private" type="InterfaceGUI2"/>
+        <Field name="counterpasien1" visibility="private" type="int"/>
+        <Field name="counterpasien2" visibility="private" type="int"/>
+        <Field name="counterpasien3" visibility="private" type="int"/>
+        <Field name="clock" visibility="private" type="double"/>
+        <Field name="slidervalue" visibility="private" type="int"/>
+        <Field name="serverdokter" visibility="private" type="ServerDokter[]"/>
+        <Field name="serverperawat" visibility="private" type="ServerPerawat[]"/>
+        <Field name="batasserver" visibility="private" type="int"/>
+        <Field name="counterfindserver" visibility="private" type="int"/>
+        <Field name="batasserver2" visibility="private" type="int"/>
+        <Field name="counterfindserver2" visibility="private" type="int"/>
+        <Field name="temp" visibility="private" type="Customer"/>
+        <Field name="excel" visibility="private" type="ExcelReader"/>
+      </Fields>
+      <Methods>
+        <Method name="addCustomer" visibility="public" returnType="void" isSynchronized="true">
+          <Argument type="Customer" name="cust"/>
+        </Method>
+        <Method name="processArrival" visibility="public" returnType="Customer"/>
+        <Method name="findServer" visibility="public" returnType="int"/>
+        <Method name="getSmallestServerClock" visibility="public" returnType="int">
+          <Argument type="ServerPetugas[]" name="server"/>
+        </Method>
+        <Method name="findServerDokter" visibility="public" returnType="int"/>
+        <Method name="getSmallestServerClockDokter" visibility="public" returnType="int">
+          <Argument type="ServerDokter[]" name="server"/>
+        </Method>
+        <Method name="runSimulation" visibility="public" returnType="void"/>
+        <Method name="removeCustomer" visibility="public" returnType="Customer" isSynchronized="true"/>
+        <Method name="getCounterPasien" visibility="public" returnType="double"/>
+        <Method name="setCounterPasien" visibility="public" returnType="void">
+          <Argument type="double" name="counterPasien"/>
+        </Method>
+        <Method name="run" visibility="public" returnType="void"/>
+        <Method name="getCounterpasien1" visibility="public" returnType="int"/>
+        <Method name="setCounterpasien1" visibility="public" returnType="void">
+          <Argument type="int" name="counterpasien1"/>
+        </Method>
+        <Method name="getCounterpasien2" visibility="public" returnType="int"/>
+        <Method name="setCounterpasien2" visibility="public" returnType="void">
+          <Argument type="int" name="counterpasien2"/>
+        </Method>
+        <Method name="getCounterpasien3" visibility="public" returnType="int"/>
+        <Method name="setCounterpasien3" visibility="public" returnType="void">
+          <Argument type="int" name="counterpasien3"/>
+        </Method>
+        <Method name="getSlidervalue" visibility="public" returnType="int"/>
+        <Method name="setSlidervalue" visibility="public" returnType="void">
+          <Argument type="int" name="slidervalue"/>
+        </Method>
+        <Method name="getServerdokter" visibility="public" returnType="ServerDokter[]"/>
+        <Method name="setServerdokter" visibility="public" returnType="void">
+          <Argument type="ServerDokter[]" name="serverdokter"/>
+        </Method>
+        <Method name="getServerperawat" visibility="public" returnType="ServerPerawat[]"/>
+        <Method name="setServerperawat" visibility="public" returnType="void">
+          <Argument type="ServerPerawat[]" name="serverperawat"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="reader" source="ServerPetugas" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="sim" source="ServerAwal" target="StatisticsSimulationPoli" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ServerPetugas" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationPoli" target="ServerPetugas" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serverdokter" source="StatisticsSimulationAwal" target="ServerDokter" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serverdokter" source="ServerPerawat" target="ServerDokter" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serverdokter" source="StatisticsSimulationPoli" target="ServerDokter" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationAwal" target="ServerAwal" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="reader" source="ServerDokter" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationAwal" target="ServerPerawat" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationAwal" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ServerDokter" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationAwal" target="ServerDokter" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serverperawat" source="StatisticsSimulationPoli" target="ServerPerawat" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ServerPetugas" target="ServerPerawat" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationPoli" target="ServerPerawat" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serverperawat" source="StatisticsSimulationAwal" target="ServerPerawat" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ServerPerawat" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationPoli" target="ServerDokter" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationAwal" target="ServerPetugas" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serverperawat" source="ServerPetugas" target="ServerPerawat" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="reader" source="ServerPerawat" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ServerPerawat" target="ServerDokter" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="excel" source="StatisticsSimulationPoli" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="poli" source="StatisticsSimulationAwal" target="StatisticsSimulationPoli" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serverpetugasqueue" source="StatisticsSimulationPoli" target="ServerPetugas" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="ServerAwal" target="StatisticsSimulationPoli" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serverpetugas" source="StatisticsSimulationAwal" target="ServerPetugas" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="StatisticsSimulationAwal" target="StatisticsSimulationPoli" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="server" source="StatisticsSimulationAwal" target="ServerAwal" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="excel" source="StatisticsSimulationAwal" target="ExcelReader" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

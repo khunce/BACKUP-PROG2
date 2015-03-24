@@ -31,6 +31,10 @@ public class Tester {
         System.out.println(exponential(rng,6));
         Poisson p=new Poisson(0.32222222,2);
         System.out.println(p.gen());
+        StatisticsGenerator gen2=new StatisticsGenerator();
+        System.out.println(gen.convertSeconds(1.63));
+        String x="demo_read_input_xlsx";
+        System.out.println(x.endsWith(".xlsx"));
     }
     
     
